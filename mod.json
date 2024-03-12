@@ -1,7 +1,11 @@
 {
 	"geode": "2.0.0-beta.22",
-	"gd": "*",
-        "version": "v1.0.2",
+	"gd": {
+		"win": "*",
+		"mac": "*",
+		"android": "*"
+	},
+        "version": "v1.0.3",
 	"id": "the_bearodactyl.gay-wave-trail",
 	"name": "Gay Wave Trail",
 	"developer": "The Bearodactyl",
