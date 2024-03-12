@@ -1,3 +1,1 @@
-# gay-wave-trail
-
-This is where she makes a mod.
+./about.md
