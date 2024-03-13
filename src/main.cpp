@@ -1,10 +1,12 @@
 #include <Geode/Geode.hpp>
-#include <Geode/modify/PlayerObject.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include <Geode/modify/PlayerObject.hpp>
+#include <Geode/binding/GJRobotSprite.hpp>
+#include <Geode/ui/GeodeUI.hpp>
 #include "Utils.hpp"
+#include <chrono>
 
 using namespace geode::prelude;
-using namespace std::chrono;
 
 // thanks to shadowforce78
 void HSVtoRGB(float &fR, float &fG, float &fB, float &fH, float &fS, float &fV)
@@ -90,6 +92,9 @@ class $modify(PlayerObject) {
 };
 
 class $modify(PlayLayer) {
+    CCSprite *progressBar;
+    CCLabelBMFont *percentLabel;
+
     void postUpdate(float p0) {
         float speed = Mod::get()->getSettingValue<double>("speed");
 	float saturation = Mod::get() -> getSettingValue<double>("saturation");
