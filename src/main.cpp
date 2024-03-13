@@ -1,6 +1,7 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayerObject.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include "Utils.hpp"
 
 using namespace geode::prelude;
 using namespace std::chrono;
