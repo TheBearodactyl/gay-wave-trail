@@ -131,9 +131,10 @@ class $modify(PlayLayer) {
 		    if (m_player2->m_waveTrail) {
 		        m_player2->m_waveTrail->setColor(rainbowColor2);
 		    }
-
-		    PlayLayer::postUpdate(p0);
-		}
+	      }
 	}
+
+	PlayLayer::postUpdate(p0);
+	    
     }
 };
