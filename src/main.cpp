@@ -135,4 +135,5 @@ class $modify(PlayLayer) {
 		    PlayLayer::postUpdate(p0);
 		}
 	}
+    }
 };
