@@ -89,31 +89,44 @@ class $modify(PlayerObject) {
 };
 
 class $modify(PlayLayer) {
-	void postUpdate(float p0) {
-		float speed = Mod::get()->getSettingValue<double>("speed");
-		float saturation = Mod::get() -> getSettingValue<double>("saturation");
+    void postUpdate(float p0) {
+        float speed = Mod::get()->getSettingValue<double>("speed");
+	float saturation = Mod::get() -> getSettingValue<double>("saturation");
 
-		if (g >= 360) {
-			g = 0;
-		} else {
-			g += speed / 10;
-		}
+        if (g >= 360) {
+	    g = 0;
+	} else {
+	    g += speed / 10;
+	}
 
-		auto rainbowColor = getRainbow(0, saturation);
-		auto rainbowColor2 = getRainbow(180, saturation);
-		auto rainbowColor3 = getRainbow(90, saturation);
-		bool enable = Mod::get()->getSettingValue<bool>("enable");
+	auto rainbowColor = getRainbow(0, saturation);
+	auto rainbowColor2 = getRainbow(180, saturation);
+	auto rainbowColor3 = getRainbow(90, saturation);
+	bool enable = Mod::get()->getSettingValue<bool>("enable");
 
-		if (enable) {
-			if (m_player1->m_waveTrail) {
-				m_player1->m_waveTrail->setColor(rainbowColor);
-			}
+	if (enable == true) {
+	    if (m_fields->progressBar == nullptr || m_fields->percentLabel == nullptr) {
+                for (size_t i = 0; i < this->getChildrenCount(); i++) {
+                    auto obj = this->getChildren()->objectAtIndex(i);
+                        if (Utils::getNodeName(obj) == "cocos2d::CCLabelBMFont" && m_fields->percentLabel == nullptr) {
+                            auto labelTest = static_cast<CCLabelBMFont *>(obj);
+                            if (strlen(labelTest->getString()) < 6) {
+                                m_fields->percentLabel = labelTest;
+                            } 
+			} else if (Utils::getNodeName(obj) == "cocos2d::CCSprite" && m_fields->progressBar == nullptr) {
+                            m_fields->progressBar = static_cast<CCSprite *>(obj);
+                        }
+                    }
+			
+		    if (m_player1->m_waveTrail) {
+		        m_player1->m_waveTrail->setColor(rainbowColor);
+		    }
 
-			if (m_player2->m_waveTrail) {
-				m_player2->m_waveTrail->setColor(rainbowColor2);
-			}
+		    if (m_player2->m_waveTrail) {
+		        m_player2->m_waveTrail->setColor(rainbowColor2);
+		    }
 
-			PlayLayer::postUpdate(p0);
+		    PlayLayer::postUpdate(p0);
 		}
 	}
 };
