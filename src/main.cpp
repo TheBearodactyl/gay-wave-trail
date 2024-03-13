@@ -1,10 +1,6 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
-#include <Geode/binding/GJRobotSprite.hpp>
-#include <Geode/ui/GeodeUI.hpp>
-#include "Utils.hpp"
-#include <chrono>
 
 using namespace geode::prelude;
 
@@ -92,9 +88,6 @@ class $modify(PlayerObject) {
 };
 
 class $modify(PlayLayer) {
-    CCSprite *progressBar;
-    CCLabelBMFont *percentLabel;
-
     void postUpdate(float p0) {
         float speed = Mod::get()->getSettingValue<double>("speed");
 	float saturation = Mod::get() -> getSettingValue<double>("saturation");
@@ -111,27 +104,13 @@ class $modify(PlayLayer) {
 	bool enable = Mod::get()->getSettingValue<bool>("enable");
 
 	if (enable == true) {
-	    if (m_fields->progressBar == nullptr || m_fields->percentLabel == nullptr) {
-                for (size_t i = 0; i < this->getChildrenCount(); i++) {
-                    auto obj = this->getChildren()->objectAtIndex(i);
-                        if (Utils::getNodeName(obj) == "cocos2d::CCLabelBMFont" && m_fields->percentLabel == nullptr) {
-                            auto labelTest = static_cast<CCLabelBMFont *>(obj);
-                            if (strlen(labelTest->getString()) < 6) {
-                                m_fields->percentLabel = labelTest;
-                            } 
-			} else if (Utils::getNodeName(obj) == "cocos2d::CCSprite" && m_fields->progressBar == nullptr) {
-                            m_fields->progressBar = static_cast<CCSprite *>(obj);
-                        }
-                    }
-			
-		    if (m_player1->m_waveTrail) {
-		        m_player1->m_waveTrail->setColor(rainbowColor);
-		    }
+	    if (m_player1->m_waveTrail) {
+	        m_player1->m_waveTrail->setColor(rainbowColor);
+	    }
 
-		    if (m_player2->m_waveTrail) {
-		        m_player2->m_waveTrail->setColor(rainbowColor2);
-		    }
-	      }
+	    if (m_player2->m_waveTrail) {
+	        m_player2->m_waveTrail->setColor(rainbowColor2);
+	    }
 	}
 
 	PlayLayer::postUpdate(p0);
