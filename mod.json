@@ -43,7 +43,7 @@
   "repository": "https://github.com/TheBearodactyl/gay-wave-trail",
   "incompatibilities": [
     {
-      "id": "TheSillyDogo.Cheats",
+      "id": "TheSillyDoggo.Cheats",
       "importance": "breaking",
       "version": "*"
     }
