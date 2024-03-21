@@ -40,5 +40,12 @@
 			"description": "The larger the number, the better"
 		}
 	},
-  "repository": "https://github.com/TheBearodactyl/gay-wave-trail"
+  "repository": "https://github.com/TheBearodactyl/gay-wave-trail",
+  "incompatibilities": [
+    {
+      "id": "TheSillyDogo.Cheats",
+      "importance": "breaking",
+      "version": "*"
+    }
+  ]
 }
