@@ -3,7 +3,7 @@
   "gd": {
     "win": "2.204",
     "mac": "2.200",
-    "android": "*"
+    "android": "2.205"
   },
   "version": "v1.0.6",
   "id": "the_bearodactyl.gay-wave-trail",
