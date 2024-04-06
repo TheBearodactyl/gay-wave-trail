@@ -5,6 +5,7 @@
 #include <Geode/loader/Mod.hpp>
 #include <Geode/modify/CCMotionStreak.hpp>
 #include <Geode/loader/Loader.hpp>
+#include <Geode/ui/Notification.hpp>
 
 using namespace geode::prelude;
 
@@ -93,6 +94,7 @@ class $modify(PlayLayer) {
 	auto rainbowColor3 = getRainbow(90, saturation);
 	bool enable = Mod::get()->getSettingValue<bool>("enable");
 	bool isQolmodLoaded = Loader::get()->isModLoaded("TheSillyDoggo.Cheats");
+	Notification* notif = Notification::create("GWT Won't work with QOLMod!", NotificationIcon::Warning, 3.0f);
 
 	if (enable == true) {
    	    if (m_player1->m_waveTrail) {
