@@ -107,6 +107,7 @@ class $modify(PlayLayer) {
 	
             if (isQolmodLoaded == true) {
                 notif->show();
+		notif->hide();
 	    }
 	}
 
