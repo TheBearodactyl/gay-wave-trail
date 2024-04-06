@@ -107,7 +107,7 @@ class $modify(PlayLayer) {
 	
             if (isQolmodLoaded == true) {
                 notif->show();
-	    )
+	    }
 	}
 
 	PlayLayer::postUpdate(p0);
