@@ -4,6 +4,7 @@
 #include <Geode/cocos/include/ccTypes.h>
 #include <Geode/loader/Mod.hpp>
 #include <Geode/modify/CCMotionStreak.hpp>
+#include <Geode/loader/Loader.hpp>
 
 using namespace geode::prelude;
 
@@ -79,30 +80,30 @@ class $modify(PlayerObject) {
 class $modify(PlayLayer) {
     void postUpdate(float p0) {
         float speed = Mod::get()->getSettingValue<double>("speed");
-	    float saturation = Mod::get() -> getSettingValue<double>("saturation");
-
+	float saturation = Mod::get() -> getSettingValue<double>("saturation");
+	    
         if (g >= 360) {
     	    g = 0;
-	    } else {
+	} else {
     	    g += speed / 10;
-	    }
+	}
 
     	auto rainbowColor = getRainbow(0, saturation);
-	    auto rainbowColor2 = getRainbow(180, saturation);
-	    auto rainbowColor3 = getRainbow(90, saturation);
+	auto rainbowColor2 = getRainbow(180, saturation);
+	auto rainbowColor3 = getRainbow(90, saturation);
+	bool enable = Mod::get()->getSettingValue<bool>("enable");
+	bool isQolmodLoaded = Loader::isModLoaded("TheSillyDoggo.Cheats");
 
-	    bool enable = Mod::get()->getSettingValue<bool>("enable");
-
-	    if (enable == true) {
-   	        if (m_player1->m_waveTrail) {
-   	            m_player1->m_waveTrail->setColor(rainbowColor);
+	if (enable == true) {
+   	    if (m_player1->m_waveTrail) {
+   	        m_player1->m_waveTrail->setColor(rainbowColor);
             }
 
-	        if (m_player2->m_waveTrail) {
+	    if (m_player2->m_waveTrail) {
                 m_player2->m_waveTrail->setColor(rainbowColor2);
-	        }
 	    }
+	}
 
-	    PlayLayer::postUpdate(p0);
+	PlayLayer::postUpdate(p0);
     }
 };
