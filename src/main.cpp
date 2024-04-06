@@ -4,8 +4,6 @@
 #include <Geode/cocos/include/ccTypes.h>
 #include <Geode/loader/Mod.hpp>
 #include <Geode/modify/CCMotionStreak.hpp>
-#include <Geode/loader/Loader.hpp>
-#include <Geode/ui/Notification.hpp>
 
 using namespace geode::prelude;
 
@@ -92,9 +90,8 @@ class $modify(PlayLayer) {
     	auto rainbowColor = getRainbow(0, saturation);
 	auto rainbowColor2 = getRainbow(180, saturation);
 	auto rainbowColor3 = getRainbow(90, saturation);
+	
 	bool enable = Mod::get()->getSettingValue<bool>("enable");
-	bool isQolmodLoaded = Loader::get()->isModLoaded("TheSillyDoggo.Cheats");
-	Notification* notif = Notification::create("GWT Won't work with QOLMod!", NotificationIcon::Warning, 3.0f);
 
 	if (enable == true) {
    	    if (m_player1->m_waveTrail) {
@@ -103,12 +100,7 @@ class $modify(PlayLayer) {
 
 	    if (m_player2->m_waveTrail) {
                 m_player2->m_waveTrail->setColor(rainbowColor2);
-	    }
-	
-            if (isQolmodLoaded == true) {
-                notif->show();
-		notif->hide();
-	    }
+            }
 	}
 
 	PlayLayer::postUpdate(p0);
