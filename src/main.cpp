@@ -80,7 +80,7 @@ class $modify(PlayerObject) {
 class $modify(PlayLayer) {
     void postUpdate(float p0) {
         float speed = Mod::get()->getSettingValue<double>("speed");
-	float saturation = Mod::get() -> getSettingValue<double>("saturation");
+	float saturation = Mod::get()->getSettingValue<double>("saturation");
 	    
         if (g >= 360) {
     	    g = 0;
@@ -92,7 +92,7 @@ class $modify(PlayLayer) {
 	auto rainbowColor2 = getRainbow(180, saturation);
 	auto rainbowColor3 = getRainbow(90, saturation);
 	bool enable = Mod::get()->getSettingValue<bool>("enable");
-	bool isQolmodLoaded = Loader::isModLoaded("TheSillyDoggo.Cheats");
+	bool isQolmodLoaded = Loader::get()->isModLoaded("TheSillyDoggo.Cheats");
 
 	if (enable == true) {
    	    if (m_player1->m_waveTrail) {
