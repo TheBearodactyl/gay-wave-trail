@@ -38,6 +38,12 @@
         "slider-step": 1
       },
       "description": "The larger the number, the better"
+    },
+    "mirror-players": {
+      "name": "Mirror the player colors",
+      "description": "It's like looking in a BatMirror\n- Batman",
+      "type": "bool",
+      "default": true
     }
   },
   "repository": "https://gitlab.com/TheBearodactyl/gay-wave-trail.git"
