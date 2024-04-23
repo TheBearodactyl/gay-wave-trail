@@ -82,6 +82,7 @@ class $modify(PlayLayer) {
 
     float speed = Mod::get()->getSettingValue<double>("speed");
     float saturation = Mod::get()->getSettingValue<double>("saturation");
+    bool mirror_players = Mod::get()->getSettingValue<bool>("mirror-players");
 
     if (g >= 360) {
       g = 0;
@@ -95,12 +96,22 @@ class $modify(PlayLayer) {
     bool enable = Mod::get()->getSettingValue<bool>("enable");
 
     if (enable == true) {
-      if (m_player1->m_waveTrail) {
-        m_player1->m_waveTrail->setColor(rainbowColor);
-      }
-
-      if (m_player2->m_waveTrail) {
-        m_player2->m_waveTrail->setColor(rainbowColor2);
+      if (!mirror_players) {
+        if (m_player1->m_waveTrail) {
+          m_player1->m_waveTrail->setColor(rainbowColor);
+        }
+  
+        if (m_player2->m_waveTrail) {
+          m_player2->m_waveTrail->setColor(rainbowColor2);
+        }
+      } else {
+        if (m_player1->m_waveTrail) {
+          m_player1->m_waveTrail->setColor(rainbowColor);
+        }
+  
+        if (m_player2->m_waveTrail) {
+          m_player2->m_waveTrail->setColor(rainbowColor);
+        }
       }
     }
   }
