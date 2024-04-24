@@ -8,7 +8,8 @@
 using namespace geode::prelude;
 
 // thanks to shadowforce78
-void HSVtoRGBbutDifferentIGuess(float &fR, float &fG, float &fB, float &fH, float &fS, float &fV) {
+void HSVtoRGBbutDifferentIGuess(float &fR, float &fG, float &fB, float &fH,
+                                float &fS, float &fV) {
   float fC = fV * fS; // Chroma
   float fHPrime = fmod(fH / 60.0, 6);
   float fX = fC * (1 - fabs(fmod(fHPrime, 2) - 1));
@@ -69,10 +70,8 @@ cocos2d::_ccColor3B getRainbow(float offset, float saturation) {
   return out;
 }
 
-// thanks to shadowforce78
 class $modify(PlayerObject) {
   void flashPlayer(float p0, float p1, cocos2d::ccColor3B mainColor, cocos2d::ccColor3B secondColor) {
-    // neutralised kappa
   }
 };
 
@@ -94,13 +93,22 @@ class $modify(PlayLayer) {
     auto rainbowColor2 = getRainbow(180, saturation);
     auto rainbowColor3 = getRainbow(90, saturation);
     bool enable = Mod::get()->getSettingValue<bool>("enable");
+    bool noRegularTrail = Mod::get()->getSettingValue<bool>("no-reg-trail");
+
+    if (m_player1->m_isDart && noRegularTrail) {
+      m_player1->m_regularTrail->setVisible(false);
+    }
+
+    if (m_player2->m_isDart && noRegularTrail) {
+      m_player2->m_regularTrail->setVisible(false);
+    }
 
     if (enable == true) {
       if (!mirror_players) {
         if (m_player1->m_waveTrail) {
           m_player1->m_waveTrail->setColor(rainbowColor);
         }
-  
+
         if (m_player2->m_waveTrail) {
           m_player2->m_waveTrail->setColor(rainbowColor2);
         }
@@ -108,7 +116,7 @@ class $modify(PlayLayer) {
         if (m_player1->m_waveTrail) {
           m_player1->m_waveTrail->setColor(rainbowColor);
         }
-  
+
         if (m_player2->m_waveTrail) {
           m_player2->m_waveTrail->setColor(rainbowColor);
         }
