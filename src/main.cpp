@@ -4,7 +4,7 @@
 #include <Geode/modify/CCMotionStreak.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
-#include "rainbow_trail.hpp"
+#include "trail_customization/rainbow_trail.hpp"
 
 using namespace geode::prelude;
 
