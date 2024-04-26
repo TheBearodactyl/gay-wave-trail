@@ -29,7 +29,7 @@
       "description": "the speed of the alphabet mafia\nshould not be underestimated."
     },
     "saturation": {
-      "name": "HOW GAY ARE YOU???????",
+      "name": "HOW GAY ARE YOU???",
       "type": "float",
       "default": 100,
       "min": 0,
@@ -46,13 +46,13 @@
       "default": true
     },
     "no-reg-trail": {
-      "name": "",
-      "description": "in other words: don't be dream.",
+      "name": "THE\nDE-REGULARINATOR\n2000",
+      "description": "\n         bye-bye regular trail :3",
       "type": "bool",
       "default": true
     },
     "solid-wave-trail": {
-      "name": "Come out of the closet already,\nstop trying to blend in!",
+      "name": "Blending in ain't that fun",
       "description": "\nfood processors are better than blenders anyways",
       "type": "bool",
       "default": true
