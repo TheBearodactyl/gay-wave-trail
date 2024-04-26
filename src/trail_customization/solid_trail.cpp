@@ -1,6 +1,5 @@
 #ifndef GEODE_IS_MACOS
 
-#include <Geode/Geode.hpp>
 #include <Geode/modify/CCDrawNode.hpp>
 
 using namespace geode::prelude;

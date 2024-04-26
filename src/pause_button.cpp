@@ -1,4 +1,3 @@
-#include <Geode/Geode.hpp>
 #include <Geode/modify/Modify.hpp>
 #include <Geode/modify/PauseLayer.hpp>
 #include <Geode/ui/GeodeUI.hpp>
@@ -28,7 +27,6 @@ struct GayPauseLayer : Modify<GayPauseLayer, PauseLayer> {
 
     settingsBtn->setID("gay-settings-button"_spr);
     ccmenu->addChild(settingsBtn);
-
-    this->addChild(ccmenu);
+    ccmenu->updateLayout();
   }
 };

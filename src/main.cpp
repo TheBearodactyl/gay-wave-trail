@@ -1,4 +1,3 @@
-#include <Geode/Geode.hpp>
 #include <Geode/cocos/include/ccTypes.h>
 #include <Geode/loader/Mod.hpp>
 #include <Geode/modify/CCMotionStreak.hpp>
