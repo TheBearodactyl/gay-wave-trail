@@ -27,7 +27,6 @@ struct GayPauseLayer : Modify<GayPauseLayer, PauseLayer> {
     );
 
     settingsBtn->setID("gay-settings-button"_spr);
-    settingsBtn->setPosition(CCPoint{ 45, 40 });
     ccmenu->addChild(settingsBtn);
 
     this->addChild(ccmenu);
