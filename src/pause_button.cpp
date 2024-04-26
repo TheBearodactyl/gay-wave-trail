@@ -12,12 +12,8 @@ struct GayPauseLayer : Modify<GayPauseLayer, PauseLayer> {
   void customSetup() {
     PauseLayer::customSetup();
 
-    auto winSize = CCDirector::sharedDirector()->getWinSize();
-    auto ccmenu = this->getChildByIDRecursive("left-button-menu");
-
-    auto *settingsButtonSprite = CCSprite::create("logo.png"_spr);
-
-    settingsButtonSprite->setScale(0.25f);
+    auto settingsButtonSprite = CCSprite::create("logo.png"_spr);
+    settingsButtonSprite->setScale(.95f);
 
     auto settingsBtn = CCMenuItemSpriteExtra::create(
       settingsButtonSprite, 
@@ -26,7 +22,9 @@ struct GayPauseLayer : Modify<GayPauseLayer, PauseLayer> {
     );
 
     settingsBtn->setID("gay-settings-button"_spr);
-    ccmenu->addChild(settingsBtn);
-    ccmenu->updateLayout();
+    if (auto leftMenu = getChildByIDRecursive("left-button-menu")) {
+      leftMenu->addChild(settingsBtn);
+      leftMenu->updateLayout();
+    }
   }
 };
