@@ -1,3 +1,4 @@
+// thanks to RayDeeUx for helping fix the pause button :D
 #include <Geode/modify/Modify.hpp>
 #include <Geode/modify/PauseLayer.hpp>
 #include <Geode/ui/GeodeUI.hpp>
