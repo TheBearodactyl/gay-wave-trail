@@ -18,7 +18,7 @@
       "default": true
     },
     "speed": {
-      "name": "Sonic says: you've gotta be fast when\nyou're trying to pick up a femboy twink",
+      "name": "GOTTA GO FAST",
       "type": "float",
       "default": 10,
       "min": 1,
@@ -26,7 +26,7 @@
       "control": {
         "slider-step": 1
       },
-      "description": "\n\nMy personal record for getting\na date with a buff furry dude\nis 0.8 seconds (real)"
+      "description": "the speed of the alphabet mafia\nshould not be underestimated."
     },
     "saturation": {
       "name": "HOW GAY ARE YOU???????",
@@ -40,13 +40,13 @@
       "description": "You think you're more fruity than me? wrong."
     },
     "mirror-players": {
-      "name": "You're fruity? OMG SAME",
-      "description": "It's like looking in a Bat-Mirror\n- Batman",
+      "name": "Mirror the Players",
+      "description": "It's like looking in a Bat-Mirror\n- Batman\n\n(sorry i couldn't come up with a funny name lol)",
       "type": "bool",
       "default": true
     },
     "no-reg-trail": {
-      "name": "Don't be a coward. Be yourself without a disguise :)",
+      "name": "",
       "description": "in other words: don't be dream.",
       "type": "bool",
       "default": true
