@@ -55,9 +55,7 @@ void RainbowTrail::hsv_to_rgb(float &fR, float &fG, float &fB, float &fH, float 
 float RainbowTrail::g = 0;
 
 cocos2d::_ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
-    float R;
-    float G;
-    float B;
+    float R, G, B;
 
     float hue = fmod(g + offset, 360);
     float sat = saturation / 100.0;
