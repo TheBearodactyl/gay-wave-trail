@@ -1,70 +1,52 @@
 #include "rainbow_trail.hpp"
-
 #include <cmath>
 
 void RainbowTrail::hsv_to_rgb(float &fR, float &fG, float &fB, float &fH, float &fS, float &fV) {
-    float fC = fV * fS; // Chroma
-    float fHPrime = fmod(fH / 60.0, 6);
-    float fX = fC * (1 - fabs(fmod(fHPrime, 2) - 1));
-    float fM = fV - fC;
-
-    int hue_segment = static_cast<int>(fHPrime);
-    switch (hue_segment) {
-        case 0:
-            fR = fC;
-            fG = fX;
-            fB = 0;
-            break;
-        case 1:
-            fR = fX;
-            fG = fC;
-            fB = 0;
-            break;
-        case 2:
-            fR = 0;
-            fG = fC;
-            fB = fX;
-            break;
-        case 3:
-            fR = 0;
-            fG = fX;
-            fB = fC;
-            break;
-        case 4:
-            fR = fX;
-            fG = 0;
-            fB = fC;
-            break;
-        case 5:
-            fR = fC;
-            fG = 0;
-            fB = fX;
-            break;
-        default:
-            fR = 0;
-            fG = 0;
-            fB = 0;
-            break;
-    }
-
-    fR += fM;
-    fG += fM;
-    fB += fM;
+  float fC = fV * fS, fHPrime = fmodf(fH / 60.0f, 6), fX = fC * ( 1 - fabsf(fmodf(fHPrime, 2) - 1));
+  int iHue = static_cast<int>(fHPrime);
+  // ternary operators are fucking awesome.
+  fR = ( iHue == 0 )
+       ? fC
+       : ( iHue == 1 )
+         ? fX
+         : ( iHue == 4 )
+           ? fX
+           : ( iHue == 5 )
+             ? fC
+             : 0;
+  fG = ( iHue == 1 )
+       ? fC
+       : ( iHue == 2 )
+         ? fC
+         : ( iHue == 3 )
+           ? fX
+           : 0;
+  fB = ( iHue == 3 )
+       ? fC
+       : ( iHue == 4 )
+         ? fC
+         : ( iHue == 5 )
+           ? fX
+           : 0;
+  float fM = fV - fC;
+  fR += fM;
+  fG += fM;
+  fB += fM;
 }
 
 float RainbowTrail::g = 0;
 
 cocos2d::_ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
-    float R, G, B;
+  float R, G, B;
 
-    float hue = fmod(g + offset, 360);
-    float sat = saturation / 100.0;
-    float vc = 1;
-    hsv_to_rgb(R, G, B, hue, sat, vc);
+  float hue = static_cast<float>(fmod(g + offset, 360));
+  float sat = static_cast<float>(saturation / 100.0);
+  float vc = 1;
+  hsv_to_rgb(R, G, B, hue, sat, vc);
 
-    cocos2d::_ccColor3B out;
-    out.r = R * 255;
-    out.g = G * 255;
-    out.b = B * 255;
-    return out;
+  cocos2d::_ccColor3B out;
+  out.r = static_cast<GLubyte>(R * 255);
+  out.g = static_cast<GLubyte>(G * 255);
+  out.b = static_cast<GLubyte>(B * 255);
+  return out;
 }
