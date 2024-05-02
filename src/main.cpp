@@ -3,6 +3,7 @@
 #include <Geode/modify/CCMotionStreak.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
+#include <string>
 #include "trail_customization/rainbow_trail.hpp"
 
 using namespace geode::prelude;
@@ -25,9 +26,6 @@ class $modify(PlayLayer) {
             RainbowTrail::g += speed / 10;
         }
 
-        _ccColor3B rainbowColor = RainbowTrail::get_rainbow(0, saturation);
-        _ccColor3B rainbowColor2 = RainbowTrail::get_rainbow(180, saturation);
-        _ccColor3B rainbowColor3 = RainbowTrail::get_rainbow(90, saturation);
         bool enable = Mod::get()->getSettingValue<bool>("enable");
         bool noRegularTrail = Mod::get()->getSettingValue<bool>("no-reg-trail");
 
