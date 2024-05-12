@@ -1,11 +1,11 @@
 {
-  "geode": "2.0.0-beta.25",
+  "geode": "2.0.0-beta.26",
   "gd": {
     "win": "2.204",
     "mac": "2.200",
     "android": "2.205"
   },
-  "version": "v1.0.16",
+  "version": "v1.0.17",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
@@ -45,6 +45,12 @@
       "type": "bool",
       "default": true
     },
+    "use-gradient": {
+      "name": "Use a gradient instead of a rainbow :D",
+      "description": "now with 4 colors! full 256\ncolor rainbow NO MORE",
+      "type": "bool",
+      "default": false
+    },
     "no-reg-trail": {
       "name": "THE\nDE-REGULARINATOR\n2000",
       "description": "\n         bye-bye regular trail :3",
@@ -56,6 +62,30 @@
       "description": "\nfood processors are better than blenders anyways",
       "type": "bool",
       "default": true
+    },
+    "color-one": {
+      "name": "Wave trail color #1",
+      "description": "G R A D I E N T S A R E F U N",
+      "type": "color",
+      "default": "#FFFFFF"
+    },
+    "color-two": {
+      "name": "Wave trail color #2",
+      "description": "G R A D I E N T S A R E F U N",
+      "type": "color",
+      "default": "#FFFFFF"
+    },
+    "color-three": {
+      "name": "Wave trail color #3",
+      "description": "G R A D I E N T S A R E F U N",
+      "type": "color",
+      "default": "#FFFFFF"
+    },
+    "color-four": {
+      "name": "Wave trail color #4",
+      "description": "G R A D I E N T S A R E F U N",
+      "type": "color",
+      "default": "#FFFFFF"
     }
   },
   "repository": "https://gitlab.com/TheBearodactyl/gay-wave-trail.git"
