@@ -1,3 +1,7 @@
+if ($null -eq $Env:NDK_ROOT) {
+  throw "Please install the Android NDK"
+}
+
 geode.exe build -p android64 | Out-Null
 
 if (Test-Path -Path .\build-android64) {
