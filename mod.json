@@ -5,7 +5,7 @@
     "mac": "2.200",
     "android": "2.205"
   },
-  "version": "v1.0.17",
+  "version": "v1.0.18",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
@@ -26,7 +26,7 @@
       "control": {
         "slider-step": 1
       },
-      "description": "the speed of the alphabet mafia\nshould not be underestimated."
+      "description": "the speed of the alphabet mafia\nshould not be underestimated.\n(sets the speed at which the\nwave trail changes color)"
     },
     "saturation": {
       "name": "HOW GAY ARE YOU???",
@@ -37,19 +37,13 @@
       "control": {
         "slider-step": 1
       },
-      "description": "You think you're more fruity than me? wrong."
+      "description": "You think you're more fruity than me? wrong.\n(sets the color saturation of\nthe wave trail)"
     },
     "mirror-players": {
       "name": "Mirror the Players",
-      "description": "It's like looking in a Bat-Mirror\n- Batman\n\n(sorry i couldn't come up with a funny name lol)",
+      "description": "It's like looking in a Bat-Mirror\n- Batman\n(mirrors the player\ncolors in dual mode)",
       "type": "bool",
       "default": true
-    },
-    "use-gradient": {
-      "name": "Use a gradient instead of a rainbow :D",
-      "description": "now with 4 colors! full 256\ncolor rainbow NO MORE",
-      "type": "bool",
-      "default": false
     },
     "no-reg-trail": {
       "name": "THE\nDE-REGULARINATOR\n2000",
@@ -63,27 +57,33 @@
       "type": "bool",
       "default": true
     },
+    "use-gradient": {
+      "name": "Enable the GAYDIENT",
+      "description": "now with 4 colors! full 256\ncolor rainbow NO MORE\n(enables the usage of\nthe below custom colors\ninstead of a vanilla rainbow)",
+      "type": "bool",
+      "default": false
+    },
     "color-one": {
       "name": "Wave trail color #1",
-      "description": "G R A D I E N T S A R E F U N",
+      "description": "The first color the wave trail will become",
       "type": "color",
       "default": "#FFFFFF"
     },
     "color-two": {
       "name": "Wave trail color #2",
-      "description": "G R A D I E N T S A R E F U N",
+      "description": "The second color the wave trail will become",
       "type": "color",
       "default": "#FFFFFF"
     },
     "color-three": {
       "name": "Wave trail color #3",
-      "description": "G R A D I E N T S A R E F U N",
+      "description": "The third color the wave trail will become",
       "type": "color",
       "default": "#FFFFFF"
     },
     "color-four": {
       "name": "Wave trail color #4",
-      "description": "G R A D I E N T S A R E F U N",
+      "description": "The fourth color the wave trail will become",
       "type": "color",
       "default": "#FFFFFF"
     }
