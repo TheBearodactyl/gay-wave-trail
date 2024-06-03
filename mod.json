@@ -94,12 +94,5 @@
       "default": "#FFFFFF"
     }
   },
-  "dependencies": [
-    {
-      "id": "geode.node-ids",
-      "version": ">=v1.3.0",
-      "importance": "required"
-    }
-  ],
   "repository": "https://gitlab.com/TheBearodactyl/gay-wave-trail.git"
 }
