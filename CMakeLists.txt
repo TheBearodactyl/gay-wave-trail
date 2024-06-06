@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(GEODE_LINK_NIGHTLY ON)
 
 project(gay-wave-trail VERSION 1.0.0)
 
@@ -19,7 +20,6 @@ else()
   message(STATUS "Found Geode: $ENV{GEODE_SDK}")
 endif()
 
-set(GEODE_LINK_NIGHTLY ON)
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
 setup_geode_mod(${PROJECT_NAME})

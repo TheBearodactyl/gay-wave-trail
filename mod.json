@@ -4,7 +4,7 @@
     "win": "2.206",
     "android": "2.206"
   },
-  "version": "v1.0.19",
+  "version": "v1.0.20",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
@@ -55,13 +55,6 @@
       "description": "\nfood processors are better than blenders anyways",
       "type": "bool",
       "default": true
-    },
-    "title-seccion-p1-custom": {
-      "name": "P1 Custom",
-      "type": "custom",
-      "description": "This P1 Custom.",
-      "scale": 300,
-      "posX": 80
     },
     "use-gradient": {
       "name": "Enable the GAYDIENT",
