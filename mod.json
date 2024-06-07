@@ -8,7 +8,7 @@
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
-  "description": "make your wave trail a raging homosexual >:3",
+  "description": "make your wave trail (and kayla) a raging homosexual >:3",
   "settings": {
     "enable": {
       "name": "Enable the G A E",
@@ -26,6 +26,28 @@
         "slider-step": 1
       },
       "description": "the speed of the alphabet mafia\nshould not be underestimated.\n(sets the speed at which the\nwave trail changes color)"
+    },
+    "wave-pulse-size": {
+      "name": "It's pulsing...",
+      "description": "the wave trail that is.",
+      "type": "float",
+      "default": 1,
+      "min": 0.05,
+      "max": 5,
+      "control": {
+        "slider-step": 0.05
+      }
+    },
+    "wave-trail-size": {
+      "name": "it even left a trail...",
+      "description": "that of which you can change the size...\noh my fucking sex,\nyou though i was talking about something else",
+      "type": "float",
+      "default": 1,
+      "min": 0.05,
+      "max": 5,
+      "control": {
+        "slider-step": 0.05
+      }
     },
     "saturation": {
       "name": "HOW GAY ARE YOU???",
@@ -55,6 +77,13 @@
       "description": "\nfood processors are better than blenders anyways",
       "type": "bool",
       "default": true
+    },
+    "gaydient-section": {
+      "name": "Gaydient Settings",
+      "type": "custom",
+      "description": "make kayla gay",
+      "scale": 300,
+      "posX": 80
     },
     "use-gradient": {
       "name": "Enable the GAYDIENT",
