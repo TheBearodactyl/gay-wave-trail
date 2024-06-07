@@ -31,6 +31,7 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     bool use_gradient = Mod::get()->getSettingValue<bool>( "use-gradient" );
     bool enable = Mod::get()->getSettingValue<bool>( "enable" );
     bool noRegularTrail = Mod::get()->getSettingValue<bool>( "no-reg-trail" );
+    bool rainbow_icon = Mod::get()->getSettingValue<bool>( "rainbow-icon" );
 
     auto color1 = Mod::get()->getSettingValue<ccColor3B>( "color-one" );
     auto color2 = Mod::get()->getSettingValue<ccColor3B>( "color-two" );
@@ -67,6 +68,10 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
         if ( m_player1->m_waveTrail ) {
           m_player1->m_waveTrail
               ->setColor( rainbowColor );
+
+          if ( rainbow_icon ) {
+            m_player1->setColor( rainbowColor );
+          }
         }
 
         if ( m_player2->m_waveTrail ) {
@@ -74,11 +79,19 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
               ->setColor( ! mirror_players
                               ? rainbowColor2
                               : rainbowColor );
+
+          if ( rainbow_icon ) {
+            m_player2->setColor( rainbowColor2 );
+          }
         }
       } else {
         if ( m_player1->m_waveTrail ) {
           m_player1->m_waveTrail
               ->setColor( gradientColor );
+
+          if ( rainbow_icon ) {
+            m_player1->setColor( gradientColor );
+          }
         }
 
         if ( m_player2->m_waveTrail ) {
@@ -86,6 +99,8 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
               ->setColor( ! mirror_players
                               ? gradientColor
                               : gradientColor2 );
+
+          m_player2->setColor( ! mirror_players ? gradientColor : gradientColor2 );
         }
       }
     }

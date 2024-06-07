@@ -5,10 +5,10 @@
     "android": "2.206"
   },
   "version": "v1.1.0",
-  "id": "the_bearodactyl.gay-wave-trail",
-  "name": "Gay Wave Trail",
+  "id": "the_bearodactyl.gay-wave",
+  "name": "Gay Wave (fomerly trail)",
   "developer": "The Bearodactyl",
-  "description": "make your wave trail (and kayla) a raging homosexual >:3",
+  "description": "make your wave (and kayla) a raging homosexual >:3",
   "settings": {
     "enable": {
       "name": "Enable the G A E",
@@ -40,7 +40,7 @@
     },
     "wave-trail-size": {
       "name": "it even left a trail...",
-      "description": "that of which you can change the size...\noh my fucking sex,\nyou though i was talking about something else",
+      "description": "that of which you can change the size...",
       "type": "float",
       "default": 1,
       "min": 0.05,
@@ -48,6 +48,12 @@
       "control": {
         "slider-step": 0.05
       }
+    },
+    "rainbow-icon": {
+      "name": "First it was just the trail...",
+      "description": "NOW THE ICON TOO???\noh my fuckin sex, i\nam so dissapointed.",
+      "type": "bool",
+      "default": false
     },
     "saturation": {
       "name": "HOW GAY ARE YOU???",
