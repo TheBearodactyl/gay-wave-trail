@@ -69,7 +69,7 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
           m_player1->m_waveTrail
               ->setColor( rainbowColor );
 
-          if ( rainbow_icon ) {
+          if ( rainbow_icon && m_player1->m_isDart ) {
             m_player1->setColor( rainbowColor );
           }
         }
@@ -80,7 +80,7 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
                               ? rainbowColor2
                               : rainbowColor );
 
-          if ( rainbow_icon ) {
+          if ( rainbow_icon && m_player1->m_isDart ) {
             m_player2->setColor( rainbowColor2 );
           }
         }
@@ -89,7 +89,7 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
           m_player1->m_waveTrail
               ->setColor( gradientColor );
 
-          if ( rainbow_icon ) {
+          if ( rainbow_icon && m_player1->m_isDart ) {
             m_player1->setColor( gradientColor );
           }
         }
@@ -100,7 +100,9 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
                               ? gradientColor
                               : gradientColor2 );
 
-          m_player2->setColor( ! mirror_players ? gradientColor : gradientColor2 );
+          if ( rainbow_icon && m_player2->m_isDart ) {
+            m_player2->setColor( ! mirror_players ? gradientColor : gradientColor2 );
+          }
         }
       }
     }
