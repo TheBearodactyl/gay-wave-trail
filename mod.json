@@ -5,7 +5,7 @@
     "android": "2.206",
     "mac": "2.206"
   },
-  "version": "v1.1.8",
+  "version": "v1.2.0",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
@@ -142,7 +142,7 @@
       "default": false
     },
     "min-y-pos-offset": {
-      "name": "Maximum Y Position Offset",
+      "name": "Minimum Y Position Offset",
       "description": "the maximum amount the wave trail can be offset from the player's position",
       "type": "float",
       "default": 0,
@@ -163,9 +163,9 @@
         "slider-step": 0.1
       }
     },
-    "max-x-pos-offset": {
-      "name": "Maximum X Position Offset",
-      "description": "the maximum amount the wave trail can be offset from the player's position",
+    "min-x-pos-offset": {
+      "name": "Minimum X Position Offset",
+      "description": "the minimum amount the wave trail can be offset from the player's position",
       "type": "float",
       "default": 0,
       "min": -50,
@@ -174,9 +174,9 @@
         "slider-step": 0.1
       }
     },
-    "min-x-pos-offset": {
-      "name": "Minimum X Position Offset",
-      "description": "the minimum amount the wave trail can be offset from the player's position",
+    "max-x-pos-offset": {
+      "name": "Maximum X Position Offset",
+      "description": "the maximum amount the wave trail can be offset from the player's position",
       "type": "float",
       "default": 0,
       "min": -50,
