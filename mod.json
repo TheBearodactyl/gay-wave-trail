@@ -1,10 +1,10 @@
 {
-  "geode": "3.1.0",
+  "geode": "3.1.1",
   "gd": {
     "win": "2.206",
     "android": "2.206"
   },
-  "version": "v1.1.6",
+  "version": "v1.1.7",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
@@ -83,6 +83,18 @@
       "description": "\nfood processors are better than blenders anyways\n(disables wave trail blending)",
       "type": "bool",
       "default": true
+    },
+    "disable-wave-trail": {
+      "name": "*cutely untrails your wave*",
+      "description": "i may not be able to label your sexuality,\nbut grammarly can help you with your grammar.\nWriting's not easy. That's why Grammarly can help. This\nsentence is grammatically correct, but it's wordy, and hard to\nread. It undermines the writer's message and the word choice is\nbland.\n(press Esc to close this btw)\nGrammarly's cutting edge technology helps you craft\ncompelling, understandable writing that makes an impact on\nyour reader. Much better. Are you ready to give it a try?\nInstallation is simple and free. Visit Grammarly.com today!",
+      "type": "bool",
+      "default": false
+    },
+    "chaos": {
+      "name": "I FINALLY HAVE THE CHAOS EMERALDS",
+      "description": "chaos insues when enabled (randomizes the placement of every point on the wave trail)",
+      "type": "bool",
+      "default": false
     },
     "gaydient-section": {
       "name": "Gaydient Settings",

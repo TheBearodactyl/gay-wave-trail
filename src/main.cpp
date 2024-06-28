@@ -1,10 +1,13 @@
 #include <Geode/cocos/include/ccTypes.h>
 #include <Geode/loader/Mod.hpp>
+#include <Geode/loader/SettingEvent.hpp>
 #include <Geode/modify/CCMotionStreak.hpp>
+#include <Geode/modify/HardStreak.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
 #include <cmath>
 #include <cocos2d.h>
+#include <random>
 
 #include "Geode/loader/ModEvent.hpp"
 #include "Geode/modify/Modify.hpp"
@@ -32,6 +35,8 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     bool enable = Mod::get()->getSettingValue<bool>("enable");
     bool noRegularTrail = Mod::get()->getSettingValue<bool>("no-reg-trail");
     bool rainbow_icon = Mod::get()->getSettingValue<bool>("rainbow-icon");
+    bool disable_trail = Mod::get()->getSettingValue<bool>("disable-wave-trail");
+    bool infinite_trail = Mod::get()->getSettingValue<bool>("infinite-trail");
 
     auto color1 = Mod::get()->getSettingValue<ccColor3B>("color-one");
     auto color2 = Mod::get()->getSettingValue<ccColor3B>("color-two");
@@ -64,7 +69,7 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     }
 
     if (enable) {
-      if (!use_gradient) {
+      if (! use_gradient) {
         if (m_player1->m_waveTrail) {
           m_player1->m_waveTrail
               ->setColor(rainbowColor);
@@ -76,9 +81,9 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
 
         if (m_player2->m_waveTrail) {
           m_player2->m_waveTrail
-              ->setColor(!mirror_players
-                         ? rainbowColor2
-                         : rainbowColor);
+              ->setColor(! mirror_players
+                             ? rainbowColor2
+                             : rainbowColor);
 
           if (rainbow_icon && m_player1->m_isDart) {
             m_player2->setColor(rainbowColor2);
@@ -91,21 +96,109 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
 
           if (rainbow_icon && m_player1->m_isDart) {
             m_player1->setColor(gradientColor);
+          } else if (! rainbow_icon) {
+            reset_colors();
           }
         }
 
         if (m_player2->m_waveTrail) {
           m_player2->m_waveTrail
-              ->setColor(!mirror_players
-                         ? gradientColor
-                         : gradientColor2);
+              ->setColor(! mirror_players
+                             ? gradientColor
+                             : gradientColor2);
 
           if (rainbow_icon && m_player2->m_isDart) {
-            m_player2->setColor(!mirror_players ? gradientColor : gradientColor2);
+            m_player2->setColor(! mirror_players ? gradientColor : gradientColor2);
+          } else if (! rainbow_icon) {
+            reset_colors();
           }
         }
       }
+
+      if (disable_trail) {
+        this->m_player1->m_waveTrail->setVisible(false);
+        this->m_player2->m_waveTrail->setVisible(false);
+      } else {
+        this->m_player1->m_waveTrail->setVisible(true);
+        this->m_player2->m_waveTrail->setVisible(true);
+      }
     }
+  }
+
+  int get_player_set_color(bool player2) {
+    if (player2) {
+      return GameManager::sharedState()->m_playerColor2;
+    } else {
+      return GameManager::sharedState()->m_playerColor;
+    }
+  }
+
+  ccColor3B int_to_rgb(int color) {
+    GLubyte r = (color >> 16) & 0xFF;
+    GLubyte g = (color >> 8) & 0xFF;
+    GLubyte b = color & 0xFF;
+
+    return ccColor3B{r, g, b};
+  }
+
+  ccColor3B get_player_color_rgb(bool player2) {
+    int color = get_player_set_color(player2);
+
+    return int_to_rgb(color);
+  }
+
+  void reset_colors() {
+    m_player1->setColor(get_player_color_rgb(false));
+    m_player2->setColor(get_player_color_rgb(true));
+  }
+};
+
+struct MyHardStreak : Modify<MyHardStreak, HardStreak> {
+  void addPoint(CCPoint p0) {
+    bool chaos = Mod::get()->getSettingValue<bool>("chaos");
+
+    if (chaos) {
+      std::mt19937 rng(std::time(nullptr));
+      std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+      std::uniform_real_distribution<float> dist_5(-25.0f, 25.0f);
+
+      auto random_float_5 = [&]() { return dist_5(rng); };
+
+      std::vector<std::function<void()>> operations = {
+          [&]() { p0.x += random_float(); },
+          [&]() { p0.x -= random_float(); },
+          [&]() { p0.x *= random_float(); },
+          [&]() { p0.x /= random_float(); },
+          [&]() { p0.y += random_float(); },
+          [&]() { p0.y -= random_float(); },
+          [&]() { p0.y *= random_float(); },
+          [&]() { p0.y /= random_float(); },
+          [&]() { m_waveSize += random_float_5(); },
+          [&]() { m_waveSize -= random_float_5(); },
+          [&]() { m_waveSize *= random_float_5(); },
+          [&]() { m_waveSize /= random_float_5(); },
+          [&]() { m_pulseSize += random_float_5(); },
+          [&]() { m_pulseSize -= random_float_5(); },
+          [&]() { m_pulseSize *= random_float_5(); },
+          [&]() { m_pulseSize /= random_float_5(); }};
+
+      std::bernoulli_distribution enable_op(0.5);
+
+      for (auto &op: operations) {
+        if (enable_op(rng)) {
+          op();
+        }
+      }
+    }
+
+    HardStreak::addPoint(p0);
+  }
+
+  float random_float(float min = -25.f, float max = 25.f) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_real_distribution<float> dis(min, max);
+    return dis(gen);
   }
 };
 
