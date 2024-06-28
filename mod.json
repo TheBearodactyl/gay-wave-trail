@@ -91,12 +91,6 @@
       "type": "bool",
       "default": false
     },
-    "chaos": {
-      "name": "I FINALLY HAVE THE CHAOS EMERALDS",
-      "description": "chaos insues when enabled (randomizes the placement of every point on the wave trail)",
-      "type": "bool",
-      "default": false
-    },
     "gaydient-section": {
       "name": "Gaydient Settings",
       "type": "custom",
@@ -133,6 +127,118 @@
       "description": "The fourth color the wave trail will become",
       "type": "color",
       "default": "#FFFFFF"
+    },
+    "chaos-section": {
+      "name": "The chaos emeralds",
+      "type": "custom",
+      "description": "make skylar gay",
+      "scale": 300,
+      "posX": 80
+    },
+    "chaos": {
+      "name": "I FINALLY HAVE THE CHAOS EMERALDS",
+      "description": "chaos insues when enabled (randomizes the placement of every point on the wave trail)",
+      "type": "bool",
+      "default": false
+    },
+    "min-y-pos-offset": {
+      "name": "Maximum Y Position Offset",
+      "description": "the maximum amount the wave trail can be offset from the player's position",
+      "type": "float",
+      "default": 0,
+      "min": -50,
+      "max": 50,
+      "control": {
+        "slider-step": 0.1
+      }
+    },
+    "max-y-pos-offset": {
+      "name": "Maximum Y Position Offset",
+      "description": "the maximum amount the wave trail can be offset from the player's position",
+      "type": "float",
+      "default": 0,
+      "min": -50,
+      "max": 50,
+      "control": {
+        "slider-step": 0.1
+      }
+    },
+    "max-x-pos-offset": {
+      "name": "Maximum X Position Offset",
+      "description": "the maximum amount the wave trail can be offset from the player's position",
+      "type": "float",
+      "default": 0,
+      "min": -50,
+      "max": 50,
+      "control": {
+        "slider-step": 0.1
+      }
+    },
+    "min-x-pos-offset": {
+      "name": "Minimum X Position Offset",
+      "description": "the minimum amount the wave trail can be offset from the player's position",
+      "type": "float",
+      "default": 0,
+      "min": -50,
+      "max": 50,
+      "control": {
+        "slider-step": 0.1
+      }
+    },
+    "max-wave-pulse-size": {
+      "name": "Maximum Wave Pulse Size",
+      "description": "the maximum size the wave trail can pulse to",
+      "type": "float",
+      "default": 1,
+      "min": -25,
+      "max": 25,
+      "control": {
+        "slider-step": 0.1
+      }
+    },
+    "min-wave-pulse-size": {
+      "name": "Minimum Wave Pulse Size",
+      "description": "the minimum size the wave trail can pulse to",
+      "type": "float",
+      "default": 1,
+      "min": -25,
+      "max": 25,
+      "control": {
+        "slider-step": 0.1
+      }
+    },
+    "max-wave-trail-size": {
+      "name": "Maximum Wave Trail Size",
+      "description": "the maximum size the wave trail can be",
+      "type": "float",
+      "default": 1,
+      "min": -25,
+      "max": 25,
+      "control": {
+        "slider-step": 0.1
+      }
+    },
+    "min-wave-trail-size": {
+      "name": "Minimum Wave Trail Size",
+      "description": "the minimum size the wave trail can be",
+      "type": "float",
+      "default": 1,
+      "min": -25,
+      "max": 25,
+      "control": {
+        "slider-step": 0.1
+      }
+    },
+    "skip-chance": {
+      "name": "Skip Chance",
+      "description": "the chance that a point will be skipped",
+      "type": "float",
+      "default": 0,
+      "min": 0,
+      "max": 1,
+      "control": {
+        "slider-step": 0.01
+      }
     }
   },
   "repository": "https://github.com/TheBearodactyl/gay-wave-trail.git"
