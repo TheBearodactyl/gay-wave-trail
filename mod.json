@@ -129,20 +129,20 @@
       "default": "#FFFFFF"
     },
     "chaos-section": {
-      "name": "The chaos emeralds",
+      "name": "The chaos emeralds (CHECK SETTING DESCRIPTIONS)",
       "type": "custom",
       "description": "make skylar gay",
       "scale": 300,
-      "posX": 80
+      "posX": 160
     },
     "chaos": {
-      "name": "I FINALLY HAVE THE CHAOS EMERALDS",
+      "name": "THE CHAOS EMERALDS",
       "description": "chaos insues when enabled (randomizes the placement of every point on the wave trail)",
       "type": "bool",
       "default": false
     },
     "min-y-pos-offset": {
-      "name": "Minimum Y Position Offset",
+      "name": "Red Emerald",
       "description": "the maximum amount the wave trail can be offset from the player's position",
       "type": "float",
       "default": 0,
@@ -153,7 +153,7 @@
       }
     },
     "max-y-pos-offset": {
-      "name": "Maximum Y Position Offset",
+      "name": "Blue Emerald",
       "description": "the maximum amount the wave trail can be offset from the player's position",
       "type": "float",
       "default": 0,
@@ -164,7 +164,7 @@
       }
     },
     "min-x-pos-offset": {
-      "name": "Minimum X Position Offset",
+      "name": "Cyan Emerald",
       "description": "the minimum amount the wave trail can be offset from the player's position",
       "type": "float",
       "default": 0,
@@ -175,7 +175,7 @@
       }
     },
     "max-x-pos-offset": {
-      "name": "Maximum X Position Offset",
+      "name": "Purple Emerald",
       "description": "the maximum amount the wave trail can be offset from the player's position",
       "type": "float",
       "default": 0,
@@ -186,7 +186,7 @@
       }
     },
     "max-wave-pulse-size": {
-      "name": "Maximum Wave Pulse Size",
+      "name": "Yellow Emerald",
       "description": "the maximum size the wave trail can pulse to",
       "type": "float",
       "default": 1,
@@ -197,7 +197,7 @@
       }
     },
     "min-wave-pulse-size": {
-      "name": "Minimum Wave Pulse Size",
+      "name": "Green Emerald",
       "description": "the minimum size the wave trail can pulse to",
       "type": "float",
       "default": 1,
@@ -208,7 +208,7 @@
       }
     },
     "max-wave-trail-size": {
-      "name": "Maximum Wave Trail Size",
+      "name": "White Emerald",
       "description": "the maximum size the wave trail can be",
       "type": "float",
       "default": 1,
@@ -219,7 +219,7 @@
       }
     },
     "min-wave-trail-size": {
-      "name": "Minimum Wave Trail Size",
+      "name": "Black Emerald",
       "description": "the minimum size the wave trail can be",
       "type": "float",
       "default": 1,
@@ -230,7 +230,7 @@
       }
     },
     "skip-chance": {
-      "name": "Skip Chance",
+      "name": "THE MASTER EMERALD",
       "description": "the chance that a point will be skipped",
       "type": "float",
       "default": 0,
