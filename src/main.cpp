@@ -18,10 +18,6 @@ using namespace cocos2d;
 
 float phase;
 
-struct MyPlayerObject : Modify<MyPlayerObject, PlayerObject> {
-  void flashPlayer(float p0, float p1, cocos2d::ccColor3B mainColor, cocos2d::ccColor3B secondColor) {}
-};
-
 struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
   void postUpdate(float p0) {
     PlayLayer::postUpdate(p0);
