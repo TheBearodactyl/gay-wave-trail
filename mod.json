@@ -1,11 +1,11 @@
 {
-  "geode": "3.2.0",
+  "geode": "3.3.0",
   "gd": {
     "win": "2.206",
     "android": "2.206",
     "mac": "2.206"
   },
-  "version": "v1.2.2",
+  "version": "v1.2.3",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
@@ -129,7 +129,7 @@
       "default": "#FFFFFF"
     },
     "chaos-section": {
-      "name": "The chaos emeralds (CHECK SETTING DESCRIPTIONS)",
+      "name": "The chaos emeralds\n(CHECK SETTING DESCRIPTIONS)",
       "type": "custom",
       "description": "make skylar gay",
       "scale": 300,
