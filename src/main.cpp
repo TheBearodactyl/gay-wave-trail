@@ -151,20 +151,10 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
 };
 
 /* persist wave trail */
-struct MyMotionStreak : Modify<MyMotionStreak, CCMotionStreak> {
-  struct Fields {
-    int update = 3;
-  };
-
-  virtual void update(float delta) {
-    if (Mod::get()->getSettingValue<bool>("persist-wave-trail")) {
-      if (m_fields->update != 3) {
-        m_fields->update++;
-        return;
-      } else {
-        m_fields->update = 0;
-        CCMotionStreak::update(delta);
-      }
+struct MyMotionStreak : Modify<MyMotionStreak, PlayerObject> {
+  void fadeOutStreak2(float p0) {
+    if (!Mod::get()->getSettingValue<bool>("persist-wave-trail")) {
+      PlayerObject::fadeOutStreak2(p0);
     }
   }
 };
