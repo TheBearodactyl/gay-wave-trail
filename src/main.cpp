@@ -6,8 +6,10 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
 #include <cmath>
+#include <Geode/modify/HardStreak.hpp>
 #include <cocos2d.h>
 
+#include "Geode/cocos/misc_nodes/CCMotionStreak.h"
 #include "Geode/loader/ModEvent.hpp"
 #include "Geode/modify/Modify.hpp"
 #include "settings/section.hpp"
@@ -145,6 +147,54 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
   void reset_colors() {
     m_player1->setColor(get_player_color_rgb(false));
     m_player2->setColor(get_player_color_rgb(true));
+  }
+};
+
+/* persist wave trail */
+struct MyMotionStreak : Modify<MyMotionStreak, CCMotionStreak> {
+  struct Fields {
+    int update = 3;
+  };
+
+  virtual void update(float delta) {
+    if (Mod::get()->getSettingValue<bool>("persist-wave-trail")) {
+      if (m_fields->update != 3) {
+        m_fields->update++;
+        return;
+      } else {
+        m_fields->update = 0;
+        CCMotionStreak::update(delta);
+      }
+    }
+  }
+};
+
+/* editor trail */
+class $modify(HardStreak) {
+  void updateStroke(float p0) {
+    if (LevelEditorLayer::get() && Mod::get()->getSettingValue<bool>("editor-trail")) {
+      m_drawStreak = true;
+    }
+
+    HardStreak::updateStroke(p0);
+  }
+};
+
+class $modify(PlayerObject) {
+  void placeStreakPoint() {
+    if (LevelEditorLayer::get() && m_isDart && Mod::get()->getSettingValue<bool>("editor-trail")) {
+      m_waveTrail->addPoint(this->getPosition());
+    } else {
+      PlayerObject::placeStreakPoint();
+    }
+  }
+
+  virtual void update(float dt) {
+    PlayerObject::update(dt);
+
+    if (LevelEditorLayer::get() && Mod::get()->getSettingValue<bool>("editor-trail")) {
+      m_waveTrail->m_currentPoint = this->getPosition();
+    }
   }
 };
 

@@ -1,5 +1,5 @@
 {
-  "geode": "3.2.0",
+  "geode": "3.4.0",
   "gd": {
     "win": "2.206",
     "android": "2.206",
@@ -49,6 +49,18 @@
       "control": {
         "slider-step": 0.1
       }
+    },
+    "persist-wave-trail": {
+      "name": "Keep going...",
+      "description": "Insted of just \"oh yes\", it's now \"oh yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-\" (makes the wave trail stay after exiting the wave)",
+      "type": "bool",
+      "default": true
+    },
+    "editor-trail": {
+      "name": "But can you eetitor deez NUTS",
+      "description": "(Show the trail in the editor)",
+      "type": "bool",
+      "default": false
     },
     "rainbow-icon": {
       "name": "First it was just the trail...",
