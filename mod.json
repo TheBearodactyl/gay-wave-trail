@@ -5,7 +5,7 @@
     "android": "2.206",
     "mac": "2.206"
   },
-  "version": "v1.2.4",
+  "version": "v1.2.5",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
@@ -252,6 +252,11 @@
         "slider-step": 0.01
       }
     }
+  },
+  "resources": {
+    "sprites": [
+      "resources/*.png"
+    ]
   },
   "repository": "https://github.com/TheBearodactyl/gay-wave-trail.git"
 }

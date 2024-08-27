@@ -13,7 +13,7 @@ struct GayPauseLayer : Modify<GayPauseLayer, PauseLayer> {
   void customSetup() {
     PauseLayer::customSetup();
 
-    auto settingsButtonSprite = CCSprite::create("logo.png"_spr);
+    auto settingsButtonSprite = CCSprite::create("button.png"_spr);
     settingsButtonSprite->setScale(.25f);
     if (auto betterPause = Loader::get()->getLoadedMod("tpdea.betterpause-Better")) {
       if (betterPause->getSettingValue<int64_t>("type-pause") == 1) settingsButtonSprite->setScale(.95f);
