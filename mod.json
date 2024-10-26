@@ -1,5 +1,5 @@
 {
-  "geode": "3.4.0",
+  "geode": "3.8.1",
   "gd": {
     "win": "2.206",
     "android": "2.206",
@@ -11,6 +11,11 @@
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "settings": {
+    "main-section": {
+      "type": "title",
+      "name": "Gay asf :PPP"
+      "description": "HOLY CRAP. Lois, LOIS! the world record holder on unnerfed sakupen circles uses my mod. this is so AWESOME. - Peter Griffin"
+    },
     "enable": {
       "name": "Enable the G A E",
       "type": "bool",
@@ -104,11 +109,9 @@
       "default": false
     },
     "gaydient-section": {
+      "type": "title",
       "name": "Gaydient Settings",
-      "type": "custom",
-      "description": "make kayla gay",
-      "scale": 300,
-      "posX": 80
+      "description": "make kayla gay"
     },
     "use-gradient": {
       "name": "Enable the GAYDIENT",
@@ -142,10 +145,8 @@
     },
     "chaos-section": {
       "name": "The chaos emeralds (CHECK SETTING DESCRIPTIONS)",
-      "type": "custom",
-      "description": "make skylar gay",
-      "scale": 300,
-      "posX": 160
+      "type": "title",
+      "description": "make skylar gay"
     },
     "chaos": {
       "name": "THE CHAOS EMERALDS",
