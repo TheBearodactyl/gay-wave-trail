@@ -6,14 +6,15 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
 #include <cmath>
-#include <Geode/modify/HardStreak.hpp>
 #include <cocos2d.h>
 
 #include "Geode/cocos/misc_nodes/CCMotionStreak.h"
 #include "Geode/loader/ModEvent.hpp"
 #include "Geode/modify/Modify.hpp"
+#include "settings/multi_string_setting.hpp"
 #include "settings/section.hpp"
 #include "trail_customization/rainbow_trail.hpp"
+#include "utils/color_utils.hpp"
 
 using namespace geode::prelude;
 using namespace cocos2d;
@@ -27,18 +28,20 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     float speed = Mod::get()->getSettingValue<double>("speed");
     float saturation = Mod::get()->getSettingValue<double>("saturation");
 
+    std::vector<std::string> color_strings = Mod::get()->getSettingValue<MultiStringSettingStruct>("colors-list").m_strings;
+
+    std::vector<cocos2d::ccColor3B> colors;
+
+    for (const auto &color_string: color_strings) {
+      colors.push_back(ColorUtils::hex_to_rgb(color_string));
+    }
+
     bool mirror_players = Mod::get()->getSettingValue<bool>("mirror-players");
     bool use_gradient = Mod::get()->getSettingValue<bool>("use-gradient");
     bool enable = Mod::get()->getSettingValue<bool>("enable");
     bool noRegularTrail = Mod::get()->getSettingValue<bool>("no-reg-trail");
-    bool rainbow_icon = Mod::get()->getSettingValue<bool>("rainbow-icon");
     bool disable_trail = Mod::get()->getSettingValue<bool>("disable-wave-trail");
     bool infinite_trail = Mod::get()->getSettingValue<bool>("infinite-trail");
-
-    auto color1 = Mod::get()->getSettingValue<ccColor3B>("color-one");
-    auto color2 = Mod::get()->getSettingValue<ccColor3B>("color-two");
-    auto color3 = Mod::get()->getSettingValue<ccColor3B>("color-three");
-    auto color4 = Mod::get()->getSettingValue<ccColor3B>("color-four");
 
     if (ColorUtils::owo >= 360) {
       ColorUtils::owo = 0;
@@ -49,76 +52,30 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     phase = fmod(phase + speed, 360.f);
     bool p2 = true;
 
-    _ccColor3B rainbowColor = RainbowTrail::get_rainbow(0, saturation);
-    _ccColor3B rainbowColor2 = RainbowTrail::get_rainbow(180, saturation);
+    RainbowTrail traill;
 
-    _ccColor3B gradientColor = RainbowTrail::get_gradient(phase, 0.0f, false, color1, color2, color3, color4);
-    _ccColor3B gradientColor2 = RainbowTrail::get_gradient(phase, 0.0f, false, color4, color3, color2, color1);
+    ccColor3B rainbowColor = RainbowTrail::get_rainbow(0, saturation);
+    ccColor3B rainbowColor2 = RainbowTrail::get_rainbow(180, saturation);
+    auto gradientColor = traill.get_gradient(phase, 0.0f, false, colors);
+    auto gradientColor2 = traill.get_gradient(phase + 180.0f, 0.0f, false, colors);
 
-    if (m_player1->m_isDart && noRegularTrail) {
-      m_player1->m_regularTrail
-          ->setVisible(false);
+    if (enable && m_player1->m_isDart) {
+        m_player1->m_regularTrail->setVisible(!noRegularTrail);
+        if (m_player1->m_waveTrail) {
+            m_player1->m_waveTrail->setColor(use_gradient ? gradientColor : rainbowColor);
+            m_player1->m_waveTrail->setVisible(!disable_trail);
+        }
     }
 
-    if (m_player2->m_isDart && noRegularTrail) {
-      m_player2->m_regularTrail
-          ->setVisible(false);
-    }
-
-    if (enable) {
-      if (! use_gradient) {
-        if (m_player1->m_waveTrail) {
-          m_player1->m_waveTrail
-              ->setColor(rainbowColor);
-
-          if (rainbow_icon && m_player1->m_isDart) {
-            m_player1->setColor(rainbowColor);
-          }
-        }
-
+    if (enable && m_player2->m_isDart) {
+        m_player2->m_regularTrail->setVisible(!noRegularTrail);
         if (m_player2->m_waveTrail) {
-          m_player2->m_waveTrail
-              ->setColor(! mirror_players
-                             ? rainbowColor2
-                             : rainbowColor);
-
-          if (rainbow_icon && m_player1->m_isDart) {
-            m_player2->setColor(rainbowColor2);
-          }
+            ccColor3B p2Color = mirror_players 
+                ? (use_gradient ? gradientColor : rainbowColor)
+                : (use_gradient ? gradientColor2 : rainbowColor2);
+            m_player2->m_waveTrail->setColor(p2Color);
+            m_player2->m_waveTrail->setVisible(!disable_trail);
         }
-      } else {
-        if (m_player1->m_waveTrail) {
-          m_player1->m_waveTrail
-              ->setColor(gradientColor);
-
-          if (rainbow_icon && m_player1->m_isDart) {
-            m_player1->setColor(gradientColor);
-          } else if (! rainbow_icon) {
-            reset_colors();
-          }
-        }
-
-        if (m_player2->m_waveTrail) {
-          m_player2->m_waveTrail
-              ->setColor(! mirror_players
-                             ? gradientColor
-                             : gradientColor2);
-
-          if (rainbow_icon && m_player2->m_isDart) {
-            m_player2->setColor(! mirror_players ? gradientColor : gradientColor2);
-          } else if (! rainbow_icon) {
-            reset_colors();
-          }
-        }
-      }
-
-      if (disable_trail) {
-        this->m_player1->m_waveTrail->setVisible(false);
-        this->m_player2->m_waveTrail->setVisible(false);
-      } else {
-        this->m_player1->m_waveTrail->setVisible(true);
-        this->m_player2->m_waveTrail->setVisible(true);
-      }
     }
   }
 
@@ -153,14 +110,14 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
 /* persist wave trail */
 struct MyMotionStreak : Modify<MyMotionStreak, PlayerObject> {
   void fadeOutStreak2(float p0) {
-    if (!Mod::get()->getSettingValue<bool>("persist-wave-trail")) {
+    if (! Mod::get()->getSettingValue<bool>("persist-wave-trail")) {
       PlayerObject::fadeOutStreak2(p0);
     }
   }
 };
 
 /* editor trail */
-class $modify(HardStreak) {
+struct MyHardStreak : Modify<MyHardStreak, HardStreak> {
   void updateStroke(float p0) {
     if (LevelEditorLayer::get() && Mod::get()->getSettingValue<bool>("editor-trail")) {
       m_drawStreak = true;
@@ -170,7 +127,7 @@ class $modify(HardStreak) {
   }
 };
 
-class $modify(PlayerObject) {
+struct MyPlayerObject : Modify<MyPlayerObject, PlayerObject> {
   void placeStreakPoint() {
     if (LevelEditorLayer::get() && m_isDart && Mod::get()->getSettingValue<bool>("editor-trail")) {
       m_waveTrail->addPoint(this->getPosition());
@@ -191,4 +148,6 @@ class $modify(PlayerObject) {
 $on_mod(Loaded) {
   Mod::get()->addCustomSetting<SettingSectionValue>("gaydient-section", "none");
   Mod::get()->addCustomSetting<SettingSectionValue>("chaos-section", "none");
+  Mod::get()->addCustomSetting<MultiStringSettingValue>("colors-list",
+                                                        Mod::get()->getSettingDefinition("colors-list")->get<CustomSetting>()->json->get<std::vector<std::string>>("default"));
 }

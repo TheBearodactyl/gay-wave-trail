@@ -1,5 +1,5 @@
 {
-  "geode": "3.8.1",
+  "geode": "3.4.0",
   "gd": {
     "win": "2.206",
     "android": "2.206",
@@ -67,12 +67,6 @@
       "type": "bool",
       "default": false
     },
-    "rainbow-icon": {
-      "name": "First it was just the trail...",
-      "description": "NOW THE ICON TOO???\noh my fuckin sex, i\nam so dissapointed.\n(changes the wave icon color)",
-      "type": "bool",
-      "default": false
-    },
     "saturation": {
       "name": "HOW GAY ARE YOU???",
       "type": "float",
@@ -109,9 +103,11 @@
       "default": false
     },
     "gaydient-section": {
-      "type": "title",
       "name": "Gaydient Settings",
-      "description": "make kayla gay"
+      "type": "custom",
+      "description": "make kayla gay",
+      "scale": 300,
+      "posX": 80
     },
     "use-gradient": {
       "name": "Enable the GAYDIENT",
@@ -119,34 +115,18 @@
       "type": "bool",
       "default": false
     },
-    "color-one": {
-      "name": "Wave trail color #1",
-      "description": "The first color the wave trail will become",
-      "type": "color",
-      "default": "#FFFFFF"
-    },
-    "color-two": {
-      "name": "Wave trail color #2",
-      "description": "The second color the wave trail will become",
-      "type": "color",
-      "default": "#FFFFFF"
-    },
-    "color-three": {
-      "name": "Wave trail color #3",
-      "description": "The third color the wave trail will become",
-      "type": "color",
-      "default": "#FFFFFF"
-    },
-    "color-four": {
-      "name": "Wave trail color #4",
-      "description": "The fourth color the wave trail will become",
-      "type": "color",
-      "default": "#FFFFFF"
+    "colors-list": {
+      "name": "Colors",
+      "type": "custom",
+      "description": "the colors to use for the wave trail",
+      "default": ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]
     },
     "chaos-section": {
       "name": "The chaos emeralds (CHECK SETTING DESCRIPTIONS)",
-      "type": "title",
-      "description": "make skylar gay"
+      "type": "custom",
+      "description": "make skylar gay",
+      "scale": 300,
+      "posX": 160
     },
     "chaos": {
       "name": "THE CHAOS EMERALDS",
