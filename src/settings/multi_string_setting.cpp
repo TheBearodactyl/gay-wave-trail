@@ -36,7 +36,7 @@ protected:
     auto id = static_cast<CCNode *>(target)->getID();
     auto index = std::stoi(id.substr(4));
     if (index == m_localValue.size() - 1) {
-      m_localValue.push_back("");
+      m_localValue.push_back("#");// Changed from empty string to "#"
     } else {
       m_localValue.erase(m_localValue.begin() + index);
     }

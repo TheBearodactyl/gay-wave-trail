@@ -49,7 +49,7 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
       ColorUtils::owo += speed / 10;
     }
 
-    phase = fmod(phase + speed, 360.f);
+    phase = fmod(phase + (speed / 10), 360.f); // Divided speed by 10 to slow down gradient cycling
     bool p2 = true;
 
     RainbowTrail traill;
