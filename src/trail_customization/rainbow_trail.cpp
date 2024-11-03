@@ -20,28 +20,16 @@ cocos2d::_ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
 
 cocos2d::_ccColor3B RainbowTrail::get_gradient(float phase, float offset, bool smooth, const std::vector<cocos2d::ccColor3B> &colors) {
   float t = fmodf(phase + offset, 360.0f);
-  float y = t / 90.0f;
-  int quadrant = static_cast<int>(t / 90.0f);
+  float segment_size = 360.0f / colors.size();
+  int segment = static_cast<int>(t / segment_size);
+  float y = (t - segment * segment_size) / segment_size;
+
+  int next_segment = (segment + 1) % colors.size();
 
   cocos2d::_ccColor3B out;
-
-  out.r = static_cast<GLubyte>(
-      quadrant == 0   ? colors[0].r + (colors[1].r - colors[0].r) * y
-      : quadrant == 1 ? colors[1].r + (colors[2].r - colors[1].r) * (y - 1.0f)
-      : quadrant == 2 ? colors[2].r + (colors[3].r - colors[2].r) * (y - 2.0f)
-                      : colors[3].r + (colors[0].r - colors[3].r) * (y - 3.0f));
-
-  out.g = static_cast<GLubyte>(
-      quadrant == 0   ? colors[0].g + (colors[1].g - colors[0].g) * y
-      : quadrant == 1 ? colors[1].g + (colors[2].g - colors[1].g) * (y - 1.0f)
-      : quadrant == 2 ? colors[2].g + (colors[3].g - colors[2].g) * (y - 2.0f)
-                      : colors[3].g + (colors[0].g - colors[3].g) * (y - 3.0f));
-
-  out.b = static_cast<GLubyte>(
-      quadrant == 0   ? colors[0].b + (colors[1].b - colors[0].b) * y
-      : quadrant == 1 ? colors[1].b + (colors[2].b - colors[1].b) * (y - 1.0f)
-      : quadrant == 2 ? colors[2].b + (colors[3].b - colors[2].b) * (y - 2.0f)
-                      : colors[3].b + (colors[0].b - colors[3].b) * (y - 3.0f));
+  out.r = static_cast<GLubyte>(colors[segment].r + (colors[next_segment].r - colors[segment].r) * y);
+  out.g = static_cast<GLubyte>(colors[segment].g + (colors[next_segment].g - colors[segment].g) * y);
+  out.b = static_cast<GLubyte>(colors[segment].b + (colors[next_segment].b - colors[segment].b) * y);
 
   return out;
 }
