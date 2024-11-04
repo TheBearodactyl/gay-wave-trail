@@ -25,7 +25,7 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
   void postUpdate(float p0) {
     PlayLayer::postUpdate(p0);
 
-    float speed = Mod::get()->getSettingValue<double>("speed");
+    float speed = Mod::get()->getSettingValue<double>("speed") * 10.0f;
     float saturation = Mod::get()->getSettingValue<double>("saturation");
 
     std::vector<std::string> color_strings = Mod::get()->getSettingValue<MultiStringSettingStruct>("colors-list").m_strings;
