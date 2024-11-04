@@ -43,13 +43,16 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     bool disable_trail = Mod::get()->getSettingValue<bool>("disable-wave-trail");
     bool infinite_trail = Mod::get()->getSettingValue<bool>("infinite-trail");
 
+    // Use delta time (p0) to make color changes framerate independent
+    float delta = p0;
     if (ColorUtils::owo >= 360) {
       ColorUtils::owo = 0;
     } else {
-      ColorUtils::owo += speed / 10;
+      ColorUtils::owo += (speed * delta); // Multiply by delta time
     }
 
-    phase = fmod(phase + (speed / 10), 360.f); // Divided speed by 10 to slow down gradient cycling
+    // Update phase using delta time
+    phase = fmod(phase + (speed * delta), 360.f);
     bool p2 = true;
 
     RainbowTrail traill;
