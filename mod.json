@@ -5,11 +5,12 @@
     "android": "2.206",
     "mac": "2.206"
   },
-  "version": "v2.0.1",
+  "version": "v2.0.2",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
+  "tags": ["offline", "customization", "enhancement"],
   "settings": {
     "main-section": {
       "type": "title",
@@ -43,6 +44,12 @@
       "control": {
         "slider-step": 0.1
       }
+    },
+    "smooth": {
+      "name": "Smoooooooooooooth",
+      "description": "When the trail's in the crib ma: Drop it like it's hot, Drop it like it's hot, Drop it like it's hot",
+      "type": "bool",
+      "default": true
     },
     "wave-trail-size": {
       "name": "it even left a trail...",
@@ -119,7 +126,12 @@
       "name": "Colors",
       "type": "custom",
       "description": "the colors to use for the wave trail",
-      "default": ["#FFFFFF", "#FFFFFF", "#FFFFFF", "#FFFFFF"]
+      "default": [
+        "#FFFFFF",
+        "#FFFFFF",
+        "#FFFFFF",
+        "#FFFFFF"
+      ]
     },
     "chaos-section": {
       "name": "The chaos emeralds (CHECK SETTING DESCRIPTIONS)",
@@ -231,6 +243,41 @@
       "max": 1,
       "control": {
         "slider-step": 0.01
+      }
+    },
+    "ambience-section": {
+      "name": "this ambience bouta put me in an ambulence",
+      "type": "custom",
+      "description": "lol",
+      "scale": 300,
+      "posX": 160
+    },
+    "ambience": {
+      "name": "Ambien.",
+      "description": "boutta overdose on the colors :DDDD (enable ambience for the wave trail)",
+      "type": "bool",
+      "default": false
+    },
+    "channel-begin": {
+      "name": "the pills",
+      "description": "the color channel the color finder will start on",
+      "type": "int",
+      "default": 1,
+      "min": 1,
+      "max": 9999,
+      "control": {
+        "slider-step": 1
+      }
+    },
+    "channel-end": {
+      "name": "the overdose",
+      "description": "the color channel the color finder will end on",
+      "type": "int",
+      "default": 5,
+      "min": 1,
+      "max": 9999,
+      "control": {
+        "slider-step": 1
       }
     }
   },
