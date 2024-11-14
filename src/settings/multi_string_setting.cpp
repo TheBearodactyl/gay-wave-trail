@@ -22,7 +22,7 @@ bool ColorListSettingNode::init(std::shared_ptr<ColorListSettingV3> setting, flo
   menu->setPosition({0.0f, 0.0f});
   menu->setID("inputs-menu");
 
-  auto viewSpr = ButtonSprite::create("I E N T");
+  auto viewSpr = ButtonSprite::create("E N T");
   viewSpr->setScale(0.72f);
 
   auto viewBtn = CCMenuItemSpriteExtra::create(viewSpr, this, menu_selector(ColorListSettingNode::onView));
