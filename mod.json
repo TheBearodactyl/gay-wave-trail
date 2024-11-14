@@ -1,11 +1,11 @@
 {
-  "geode": "3.4.0",
+  "geode": "4.0.0-alpha.1",
   "gd": {
-    "win": "2.206",
-    "android": "2.206",
-    "mac": "2.206"
+    "win": "2.2074",
+    "android": "2.2074",
+    "mac": "2.2074"
   },
-  "version": "v2.0.2",
+  "version": "v2.0.3",
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
@@ -111,10 +111,8 @@
     },
     "gaydient-section": {
       "name": "Gaydient Settings",
-      "type": "custom",
-      "description": "make kayla gay",
-      "scale": 300,
-      "posX": 80
+      "type": "title",
+      "description": "make kayla gay"
     },
     "use-gradient": {
       "name": "Enable the GAYDIENT",
@@ -123,8 +121,8 @@
       "default": false
     },
     "colors-list": {
-      "name": "Colors",
-      "type": "custom",
+      "name": "G A Y D",
+      "type": "custom:color-list",
       "description": "the colors to use for the wave trail",
       "default": [
         "#FFFFFF",
@@ -135,10 +133,8 @@
     },
     "chaos-section": {
       "name": "The chaos emeralds (CHECK SETTING DESCRIPTIONS)",
-      "type": "custom",
-      "description": "make skylar gay",
-      "scale": 300,
-      "posX": 160
+      "type": "title",
+      "description": "make skylar gay"
     },
     "chaos": {
       "name": "THE CHAOS EMERALDS",
@@ -247,10 +243,8 @@
     },
     "ambience-section": {
       "name": "this ambience bouta put me in an ambulence",
-      "type": "custom",
-      "description": "lol",
-      "scale": 300,
-      "posX": 160
+      "type": "title",
+      "description": "lol"
     },
     "ambience": {
       "name": "Ambien.",

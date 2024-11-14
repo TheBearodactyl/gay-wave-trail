@@ -1,6 +1,5 @@
 #include <Geode/cocos/include/ccTypes.h>
 #include <Geode/loader/Mod.hpp>
-#include <Geode/loader/SettingEvent.hpp>
 #include <Geode/modify/CCMotionStreak.hpp>
 #include <Geode/modify/GJBaseGameLayer.hpp>
 #include <Geode/modify/HardStreak.hpp>
@@ -9,11 +8,11 @@
 #include <cmath>
 #include <cocos2d.h>
 
+#include "Geode/DefaultInclude.hpp"
 #include "Geode/cocos/misc_nodes/CCMotionStreak.h"
 #include "Geode/loader/ModEvent.hpp"
 #include "Geode/modify/Modify.hpp"
 #include "settings/multi_string_setting.hpp"
-#include "settings/section.hpp"
 #include "trail_customization/rainbow_trail.hpp"
 #include "utils/color_utils.hpp"
 
@@ -42,7 +41,7 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     float speed = Mod::get()->getSettingValue<double>("speed") * 10.0f;
     float saturation = Mod::get()->getSettingValue<double>("saturation");
 
-    std::vector<std::string> color_strings = Mod::get()->getSettingValue<MultiStringSettingStruct>("colors-list").m_strings;
+    std::vector<std::string> color_strings = Mod::get()->getSettingValue<ColorList>("colors-list").colors;
 
     std::vector<cocos2d::ccColor3B> colors;
 
@@ -62,15 +61,13 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     int channel_range_end = Mod::get()->getSettingValue<int64_t>("channel-end");
 
 
-    // Use delta time (p0) to make color changes framerate independent
     float delta = p0;
     if (ColorUtils::owo >= 360) {
       ColorUtils::owo = 0;
     } else {
-      ColorUtils::owo += (speed * delta);// Multiply by delta time
+      ColorUtils::owo += (speed * delta);
     }
 
-    // Update phase using delta time
     phase = fmod(phase + (speed * delta), 360.f);
     bool p2 = true;
 
@@ -108,9 +105,6 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
         }
       }
     }
-
-
-    // Update phase using delta time
   }
 
   int get_player_set_color(bool player2) {
@@ -179,10 +173,6 @@ struct MyPlayerObject : Modify<MyPlayerObject, PlayerObject> {
   }
 };
 
-$on_mod(Loaded) {
-  Mod::get()->addCustomSetting<SettingSectionValue>("gaydient-section", "none");
-  Mod::get()->addCustomSetting<SettingSectionValue>("chaos-section", "none");
-  Mod::get()->addCustomSetting<SettingSectionValue>("ambience-section", "none");
-  Mod::get()->addCustomSetting<MultiStringSettingValue>("colors-list",
-                                                        Mod::get()->getSettingDefinition("colors-list")->get<CustomSetting>()->json->get<std::vector<std::string>>("default"));
+$execute {
+  (void) Mod::get()->registerCustomSettingType("color-list", &ColorListSettingV3::parse);
 }

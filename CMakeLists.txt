@@ -3,7 +3,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
-set(GEODE_BINDINGS_REPO_PATH "D:\\Projects\\gay-wave-trail\\bindings\\")
+# set(GEODE_BINDINGS_REPO_PATH "D:\\Projects\\gay-wave-trail\\bindings\\")
 
 project(gay-wave-trail VERSION 1.0.0)
 
@@ -16,11 +16,10 @@ file(
   src/settings/*.cpp
   src/ui/*.cpp
   src/types/*.cpp
-  src/types/*.hpp
-  src/*.hpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
+target_include_directories(${PROJECT_NAME} PUBLIC include src)
 
 if(NOT DEFINED ENV{GEODE_SDK})
   message(

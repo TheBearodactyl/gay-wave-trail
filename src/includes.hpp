@@ -14,8 +14,6 @@
 #include <Geode/loader/Event.hpp>
 #include <Geode/loader/Mod.hpp>
 #include <Geode/loader/Setting.hpp>
-#include <Geode/loader/SettingEvent.hpp>
-#include <Geode/loader/SettingNode.hpp>
 #include <Geode/modify/CustomSongWidget.hpp>
 #include <Geode/modify/EditButtonBar.hpp>
 #include <Geode/modify/EditLevelLayer.hpp>
@@ -30,7 +28,6 @@
 #include <Geode/ui/BasedButtonSprite.hpp>
 #include <Geode/ui/ColorPickPopup.hpp>
 #include <Geode/ui/GeodeUI.hpp>
-#include <Geode/ui/InputNode.hpp>
 #include <Geode/ui/Popup.hpp>
 #include <Geode/ui/TextInput.hpp>
 #include <Geode/utils/Task.hpp>
