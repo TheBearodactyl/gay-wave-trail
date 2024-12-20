@@ -1,4 +1,5 @@
 #include "ordered_vec.hpp"
+#include <random>
 
 #if defined(__APPLE__)
     #include <TargetConditionals.h>

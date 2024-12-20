@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <concepts>
 #include <functional>
+#include <random>
 
 template <typename T>
 concept Comparable = requires(T a, T b) {
