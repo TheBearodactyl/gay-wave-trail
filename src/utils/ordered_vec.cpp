@@ -1,5 +1,13 @@
 #include "ordered_vec.hpp"
 
+#if defined(__APPLE__)
+    #include <TargetConditionals.h>
+#endif
+
+#if defined(__ANDROID__)
+    #include <android/log.h>
+#endif
+
 template <Comparable T>
 ordered_vec<T>::ordered_vec(const std::vector<T> &data) {
   data_ = data;
