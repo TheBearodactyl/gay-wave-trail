@@ -3,6 +3,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(Rust_RUSTUP_INSTALL_MISSING_TARGET ON)
 
 project(gay-wave-trail VERSION 1.0.0)
 add_subdirectory(tools/corrosion)

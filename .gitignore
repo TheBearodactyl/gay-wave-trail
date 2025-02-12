@@ -60,3 +60,4 @@ build-*/
 bindings/
 **/target
 **/target/*
+/__cmake_systeminformation
