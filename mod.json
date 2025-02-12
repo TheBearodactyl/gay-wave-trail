@@ -1,5 +1,5 @@
 {
-  "geode": "4.1.0",
+  "geode": "4.2.0",
   "gd": {
     "win": "2.2074",
     "android": "2.2074",
@@ -10,7 +10,11 @@
   "name": "Gay Wave Trail",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
-  "tags": ["offline", "customization", "enhancement"],
+  "tags": [
+    "offline",
+    "customization",
+    "enhancement"
+  ],
   "settings": {
     "main-section": {
       "type": "title",
