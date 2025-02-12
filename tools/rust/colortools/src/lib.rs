@@ -1,13 +1,14 @@
 use std::ffi::CStr;
 
 #[repr(C)]
-pub struct CCColor3B {
+pub struct CCColor3BR {
     r: u8,
     g: u8,
-    b: u8
+    b: u8,
 }
 
-#[unsafe(no_mangle)] pub static mut OWO: f32 = 0.0;
+#[unsafe(no_mangle)]
+pub static mut OWO: f32 = 0.0;
 
 #[unsafe(no_mangle)]
 pub extern "C" fn hsv_to_rgb(
@@ -16,7 +17,7 @@ pub extern "C" fn hsv_to_rgb(
     b: &mut f32,
     h: &mut f32,
     s: &mut f32,
-    v: &mut f32
+    v: &mut f32,
 ) {
     let c = *v * *s;
     let x = c * (1.0 - ((*h / 60.0) % 2.0 - 1.0).abs());
@@ -49,7 +50,7 @@ pub extern "C" fn hsv_to_rgb(
     } else {
         0.0
     };
-    
+
     *b = if *h < 60.0 {
         0.0
     } else if *h < 120.0 {
@@ -103,36 +104,32 @@ pub extern "C" fn hex_to_hsv(hex: u32, h: &mut f32, s: &mut f32, v: &mut f32) {
 }
 
 #[unsafe(no_mangle)]
-pub extern "C" fn hex_to_rgb(hex: *const std::os::raw::c_char) -> CCColor3B {
-    let hex_str = unsafe { 
-        CStr::from_ptr(hex).to_string_lossy() 
-    };
-    
+pub extern "C" fn hex_to_rgb(hex: *const std::os::raw::c_char) -> CCColor3BR {
+    let hex_str = unsafe { CStr::from_ptr(hex).to_string_lossy() };
+
     if !is_valid_hex_code(hex) {
-        return CCColor3B { r: 0, g: 0, b: 0 };
+        return CCColor3BR { r: 0, g: 0, b: 0 };
     }
-    
+
     let clean_hex = if hex_str.starts_with('#') {
         &hex_str[1..]
     } else {
         &hex_str
     };
-    
+
     let r = hex_pair_to_dec(clean_hex[0..2].as_ptr() as *const std::os::raw::c_char);
     let g = hex_pair_to_dec(clean_hex[2..4].as_ptr() as *const std::os::raw::c_char);
     let b = hex_pair_to_dec(clean_hex[4..6].as_ptr() as *const std::os::raw::c_char);
-    
-    CCColor3B { r, g, b }
+
+    CCColor3BR { r, g, b }
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn hex_pair_to_dec(hex_pair: *const std::os::raw::c_char) -> u8 {
-    let hex_str = unsafe {
-        CStr::from_ptr(hex_pair).to_string_lossy()
-    };
- 
+    let hex_str = unsafe { CStr::from_ptr(hex_pair).to_string_lossy() };
+
     let mut val = 0;
-    
+
     for c in hex_str.chars() {
         val = val * 16;
         val += if c.is_ascii_digit() {
@@ -141,25 +138,24 @@ pub extern "C" fn hex_pair_to_dec(hex_pair: *const std::os::raw::c_char) -> u8 {
             c.to_ascii_lowercase() as i32 - 'a' as i32 + 10
         };
     }
-    
+
     val as u8
 }
 
 #[unsafe(no_mangle)]
 pub extern "C" fn is_valid_hex_code(hex_code: *const std::os::raw::c_char) -> bool {
-    let hex_str = unsafe {
-        CStr::from_ptr(hex_code).to_string_lossy()
-    };
-    
+    let hex_str = unsafe { CStr::from_ptr(hex_code).to_string_lossy() };
+
     if hex_str.is_empty() {
         return false;
     }
-    
+
     let start_pos = if hex_str.starts_with("#") { 0 } else { 1 };
-    
+
     if hex_str.len() != start_pos + 6 {
         return false;
     }
-    
+
     hex_str[start_pos..].chars().all(|c| c.is_ascii_hexdigit())
 }
+

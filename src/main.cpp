@@ -1,7 +1,5 @@
 #include <Geode/cocos/include/ccTypes.h>
 #include <Geode/loader/Mod.hpp>
-#include <Geode/modify/CCMotionStreak.hpp>
-#include <Geode/modify/GJBaseGameLayer.hpp>
 #include <Geode/modify/HardStreak.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
@@ -9,44 +7,33 @@
 #include <cocos2d.h>
 
 #include "Geode/DefaultInclude.hpp"
-#include "Geode/cocos/misc_nodes/CCMotionStreak.h"
-#include "Geode/loader/ModEvent.hpp"
 #include "Geode/modify/Modify.hpp"
 #include "settings/multi_string_setting.hpp"
 #include "trail_customization/rainbow_trail.hpp"
-#include "utils/color_utils.hpp"
 
 using namespace geode::prelude;
 using namespace cocos2d;
 
 float phase;
 
-struct AmbientTrail : Modify<AmbientTrail, GJBaseGameLayer> {
-  std::vector<ccColor3B> get_cccolor3b_from_channel_id(int channel_begin, int channel_end) {
-    std::vector<ccColor3B> colors;
-    for (auto i = channel_begin; i < channel_end; i++) {
-      if (auto action = this->m_effectManager->getColorAction(i)) {
-        colors.emplace_back(action->m_color);
-      }
-    }
-
-    return colors;
-  }
-};
-
-struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
-  void postUpdate(float p0) {
+struct [[maybe_unused]] MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
+  void postUpdate(float p0) override {
     PlayLayer::postUpdate(p0);
 
     float speed = Mod::get()->getSettingValue<double>("speed") * 10.0f;
     float saturation = Mod::get()->getSettingValue<double>("saturation");
 
     std::vector<std::string> color_strings = Mod::get()->getSettingValue<ColorList>("colors-list").colors;
-
     std::vector<cocos2d::ccColor3B> colors;
 
     for (const auto &color_string: color_strings) {
-      colors.push_back(ColorUtils::hex_to_rgb(color_string));
+      colors.push_back(
+          cocos2d::ccColor3B{
+              hex_to_rgb(color_string.c_str()).r,
+              hex_to_rgb(color_string.c_str()).g,
+              hex_to_rgb(color_string.c_str()).b
+          }
+      );
     }
 
     bool mirror_players = Mod::get()->getSettingValue<bool>("mirror-players");
@@ -55,54 +42,41 @@ struct MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     bool noRegularTrail = Mod::get()->getSettingValue<bool>("no-reg-trail");
     bool disable_trail = Mod::get()->getSettingValue<bool>("disable-wave-trail");
     bool infinite_trail = Mod::get()->getSettingValue<bool>("infinite-trail");
-    bool ambient_trail = Mod::get()->getSettingValue<bool>("ambient-trail");
     bool smooth_colors = Mod::get()->getSettingValue<bool>("smooth");
-    int channel_range_begin = Mod::get()->getSettingValue<int64_t>("channel-begin");
-    int channel_range_end = Mod::get()->getSettingValue<int64_t>("channel-end");
-
 
     float delta = p0;
-    if (ColorUtils::owo >= 360) {
-      ColorUtils::owo = 0;
+    if (OWO >= 360) {
+      OWO = 0;
     } else {
-      ColorUtils::owo += (speed * delta);
+      OWO += (speed * delta);
     }
 
     phase = fmod(phase + (speed * delta), 360.f);
     bool p2 = true;
 
-    RainbowTrail traill;
-    AmbientTrail ambience;
+    RainbowTrail trail;
 
     ccColor3B rainbowColor = RainbowTrail::get_rainbow(0, saturation);
     ccColor3B rainbowColor2 = RainbowTrail::get_rainbow(180, saturation);
-    auto gradientColor = traill.get_gradient(phase, 0.0f, smooth_colors, colors);
-    auto gradientColor2 = traill.get_gradient(phase + 180.0f, 0.0f, smooth_colors, colors);
+    auto gradientColor = trail.get_gradient(phase, 0.0f, smooth_colors, colors);
+    auto gradientColor2 = trail.get_gradient(phase + 180.0f, 0.0f, smooth_colors, colors);
 
     if (enable && m_player1->m_isDart) {
       m_player1->m_regularTrail->setVisible(! noRegularTrail);
       if (m_player1->m_waveTrail) {
-        if (ambient_trail) {
-          this->m_player1->m_waveTrail->setColor(traill.get_gradient(phase, 0.0f, true, ambience.get_cccolor3b_from_channel_id(channel_range_begin, channel_range_end)));
-        } else {
-          m_player1->m_waveTrail->setColor(use_gradient ? gradientColor : rainbowColor);
-          m_player1->m_waveTrail->setVisible(! disable_trail);
-        }
+        m_player1->m_waveTrail->setColor(use_gradient ? gradientColor : rainbowColor);
+        m_player1->m_waveTrail->setVisible(! disable_trail);
       }
     }
 
     if (enable && m_player2->m_isDart) {
       m_player2->m_regularTrail->setVisible(! noRegularTrail);
       if (m_player2->m_waveTrail) {
-        if (ambient_trail) {
-          this->m_player2->m_waveTrail->setColor(traill.get_gradient(phase, 0.0f, true, ambience.get_cccolor3b_from_channel_id(channel_range_begin, channel_range_end)));
-        } else {
-          ccColor3B p2Color = mirror_players
-                                  ? (use_gradient ? gradientColor : rainbowColor)
-                                  : (use_gradient ? gradientColor2 : rainbowColor2);
-          m_player2->m_waveTrail->setColor(p2Color);
-          m_player2->m_waveTrail->setVisible(! disable_trail);
-        }
+        ccColor3B p2Color = mirror_players
+                                ? (use_gradient ? gradientColor : rainbowColor)
+                                : (use_gradient ? gradientColor2 : rainbowColor2);
+        m_player2->m_waveTrail->setColor(p2Color);
+        m_player2->m_waveTrail->setVisible(! disable_trail);
       }
     }
   }
