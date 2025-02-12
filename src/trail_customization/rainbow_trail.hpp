@@ -2,6 +2,7 @@
 
 #include <Geode/cocos/include/ccTypes.h>
 #include "../utils/color_utils.hpp"
+#include "colortools.hpp"
 #include <vector>
 
 class RainbowTrail {

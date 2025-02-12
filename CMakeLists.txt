@@ -5,6 +5,7 @@ set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 project(gay-wave-trail VERSION 1.0.0)
+add_subdirectory(tools/corrosion)
 
 file(
   GLOB_RECURSE
@@ -29,6 +30,14 @@ else()
   message(STATUS "Found Geode: $ENV{GEODE_SDK}")
 endif()
 
+
+corrosion_import_crate(MANIFEST_PATH tools/rust/colortools/Cargo.toml)
+corrosion_experimental_cbindgen(
+  TARGET colortools
+  HEADER_NAME "colortools.hpp"
+)
+
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
+target_link_libraries(${PROJECT_NAME} colortools)
 setup_geode_mod(${PROJECT_NAME})

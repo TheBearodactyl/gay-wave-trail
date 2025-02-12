@@ -6,10 +6,10 @@
 cocos2d::_ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
   float R, G, B;
 
-  float hue = static_cast<float>(fmod(ColorUtils::owo + offset, 360));
+  float hue = static_cast<float>(fmod(OWO + offset, 360));
   float sat = static_cast<float>(static_cast<double>(saturation) / 100.0);
   float vc = 1;
-  ColorUtils::hsv_to_rgb(R, G, B, hue, sat, vc);
+  hsv_to_rgb(&R, &G, &B, &hue, &sat, &vc);
 
   cocos2d::_ccColor3B out{};
   out.r = static_cast<GLubyte>(R * 255);
