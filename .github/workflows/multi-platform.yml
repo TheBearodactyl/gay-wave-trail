@@ -50,6 +50,7 @@ jobs:
           for target in $(echo ${{ matrix.config.rust-targets }} | tr ',' ' '); do
             echo "Building for target: $target"
             cargo build --release --target $target
+          done
       
       - name: Combine MacOS binaries with lipo
         if: matrix.config.os == 'macos-latest'
