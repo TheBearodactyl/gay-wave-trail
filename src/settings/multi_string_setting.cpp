@@ -37,15 +37,13 @@ bool ColorListSettingNode::init(std::shared_ptr<ColorListSettingV3> setting, flo
 
 void ColorListSettingNode::onView(CCObject *) {
   auto setting = this->getSetting();
-  ColorListPopup::create(setting->getValue().colors,
-                         [this](std::vector<std::string> colors) {
-                           this->setValue(ColorList{colors}, this);
-                         })
-      ->show();
+  ColorListPopup::create(setting->getValue().colors, [this](std::vector<std::string> colors) {
+    this->setValue(ColorList{colors}, this);
+  })->show();
 }
 
 ColorListSettingNode *ColorListSettingNode::create(std::shared_ptr<ColorListSettingV3> setting, float width) {
-  ColorListSettingNode *ret = new ColorListSettingNode();
+  auto *ret = new ColorListSettingNode();
 
   if (ret->init(setting, width)) {
     ret->autorelease();
@@ -56,9 +54,7 @@ ColorListSettingNode *ColorListSettingNode::create(std::shared_ptr<ColorListSett
   return nullptr;
 }
 
-Result<std::shared_ptr<SettingV3>> ColorListSettingV3::parse(
-    const std::string &key, const std::string &modID,
-    const matjson::Value &json) {
+Result<std::shared_ptr<SettingV3>> ColorListSettingV3::parse(const std::string &key, const std::string &modID, const matjson::Value &json) {
   auto ret = std::make_shared<ColorListSettingV3>();
   auto root = checkJson(json, "ColorListSettingV3");
   (void) ret->parseBaseProperties(key, modID, json);

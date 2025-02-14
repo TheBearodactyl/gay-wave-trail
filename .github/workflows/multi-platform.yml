@@ -14,17 +14,21 @@ jobs:
         config:
         - name: Windows
           os: windows-latest
+          rust-targets: 'x86_64-pc-windows-msvc'
 
         - name: macOS
           os: macos-latest
+          rust-targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
 
-        - name: Android32
-          os: ubuntu-latest
-          target: Android32
+        #- name: Android32
+        #  os: ubuntu-latest
+        #  target: Android32
+        #  rust-targets: 'arm-linux-androideabi,aarch64-linux-android'
 
         - name: Android64
           os: ubuntu-latest
           target: Android64
+          rust-targets: 'arm-linux-androideabi,aarch64-linux-android'
 
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
@@ -33,6 +37,27 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
+
+      - uses: moonrepo/setup-rust@v1
+        with:
+          cache: false
+          profile: complete
+          targets: ${{ matrix.config.rust-targets }}
+
+      - name: Build Rust for MacOS
+        if: matrix.config.os == 'macos-latest'
+        run: |
+          for target in $(echo ${{ matrix.config.rust-targets }} | tr ',' ' '); do
+            echo "Building for target: $target"
+            cargo build --release --target $target
+      
+      - name: Combine MacOS binaries with lipo
+        if: matrix.config.os == 'macos-latest'
+        run: |
+          lipo -create \
+            target/aarch64-apple-darwin/release/libcolortools.a \
+            target/x86_64-apple-darwin/release/libcolortools.a \
+            -output target/universal/libcolortools.a
 
       - name: Build the mod
         uses: geode-sdk/build-geode-mod@main

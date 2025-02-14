@@ -7,10 +7,10 @@ AlignOperands: Align
 AllowAllArgumentsOnNextLine: false
 AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Always
+AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: true
-AllowShortFunctionsOnASingleLine: All
-AllowShortLambdasOnASingleLine: All
+AllowShortFunctionsOnASingleLine: None
+AllowShortLambdasOnASingleLine: None
 AllowShortLoopsOnASingleLine: true
 AlwaysBreakAfterReturnType: None
 AlwaysBreakTemplateDeclarations: Yes
@@ -32,7 +32,7 @@ BreakBeforeBinaryOperators: None
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: BeforeColon
-ColumnLimit: 0
+ColumnLimit: 500
 CompactNamespaces: false
 ContinuationIndentWidth: 4
 IndentCaseLabels: true
