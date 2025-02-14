@@ -57,6 +57,7 @@ jobs:
         if: matrix.config.os == 'macos-latest'
         run: |
           cd tools/rust/colortools
+          mkdir -p target/universal
           lipo -create \
             target/aarch64-apple-darwin/release/libcolortools.a \
             target/x86_64-apple-darwin/release/libcolortools.a \
