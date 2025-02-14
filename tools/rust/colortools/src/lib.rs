@@ -1,3 +1,5 @@
+mod rainbow_trail;
+
 use std::ffi::CStr;
 
 #[repr(C)]
