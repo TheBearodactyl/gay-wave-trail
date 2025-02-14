@@ -47,6 +47,7 @@ jobs:
       - name: Build Rust for MacOS
         if: matrix.config.os == 'macos-latest'
         run: |
+          cd tools/rust/colortools/
           for target in $(echo ${{ matrix.config.rust-targets }} | tr ',' ' '); do
             echo "Building for target: $target"
             cargo build --release --target $target
@@ -55,6 +56,7 @@ jobs:
       - name: Combine MacOS binaries with lipo
         if: matrix.config.os == 'macos-latest'
         run: |
+          cd tools/rust/colortools
           lipo -create \
             target/aarch64-apple-darwin/release/libcolortools.a \
             target/x86_64-apple-darwin/release/libcolortools.a \
