@@ -41,7 +41,6 @@ struct [[maybe_unused]] MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
     bool enable = Mod::get()->getSettingValue<bool>("enable");
     bool noRegularTrail = Mod::get()->getSettingValue<bool>("no-reg-trail");
     bool disable_trail = Mod::get()->getSettingValue<bool>("disable-wave-trail");
-    bool infinite_trail = Mod::get()->getSettingValue<bool>("infinite-trail");
     bool smooth_colors = Mod::get()->getSettingValue<bool>("smooth");
 
     float delta = p0;
@@ -56,10 +55,10 @@ struct [[maybe_unused]] MyPlayLayer : Modify<MyPlayLayer, PlayLayer> {
 
     RainbowTrail trail;
 
-    ccColor3B rainbowColor = RainbowTrail::get_rainbow(0, saturation);
-    ccColor3B rainbowColor2 = RainbowTrail::get_rainbow(180, saturation);
-    auto gradientColor = trail.get_gradient(phase, 0.0f, smooth_colors, colors);
-    auto gradientColor2 = trail.get_gradient(phase + 180.0f, 0.0f, smooth_colors, colors);
+    ccColor3B rainbowColor = RainbowTrail::get_rainbow_proxy(0, saturation);
+    ccColor3B rainbowColor2 = RainbowTrail::get_rainbow_proxy(180, saturation);
+    auto gradientColor = trail.get_gradient_proxy(phase, 0.0f, smooth_colors, colors);
+    auto gradientColor2 = trail.get_gradient_proxy(phase + 180.0f, 0.0f, smooth_colors, colors);
 
     if (enable && m_player1->m_isDart) {
       m_player1->m_regularTrail->setVisible(! noRegularTrail);
