@@ -1,0 +1,182 @@
+{
+  "geode": "4.2.0",
+  "gd": {
+    "win": "2.2074",
+    "android": "2.2074",
+    "mac": "2.2074",
+    "ios": "2.2074"
+  },
+  "id": "the_bearodactyl.gay-wave-trail",
+  "name": "Gay Wave Trail",
+  "version": "v3.0.0",
+  "developer": "The Bearodactyl",
+  "description": "make your wave (and kayla) a raging homosexual >:3",
+  "tags": [
+    "offline",
+    "customization",
+    "enhancement"
+  ],
+  "settings": {
+    "main-section": {
+      "type": "title",
+      "name": "Mod Settings",
+      "description": "Make kayla gay."
+    },
+    "enabled": {
+      "name": "Enable",
+      "type": "bool",
+      "description": "Enable the mod",
+      "default": true
+    },
+    "speed": {
+      "name": "Color Cycle Speed",
+      "type": "float",
+      "default": 10,
+      "min": 1,
+      "max": 100,
+      "control": {
+        "slider-step": 1
+      },
+      "description": "Sets the speed at which the colors of the trail cycle."
+    },
+    "saturation": {
+      "name": "Color Saturation",
+      "type": "float",
+      "default": 100,
+      "min": 1,
+      "max": 100,
+      "control": {
+        "slider-step": 1
+      },
+      "description": "The saturation of the colors the wave trail cycles through."
+    },
+    "trail-size": {
+      "name": "Wave Trail Size",
+      "type": "float",
+      "default": 1,
+      "min": 0,
+      "max": 10,
+      "control": {
+        "slider-step": 0.05
+      }
+    },
+    "pulse-size": {
+      "name": "Wave Pulse Size",
+      "type": "float",
+      "default": 1,
+      "min": 0,
+      "max": 10,
+      "control": {
+        "slider-step": 0.05
+      }
+    },
+    "solid-trail": {
+      "name": "Solid Trail",
+      "type": "bool",
+      "description": "Makes the wave trail solid",
+      "default": true
+    },
+    "editor-trail": {
+      "name": "Editor Trail",
+      "type": "bool",
+      "description": "Enables the wave trail in the editor",
+      "default": true
+    },
+    "persist-trail": {
+      "name": "Persist Trail",
+      "type": "bool",
+      "description": "Disables fading the wave trail out in portals",
+      "default": false
+    },
+    "disable-pulse": {
+      "name": "Disable Wave Pulse",
+      "type": "bool",
+      "description": "Disables the wave trail pulse completely",
+      "default": false
+    },
+    "gaydient-section": {
+      "name": "The Gaydient",
+      "type": "title",
+      "description": "A custom trail gradient that you can use as an alternative to the basic rainbow."
+    },
+    "enable-gaydient": {
+      "name": "Enable",
+      "type": "bool",
+      "default": false,
+      "description": "Enables the custom gradient and disables the base rainbow"
+    },
+    "gaydient-colors": {
+      "name": "Gaydient Colors",
+      "description": "A list of the colors that the wave trail will cycle through",
+      "type": "custom:gaydient-colors",
+      "default": [
+        {
+          "hex": "#5BCEFA",
+          "enabled": true,
+          "userAdded": true
+        },
+        {
+          "hex": "#F5A9B8",
+          "enabled": true,
+          "userAdded": true
+        },
+        {
+          "hex": "#FFFFFF",
+          "enabled": true,
+          "userAdded": true
+        },
+        {
+          "hex": "#F5A9B8",
+          "enabled": true,
+          "userAdded": true
+        }
+      ]
+    },
+    "tilted-section": {
+      "name": "Tilted Trail Section",
+      "type": "title",
+      "description": "Section for configuring the tilted trail settings"
+    },
+    "tilt-enabled": {
+      "name": "Enable Tilted Wave Trail",
+      "type": "bool",
+      "default": false,
+      "description": "Enable/Disable wave trail tilting"
+    },
+    "tilt-x-offset": {
+      "name": "Tilt X Offset",
+      "type": "float",
+      "default": 0,
+      "min": -10,
+      "max": 10,
+      "control": {
+        "slider-step": 0.05
+      }
+    },
+    "tilt-y-offset": {
+      "name": "Wave Pulse Size",
+      "type": "float",
+      "default": 0,
+      "min": -10,
+      "max": 10,
+      "control": {
+        "slider-step": 0.05
+      }
+    }
+  },
+  "resources": {
+    "sprites": [
+      "resources/*.png"
+    ],
+    "fonts": {
+      "FiraCodeNerdMono": {
+        "path": "resources/firacodemono.ttf",
+        "size": 64
+      }
+    }
+  },
+  "links": {
+    "homepage": "https://github.com/TheBearodactyl/gay-wave-trail",
+    "source": "https://github.com/TheBearodactyl/gay-wave-trail"
+  }
+}
