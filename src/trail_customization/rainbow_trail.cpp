@@ -64,19 +64,15 @@ _ccColor3B RainbowTrail::get_gradient(float phase, float offset, bool smooth, co
 float phase;
 
 class $modify(PlayLayer) {
-  void postUpdate(float p0) override {
-    PlayLayer::postUpdate(p0);
+  void postUpdate(float dt) override {
+    PlayLayer::postUpdate(dt);
 
     auto gradient_colors = gay::settings::get<ColorList>("gaydient-colors");
+    float speed = gay::settings::get_float("speed");
 
-    float delta = p0;
-    if (ColorUtils::owo >= 360) {
-      ColorUtils::owo = 0;
-    } else {
-      ColorUtils::owo += (gay::settings::get_float("speed") + delta);
-    }
+    ColorUtils::owo = fmodf(ColorUtils::owo + (speed * 60.0f * dt), 360.0f);
 
-    phase = fmod(phase + ((gay::settings::get_float("speed") * 10.f) * p0), 360.f);
+    phase = fmodf(phase + (speed * 60.0f * dt), 360.0f);
 
     auto rainbow_one = RainbowTrail::get_rainbow(0, gay::settings::get_float("saturation"));
     auto rainbow_two = RainbowTrail::get_rainbow(180, gay::settings::get_float("saturation"));

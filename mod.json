@@ -31,7 +31,7 @@
     "speed": {
       "name": "Color Cycle Speed",
       "type": "float",
-      "default": 10,
+      "default": 1,
       "min": 1,
       "max": 100,
       "control": {
