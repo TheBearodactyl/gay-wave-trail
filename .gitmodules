@@ -1,3 +1,0 @@
-[submodule "tools/corrosion"]
-	path = tools/corrosion
-	url = https://github.com/corrosion-rs/corrosion.git
