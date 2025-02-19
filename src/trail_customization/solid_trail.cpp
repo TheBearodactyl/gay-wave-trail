@@ -9,7 +9,7 @@ using namespace geode::prelude;
 
 class $modify(CCDrawNode) {
     bool drawPolygon(CCPoint *verts, unsigned int cnt, const ccColor4F &fillColor, float borderWidth, const ccColor4F &borderColor) {
-        if (typeinfo_cast<HardStreak *>(this) && gay::settings::get_solid_trail()) {
+        if (typeinfo_cast<HardStreak *>(this) && gay::settings::get<bool>("solid-trail")) {
             if (fillColor.r >= 1.0f && fillColor.g >= 1.f && fillColor.b >= 1.f &&
                 this->getColor() != ccc3(255, 255, 255)) {
                 return true;
@@ -30,7 +30,7 @@ class $modify(HardStreak) {
     void updateStroke(float dt) {
         HardStreak::updateStroke(dt);
 
-        this->m_isSolid = gay::settings::get_solid_trail();
+        this->m_isSolid = gay::settings::get<bool>("solid-trail");
     }
 };
 

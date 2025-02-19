@@ -35,7 +35,12 @@
       "min": 1,
       "max": 100,
       "control": {
-        "slider-step": 1
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 1
       },
       "description": "Sets the speed at which the colors of the trail cycle."
     },
@@ -46,7 +51,12 @@
       "min": 1,
       "max": 100,
       "control": {
-        "slider-step": 1
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 1
       },
       "description": "The saturation of the colors the wave trail cycles through."
     },
@@ -57,18 +67,39 @@
       "min": 0,
       "max": 10,
       "control": {
-        "slider-step": 0.05
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 1
       }
     },
     "pulse-size": {
       "name": "Wave Pulse Size",
       "type": "float",
-      "default": 1,
+      "default": 0.5,
       "min": 0,
       "max": 10,
       "control": {
-        "slider-step": 0.05
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 1
       }
+    },
+    "add-min-width": {
+      "name": "Add Min Width to the Wave Width",
+      "type": "bool",
+      "default": true
+    },
+    "smooth-colors": {
+      "name": "Smooth Color Cycling",
+      "description": "Smooths the transition between each color",
+      "type": "bool",
+      "default": true
     },
     "solid-trail": {
       "name": "Solid Trail",
@@ -92,6 +123,12 @@
       "name": "Disable Wave Pulse",
       "type": "bool",
       "description": "Disables the wave trail pulse completely",
+      "default": false
+    },
+    "disable-trail": {
+      "name": "Disable the Wave Trail",
+      "type": "bool",
+      "description": "Disables the wave trail completely",
       "default": false
     },
     "gaydient-section": {
@@ -150,7 +187,12 @@
       "min": -10,
       "max": 10,
       "control": {
-        "slider-step": 0.05
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 1
       }
     },
     "tilt-y-offset": {
@@ -160,7 +202,12 @@
       "min": -10,
       "max": 10,
       "control": {
-        "slider-step": 0.05
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 1
       }
     }
   },
