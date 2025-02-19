@@ -17,16 +17,28 @@
     "enhancement"
   ],
   "settings": {
-    "main-section": {
-      "type": "title",
-      "name": "Mod Settings",
-      "description": "Make kayla gay."
-    },
     "enabled": {
       "name": "Enable",
       "type": "bool",
       "description": "Enable the mod",
       "default": true
+    },
+    "main-section": {
+      "type": "title",
+      "name": "Mod Settings",
+      "description": "Make kayla gay."
+    },
+    "rainbow-enabled": {
+      "name": "Enable the Rainbow",
+      "type": "bool",
+      "description": "Enable the rainbow",
+      "default": true
+    },
+    "mirror-players": {
+      "name": "Mirror the Players",
+      "type": "bool",
+      "default": false,
+      "description": "Mirrors the colors of the 2 player trails in Dual mode"
     },
     "speed": {
       "name": "Color Cycle Speed",
@@ -70,6 +82,28 @@
         "slider-step": 0.05
       }
     },
+    "min-wave-size": {
+      "name": "Minimum Wave Pulse Size",
+      "description": "The minimum size for the wave pulse",
+      "type": "float",
+      "default": 0.5,
+      "min": 0.0,
+      "max": 6.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 1
+      }
+    },
+    "add-min-pulse-size": {
+      "name": "Add Min Wave Size to Pulse",
+      "description": "Adds the minimum wave pulse size (set above) to the base wave pulse size",
+      "type": "bool",
+      "default": true
+    },
     "solid-trail": {
       "name": "Solid Trail",
       "type": "bool",
@@ -92,6 +126,12 @@
       "name": "Disable Wave Pulse",
       "type": "bool",
       "description": "Disables the wave trail pulse completely",
+      "default": false
+    },
+    "disable-trail": {
+      "name": "Disable the Wave Trail",
+      "type": "bool",
+      "description": "Disables the wave trail itself",
       "default": false
     },
     "gaydient-section": {

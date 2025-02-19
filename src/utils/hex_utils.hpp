@@ -8,10 +8,10 @@
 using namespace cocos2d;
 
 namespace gay::utils::hex_code {
-    class HexUtils {
-    public:
-        static ccColor3B hex_to_rgb(const std::string& hex_code);
-    };
-} // gay::utils::hex_code
+  class HexUtils {
+  public:
+    static ccColor3B hex_to_rgb(const std::string &hex_code);
+  };
+}// namespace gay::utils::hex_code
 
 #endif

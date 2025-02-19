@@ -6,12 +6,12 @@
 using namespace cocos2d;
 
 namespace gay::utils::color_conversion {
-    class ColorUtils {
-    public:
-        static float owo;
+  class ColorUtils {
+  public:
+    static float owo;
 
-        static ccColor3B hsv_to_rgb(float h, float s, float v);
-    };
-} // gay::utils::color_conversion
+    static ccColor3B hsv_to_rgb(float h, float s, float v);
+  };
+}// namespace gay::utils::color_conversion
 
 #endif
