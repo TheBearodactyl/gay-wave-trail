@@ -8,7 +8,7 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "v3.0.1",
+  "version": "v3.0.2",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "tags": [
@@ -196,7 +196,7 @@
       }
     },
     "tilt-y-offset": {
-      "name": "Wave Pulse Size",
+      "name": "Tilt Y Offset",
       "type": "float",
       "default": 0,
       "min": -10,

@@ -7,7 +7,7 @@ class $modify(HardStreak) {
     void addPoint(cocos2d::CCPoint point_coords) {
         auto out_point = CCPoint{point_coords.x, point_coords.y};
 
-        if (gay::settings::get<bool>("enabled")) {
+        if (gay::settings::get<bool>("tilt-enabled") && gay::settings::get_mod_enabled()) {
             out_point.x += gay::settings::get_float("tilt-x-offset");
             out_point.y += gay::settings::get_float("tilt-y-offset");
 
