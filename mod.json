@@ -78,7 +78,7 @@
     "pulse-size": {
       "name": "Wave Pulse Size",
       "type": "float",
-      "default": 0.5,
+      "default": 1,
       "min": 0,
       "max": 10,
       "control": {
@@ -100,6 +100,12 @@
       "description": "Smooths the transition between each color",
       "type": "bool",
       "default": true
+    },
+    "trail-shadow": {
+      "name": "Wave Trail Shadow",
+      "description": "Add a shadow behind the wave trail",
+      "type": "bool",
+      "default": false
     },
     "solid-trail": {
       "name": "Solid Trail",
