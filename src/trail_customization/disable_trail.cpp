@@ -4,7 +4,6 @@
 
 using namespace geode::prelude;
 
-// Disable the Pulse
 class $modify(HardStreak) {
   void updateStroke(float dt) {
     if (gay::settings::get_mod_enabled() && gay::settings::get<bool>("disable-pulse") && PlayLayer::get()) {
@@ -17,7 +16,6 @@ class $modify(HardStreak) {
   }
 };
 
-// Disable the trail completely
 class $modify(PlayLayer) {
   void postUpdate(float dt) {
     if (gay::settings::get_mod_enabled() && gay::settings::get<bool>("disable-trail")) {

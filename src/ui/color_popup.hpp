@@ -9,7 +9,8 @@
 
 using namespace geode::prelude;
 
-class ColorListPopup : public Popup<std::vector<ColorEntry>, std::function<void(std::vector<ColorEntry>)>>, geode::ColorPickPopupDelegate {
+class ColorListPopup : public Popup<std::vector<ColorEntry>, std::function<void(std::vector<ColorEntry>)>>,
+                       geode::ColorPickPopupDelegate {
 protected:
     std::vector<ColorEntry> m_entries;
     std::function<void(std::vector<ColorEntry>)> m_callback;
@@ -21,12 +22,12 @@ protected:
 
     void onAdd(CCObject *); // ew, camelCase :/
     void onClose(CCObject *) override; // again, ew.
-    void updateColor(ccColor3B const& color);
+    void updateColor(ccColor3B const &color);
 
 public:
     static ColorListPopup *create(
             std::vector<ColorEntry>,
-            const std::function<void(std::vector<ColorEntry>)>&
+            const std::function<void(std::vector<ColorEntry>)> &
     );
 };
 

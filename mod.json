@@ -1,5 +1,5 @@
 {
-  "geode": "4.3.0",
+  "geode": "4.6.3",
   "gd": {
     "win": "2.2074",
     "android": "2.2074",
@@ -8,7 +8,7 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "v3.0.2",
+  "version": "v4.1.0",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "tags": [
@@ -23,7 +23,7 @@
       "description": "Make kayla gay."
     },
     "enabled": {
-      "name": "Enable",
+      "name": "Enable GWT",
       "type": "bool",
       "description": "Enable the mod",
       "default": true
@@ -91,7 +91,7 @@
       }
     },
     "add-min-width": {
-      "name": "Add Min Width to the Wave Width",
+      "name": "Add Min Width",
       "type": "bool",
       "default": true
     },
@@ -100,12 +100,6 @@
       "description": "Smooths the transition between each color",
       "type": "bool",
       "default": true
-    },
-    "trail-shadow": {
-      "name": "Wave Trail Shadow",
-      "description": "Add a shadow behind the wave trail",
-      "type": "bool",
-      "default": false
     },
     "solid-trail": {
       "name": "Solid Trail",
@@ -137,13 +131,57 @@
       "description": "Disables the wave trail completely",
       "default": false
     },
+    "outline-section": {
+      "name": "Wave Outline",
+      "type": "title",
+      "description": "Wave Outline Settings"
+    },
+    "wave-outline": {
+      "name": "Enable Wave Outline",
+      "type": "bool",
+      "description": "Enables an outline effect on the wave trail",
+      "default": true
+    },
+    "outline-color": {
+      "name": "Wave Outline Colors",
+      "type": "color",
+      "default": "#FF00BB",
+      "description": "The color of the trail outline"
+    },
+    "wave-outline-width": {
+      "name": "Wave Outline Width",
+      "type": "float",
+      "default": 1,
+      "min": 0,
+      "max": 10,
+      "control": {
+        "slider": true
+      }
+    },
+    "wave-outline-blur": {
+      "name": "Wave Outline Blur",
+      "type": "int",
+      "default": 0,
+      "description": "How blurry should the outline be"
+    },
+    "wave-outline-opacity": {
+      "name": "Wave Outline Opacity",
+      "description": "The opacity of the trail outline",
+      "type": "int",
+      "default": 255,
+      "min": 1,
+      "max": 255,
+      "control": {
+        "slider": true
+      }
+    },
     "gaydient-section": {
       "name": "The Gaydient",
       "type": "title",
       "description": "A custom trail gradient that you can use as an alternative to the basic rainbow."
     },
     "enable-gaydient": {
-      "name": "Enable",
+      "name": "Enable the Gaydient",
       "type": "bool",
       "default": false,
       "description": "Enables the custom gradient and disables the base rainbow"
@@ -226,6 +264,12 @@
         "path": "resources/firacodemono.ttf",
         "size": 64
       }
+    }
+  },
+  "dependencies": {
+    "eclipse.eclipse-menu": {
+      "version": ">=v1.2.2",
+      "importance": "suggested"
     }
   },
   "links": {

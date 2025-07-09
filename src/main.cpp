@@ -9,4 +9,5 @@ using namespace geode::prelude;
 
 $execute {
     (void) Mod::get()->registerCustomSettingType("gaydient-colors", ColorListSetting::parse);
+    (void) Mod::get()->registerCustomSettingType("outline-colors", ColorListSetting::parse);
 }
