@@ -32,10 +32,10 @@ void create_float_setting(const char *id, MenuTab &tab) {
   auto setting = Mod::get()->getSetting(id);
 
   tab.addInputFloat(Mod::get()->expandSpriteName(id).data(), setting->getDisplayName(),
-                [id](double val) {
-                  Mod::get()->setSettingValue<double>(id, val);
-                  eclipse::config::set<double>(Mod::get()->expandSpriteName(id).data(), val);
-                })
+                    [id](double val) {
+                      Mod::get()->setSettingValue<double>(id, val);
+                      eclipse::config::set<double>(Mod::get()->expandSpriteName(id).data(), val);
+                    })
       .setDescription(setting->getDescription().value_or(""));
 
   eclipse::config::set<double>(Mod::get()->expandSpriteName(id).data(), Mod::get()->getSettingValue<double>(id));
@@ -46,7 +46,7 @@ void create_float_setting(const char *id, MenuTab &tab) {
 }
 
 std::vector<std::string> bool_settings = {
-    "enabled", "add-min-width", "smooth-colors", "trail-shadow", "solid-trail", "editor-trail", "persist-trail", "disable-pulse", "disable-trail", "enable-gaydient", "tilt-enabled",
+    "enabled", "add-min-width", "smooth-colors", "solid-trail", "editor-trail", "persist-trail", "disable-pulse", "disable-trail", "enable-gaydient", "tilt-enabled",
 };
 
 std::vector<std::string> float_settings = {
