@@ -8,7 +8,7 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "v4.1.2",
+  "version": "v4.1.3",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "tags": [
@@ -171,7 +171,7 @@
     },
     "outline-colors": {
       "name": "Outline Colors",
-      "description": "A list of the colors that the wave trail will cycle through",
+      "description": "A list of the colors that the trail outline will cycle through",
       "type": "custom:gaydient-colors",
       "default": [
         {
