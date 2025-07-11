@@ -8,7 +8,7 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "v4.1.1",
+  "version": "v4.1.2",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "tags": [
@@ -142,12 +142,6 @@
       "description": "Enables an outline effect on the wave trail",
       "default": true
     },
-    "outline-color": {
-      "name": "Wave Outline Colors",
-      "type": "color",
-      "default": "#FF00BB",
-      "description": "The color of the trail outline"
-    },
     "wave-outline-width": {
       "name": "Wave Outline Width",
       "type": "float",
@@ -174,6 +168,33 @@
       "control": {
         "slider": true
       }
+    },
+    "outline-colors": {
+      "name": "Outline Colors",
+      "description": "A list of the colors that the wave trail will cycle through",
+      "type": "custom:gaydient-colors",
+      "default": [
+        {
+          "hex": "#5BCEFA",
+          "enabled": true,
+          "userAdded": true
+        },
+        {
+          "hex": "#F5A9B8",
+          "enabled": true,
+          "userAdded": true
+        },
+        {
+          "hex": "#FFFFFF",
+          "enabled": true,
+          "userAdded": true
+        },
+        {
+          "hex": "#F5A9B8",
+          "enabled": true,
+          "userAdded": true
+        }
+      ]
     },
     "gaydient-section": {
       "name": "The Gaydient",

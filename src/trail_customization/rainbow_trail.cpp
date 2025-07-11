@@ -1,5 +1,4 @@
 #include "rainbow_trail.hpp"
-#include "../constants.hpp"
 #include "../settings/gay_settings.hpp"
 #include "../utils/color_utils.hpp"
 #include "../utils/hex_utils.hpp"
@@ -20,8 +19,8 @@ _ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
     int sector = static_cast<int>(h);
     float x = c * (1.0f - fabsf(fmodf(h, 2.0f) - 1.0f));
     float r = ((sector == 0) | (sector == 5)) ? c : ((sector == 1) | (sector == 4)) ? x : 0.0f;
-    float g = ((sector == 1) | (sector == 2)) ? c : (sector == 0) | (sector == 3) ? x : 0.0f;
-    float b = ((sector == 3) | (sector == 4)) ? c : (sector == 2) | (sector == 5) ? x : 0.0f;
+    float g = ((sector == 1) | (sector == 2)) ? c : ((sector == 0) | (sector == 3)) ? x : 0.0f;
+    float b = ((sector == 3) | (sector == 4)) ? c : ((sector == 2) | (sector == 5)) ? x : 0.0f;
 
     return {
         static_cast<GLubyte>((r + m) * 255.0f),
@@ -32,32 +31,33 @@ _ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
 
 _ccColor3B RainbowTrail::get_gradient(float phase, float offset, bool smooth, const ColorList &colors) {
     const auto& clrs = colors.colors;
-    if (clrs.empty()) [[unlikely]] {
+    if (clrs.empty()) {
         return {255, 255, 255};
     }
 
-    const float t = fmodf(phase + offset, 360.0f);
-    const float inv_size = 1.0f / static_cast<float>(clrs.size());
-    const float seg_size = 360.0f / inv_size;
-    const float seg_float = t * inv_size * (1.0f / seg_size) * (float)clrs.size();
-    const int seg = static_cast<int>(seg_float);
-    const float y = seg_float - seg;
-    const int nx_seg = (seg + 1) % clrs.size();
-    const auto col = HexUtils::hex_to_rgb(clrs[seg].m_hex);
-
-    if (!smooth) [[likely]] {
-        return col;
+    if (clrs.size() == 1) {
+        return HexUtils::hex_to_rgb(clrs[0].m_hex);
     }
 
-    const auto nx_col = HexUtils::hex_to_rgb(clrs[nx_seg].m_hex);
-    const float y_smth = smooth ? y : 0.0f;
+    const float normalized_phase = fmodf(phase + offset, 360.0f);
+    const float segment_size = 360.0f / static_cast<float>(clrs.size());
+    const float segment_float = normalized_phase / segment_size;
+    const int current_segment = static_cast<int>(segment_float) % clrs.size();
+    const float interpolation_factor = segment_float - static_cast<int>(segment_float);
+    const auto current_color = HexUtils::hex_to_rgb(clrs[current_segment].m_hex);
+
+    if (!smooth) {
+        return current_color;
+    }
+
+    const int next_segment = (current_segment + 1) % clrs.size();
+    const auto next_color = HexUtils::hex_to_rgb(clrs[next_segment].m_hex);
 
     return {
-            static_cast<GLubyte>(col.r + (nx_col.r - col.r) * y_smth),
-            static_cast<GLubyte>(col.g + (nx_col.g - col.g) * y_smth),
-            static_cast<GLubyte>(col.b + (nx_col.b - col.b) * y_smth)
+            static_cast<GLubyte>(current_color.r + (next_color.r - current_color.r) * interpolation_factor),
+            static_cast<GLubyte>(current_color.g + (next_color.g - current_color.g) * interpolation_factor),
+            static_cast<GLubyte>(current_color.b + (next_color.b - current_color.b) * interpolation_factor)
     };
-
 }
 
 float phase;
