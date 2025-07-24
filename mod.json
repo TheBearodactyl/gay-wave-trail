@@ -8,7 +8,7 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "v4.1.4",
+  "version": "v4.1.5",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "tags": [
@@ -26,6 +26,12 @@
       "name": "Enable GWT",
       "type": "bool",
       "description": "Enable the mod",
+      "default": true
+    },
+    "enable-pause-btn": {
+      "name": "Enable Pause Menu Button",
+      "type": "bool",
+      "description": "Enable the quick-settings button in the pause menu",
       "default": true
     },
     "speed": {
