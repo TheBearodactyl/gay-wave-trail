@@ -146,7 +146,7 @@
       "name": "Enable Wave Outline",
       "type": "bool",
       "description": "Enables an outline effect on the wave trail",
-      "default": true
+      "default": false
     },
     "wave-outline-width": {
       "name": "Wave Outline Width",
