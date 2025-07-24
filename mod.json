@@ -8,7 +8,7 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "v4.1.6",
+  "version": "v4.1.7",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "tags": [
@@ -69,7 +69,7 @@
     "trail-size": {
       "name": "Wave Trail Size",
       "type": "float",
-      "default": 1,
+      "default": 1.2,
       "min": 0,
       "max": 10,
       "control": {
@@ -84,7 +84,7 @@
     "pulse-size": {
       "name": "Wave Pulse Size",
       "type": "float",
-      "default": 1,
+      "default": 1.2,
       "min": 0,
       "max": 10,
       "control": {
