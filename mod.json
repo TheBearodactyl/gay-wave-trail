@@ -137,6 +137,12 @@
       "description": "Disables the wave trail completely",
       "default": false
     },
+    "trail-dashing": {
+      "name": "Enable Trail Dash Effect",
+      "type": "bool",
+      "description": "Makes the wave icon rotate when dashing",
+      "default": false
+    },
     "outline-section": {
       "name": "Wave Outline",
       "type": "title",
