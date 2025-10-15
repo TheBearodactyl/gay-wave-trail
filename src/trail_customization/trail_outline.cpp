@@ -44,14 +44,14 @@ struct TrailOutlineHardStreak: Modify<TrailOutlineHardStreak, HardStreak> {
 		auto* play_layer = GameManager::sharedState()->m_playLayer;
 
 		if (play_layer) {
-			if (play_layer->m_player1 && this == play_layer->m_player1->m_waveTrail) {
+			if (play_layer->m_player1 and this == play_layer->m_player1->m_waveTrail) {
 				s_streak_pl1.node = this;
 				s_streak_pl1.is_pl1 = true;
 			} else if (s_streak_pl1.node == this) {
 				s_streak_pl1.reset();
 			}
 
-			if (play_layer->m_player2 && this == play_layer->m_player2->m_waveTrail) {
+			if (play_layer->m_player2 and this == play_layer->m_player2->m_waveTrail) {
 				s_streak_pl2.node = this;
 				s_streak_pl2.is_pl1 = false;
 			} else if (s_streak_pl2.node == this) {
@@ -65,7 +65,7 @@ struct TrailOutlineHardStreak: Modify<TrailOutlineHardStreak, HardStreak> {
 
 struct TrailOutline: Modify<TrailOutline, cocos2d::CCDrawNode> {
 	bool drawPolygon(CCPoint* verts, unsigned int count, const ccColor4F& fill_col, float border_width, const ccColor4F& border_col) {
-		if ((fill_col.r == 1.F && fill_col.g == 1.F && fill_col.b == 1.F && fill_col.a != 1.F)) {
+		if ((fill_col.r == 1.F and fill_col.g == 1.F and fill_col.b == 1.F and fill_col.a != 1.F)) {
 			return CCDrawNode::drawPolygon(verts, count, fill_col, border_width, border_col);
 		}
 
@@ -101,7 +101,7 @@ struct TrailOutline: Modify<TrailOutline, cocos2d::CCDrawNode> {
 		CCPoint new_verts[4];
 
 		if (blur_layers == 0.0) {
-			for (unsigned int i = 0; i < count && i < 4; i++) {
+			for (unsigned int i = 0; i < count and i < 4; i++) {
 				new_verts[i] = verts[i];
 			}
 
@@ -141,7 +141,7 @@ struct TrailOutline: Modify<TrailOutline, cocos2d::CCDrawNode> {
 				(static_cast<float>(outline_opacity) / 255.0f) * opacity
 			};
 
-			for (unsigned int j = 0; j < count && j < 4; j++) {
+			for (unsigned int j = 0; j < count and j < 4; j++) {
 				new_verts[j] = verts[j];
 			}
 

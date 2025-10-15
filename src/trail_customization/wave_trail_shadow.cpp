@@ -3,4 +3,4 @@
 
 using namespace geode::prelude;
 
-struct WaveTrailShadow : Modify<WaveTrailShadow, HardStreak> {};
+struct WaveTrailShadow: Modify<WaveTrailShadow, HardStreak> {};

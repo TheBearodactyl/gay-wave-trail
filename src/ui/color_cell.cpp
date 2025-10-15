@@ -17,8 +17,9 @@ bool ColorCell::init(
 	std::function<void()> on_color_change,
 	const cocos2d::CCSize& size
 ) {
-	if (!CCNode::init())
+	if (!CCNode::init()) {
 		return false;
+	}
 
 	static const float HORIZONTAL_PADDING = 2.6f;
 
