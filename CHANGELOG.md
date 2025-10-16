@@ -1,4 +1,14 @@
-### post-commit git hook + setup script (HEAD -> main)
+### changelog (HEAD -> main)
+>Thu, 16 Oct 2025 16:42:53 -0500
+
+>Author: The Bearodactyl (dabewodactowluwu@gmail.com)
+
+>Commiter: The Bearodactyl (dabewodactowluwu@gmail.com)
+
+
+
+
+### post-commit git hook + setup script (origin/main, origin/HEAD)
 >Thu, 16 Oct 2025 16:41:58 -0500
 
 >Author: The Bearodactyl (dabewodactowluwu@gmail.com)
@@ -8,7 +18,7 @@
 
 
 
-### no more chatjipity (tag: v4.3.1, origin/main, origin/HEAD)
+### no more chatjipity (tag: v4.3.1)
 >Tue, 14 Oct 2025 21:37:55 -0500
 
 >Author: The Bearodactyl (dabewodactowluwu@gmail.com)

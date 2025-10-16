@@ -11,7 +11,8 @@ local colors = {
 
 local enable = {
 	git = false,
-	hook = false,
+	post_commit = false,
+	pre_commit = false,
 	cmake = false,
 }
 
@@ -61,22 +62,33 @@ local function print_help()
 	print(colors.cyan .. colors.bold .. "Usage:" .. colors.reset .. " lua setup.lua [options]\n")
 	print(colors.bold .. "Options:" .. colors.reset)
 	print(
-		"  " .. colors.yellow .. "--git" .. colors.reset .. "       Run " .. colors.cyan .. "'git pull'" .. colors.reset
+		"  "
+			.. colors.yellow
+			.. "--git"
+			.. colors.reset
+			.. "              Run "
+			.. colors.cyan
+			.. "'git pull'"
+			.. colors.reset
 	)
-	print("  " .. colors.yellow .. "--hook" .. colors.reset .. "      Link the git post-commit hook")
-	print("  " .. colors.yellow .. "--cmake" .. colors.reset .. "     Configure CMake")
-	print("  " .. colors.yellow .. "-h, --help" .. colors.reset .. "     Show this help message\n")
+	print("  " .. colors.yellow .. "--post-commit" .. colors.reset .. "      Link the git post-commit hook")
+	print("  " .. colors.yellow .. "--pre-commit" .. colors.reset .. "       Link the git pre-commit hook")
+	print("  " .. colors.yellow .. "--cmake" .. colors.reset .. "            Configure CMake")
+	print("  " .. colors.yellow .. "-h, --help" .. colors.reset .. "         Show this help message\n")
+
 	print(colors.bold .. "Examples:" .. colors.reset)
 	print("  lua setup.lua")
 	print("  lua setup.lua " .. colors.yellow .. "--git --cmake" .. colors.reset)
-	print("  lua setup.lua " .. colors.yellow .. "--hook" .. colors.reset)
+	print("  lua setup.lua " .. colors.yellow .. "--post-commit" .. colors.reset)
 end
 
 for _, arg in ipairs(arg) do
 	if arg == "--git" then
 		enable.git = true
-	elseif arg == "--hook" then
-		enable.hook = true
+	elseif arg == "--post-commit" then
+		enable.post_commit = true
+	elseif arg == "--pre-commit" then
+		enable.pre_commit = true
 	elseif arg == "--cmake" then
 		enable.cmake = true
 	elseif arg == "--help" or arg == "-h" then
@@ -137,7 +149,7 @@ local function abs_path(path)
 	return out or path
 end
 
-if enable.hook then
+if enable.post_commit then
 	if dir_exists(".git") then
 		info(".git directory found, setting up hook...")
 
