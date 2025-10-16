@@ -14,7 +14,7 @@ _ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
 	constexpr float inv60 = 1.0f / 60.0f;
 	constexpr float inv100 = 1.0f / 100.0f;
 
-	float hue = fmodf(ColorUtils::owo + offset, 360.0f);
+	float hue = fmodf(ColorUtils::phase + offset, 360.0f);
 	float c = saturation * inv100;
 	float m = 1.0f - c;
 	float h = hue * inv60;
@@ -67,7 +67,7 @@ struct RainbowTrailPlayLayer: Modify<RainbowTrailPlayLayer, PlayLayer> {
 		auto gradient_colors = gay::settings::get<ColorList>("gaydient-colors");
 		float speed = gay::settings::get_float("speed");
 
-		ColorUtils::owo = fmodf(ColorUtils::owo + (speed * 60.0f * dt), 360.0f);
+		ColorUtils::phase = fmodf(ColorUtils::phase + (speed * 60.0f * dt), 360.0f);
 
 		phase = fmodf(phase + (speed * 60.0f * dt), 360.0f);
 

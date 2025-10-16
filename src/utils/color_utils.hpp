@@ -8,7 +8,7 @@ using namespace cocos2d;
 namespace gay::utils::color_conversion {
 	class ColorUtils {
 	  public:
-		static float owo;
+		static float phase;
 
 		static ccColor3B hsv_to_rgb(float h, float s, float v);
 	};

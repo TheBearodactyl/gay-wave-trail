@@ -1,4 +1,14 @@
-### changelog (HEAD -> main)
+### add pre-commit hook (HEAD -> main)
+>Thu, 16 Oct 2025 16:58:30 -0500
+
+>Author: The Bearodactyl (dabewodactowluwu@gmail.com)
+
+>Commiter: The Bearodactyl (dabewodactowluwu@gmail.com)
+
+
+
+
+### changelog (origin/main, origin/HEAD)
 >Thu, 16 Oct 2025 16:42:53 -0500
 
 >Author: The Bearodactyl (dabewodactowluwu@gmail.com)
@@ -8,7 +18,7 @@
 
 
 
-### post-commit git hook + setup script (origin/main, origin/HEAD)
+### post-commit git hook + setup script
 >Thu, 16 Oct 2025 16:41:58 -0500
 
 >Author: The Bearodactyl (dabewodactowluwu@gmail.com)

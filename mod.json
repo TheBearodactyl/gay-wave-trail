@@ -8,10 +8,14 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "v4.3.1",
+  "version": ".3.2",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
-  "tags": ["offline", "customization", "enhancement"],
+  "tags": [
+    "offline",
+    "customization",
+    "enhancement"
+  ],
   "settings": {
     "main-section": {
       "type": "title",
@@ -285,7 +289,9 @@
     }
   },
   "resources": {
-    "sprites": ["resources/*.png"],
+    "sprites": [
+      "resources/*.png"
+    ],
     "fonts": {
       "FiraCodeNerdMono": {
         "path": "resources/firacodemono.ttf",

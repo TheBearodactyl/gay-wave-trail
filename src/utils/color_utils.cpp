@@ -3,7 +3,7 @@
 #include <cmath>
 
 namespace gay::utils::color_conversion {
-	float ColorUtils::owo = 0;
+	float ColorUtils::phase = 0;
 
 	ccColor3B ColorUtils::hsv_to_rgb(float h, float s, float v) {
 		float r, g, b;
