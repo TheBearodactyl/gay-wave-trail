@@ -21,47 +21,45 @@ _ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
 	int sector_idx = static_cast<int>(sector_pos);
 	float intermediate = chroma * (1.0f - fabsf(fmodf(sector_pos, 2.0f) - 1.0f));
 
-	float red = 0.0f;
-	float green = 0.0f;
-	float blue = 0.0f;
+	float r, g, b = 0.0f;
 
 	switch (sector_idx) {
 		case 0:
-			red = chroma;
-			green = intermediate;
-			blue = 0.0f;
+			r = chroma;
+			g = intermediate;
+			b = 0.0f;
 			break;
 		case 1:
-			red = intermediate;
-			green = chroma;
-			blue = 0.0f;
+			r = intermediate;
+			g = chroma;
+			b = 0.0f;
 			break;
 		case 2:
-			red = 0.0f;
-			green = chroma;
-			blue = intermediate;
+			r = 0.0f;
+			g = chroma;
+			b = intermediate;
 			break;
 		case 3:
-			red = 0.0f;
-			green = intermediate;
-			blue = chroma;
+			r = 0.0f;
+			g = intermediate;
+			b = chroma;
 			break;
 		case 4:
-			red = intermediate;
-			green = 0.0f;
-			blue = chroma;
+			r = intermediate;
+			g = 0.0f;
+			b = chroma;
 			break;
 		case 5:
-			red = chroma;
-			green = 0.0f;
-			blue = intermediate;
+			r = chroma;
+			g = 0.0f;
+			b = intermediate;
 			break;
 	}
 
 	return {
-		static_cast<GLubyte>((red + match) * 255.0f),
-		static_cast<GLubyte>((green + match) * 255.0f),
-		static_cast<GLubyte>((blue + match) * 255.0f)
+		static_cast<GLubyte>((r + match) * 255.0f),
+		static_cast<GLubyte>((g + match) * 255.0f),
+		static_cast<GLubyte>((b + match) * 255.0f)
 	};
 }
 

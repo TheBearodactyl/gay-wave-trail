@@ -24,9 +24,20 @@ if echo "$CHANGED_FILES" | grep -q '^src/'; then
     exit 1
   fi
 
-  IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
-  if [ -z "$PATCH" ]; then
-    PATCH=0
+  CLEAN_VERSION=$(echo "$CURRENT_VERSION" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//;s/^"//;s/"$//')
+  
+  MAJOR=$(echo "$CLEAN_VERSION" | cut -d. -f1)
+  MINOR=$(echo "$CLEAN_VERSION" | cut -d. -f2)
+  PATCH=$(echo "$CLEAN_VERSION" | cut -d. -f3)
+
+  if [ -z "$MAJOR" ] || [ -z "$MINOR" ] || [ -z "$PATCH" ]; then
+    echo "Error: Version format is not valid semver (major.minor.patch). Got: $CURRENT_VERSION"
+    exit 1
+  fi
+
+  if ! echo "$MAJOR" | grep -qE '^[0-9]+$' || ! echo "$MINOR" | grep -qE '^[0-9]+$' || ! echo "$PATCH" | grep -qE '^[0-9]+$'; then
+    echo "Error: Version components must be numeric. Got: $CURRENT_VERSION"
+    exit 1
   fi
 
   PATCH=$((PATCH + 1))
@@ -37,28 +48,28 @@ if echo "$CHANGED_FILES" | grep -q '^src/'; then
   if command -v jq >/dev/null 2>&1; then
     jq --arg v "$NEW_VERSION" '.version = $v' "$MOD_FILE" > "$MOD_FILE.tmp" && mv "$MOD_FILE.tmp" "$MOD_FILE"
   elif command -v pwsh >/dev/null 2>&1; then
-	  pwsh -NoProfile -Command "
-	  \$jsonContent = Get-Content -Raw '$MOD_FILE' | ConvertFrom-Json
-	  if (-not \$jsonContent.PSObject.Properties.Name -contains 'version') {
-		  Write-Error 'No top-level version found in mod.json. Aborting.'
-		  exit 1
-	  }
+    pwsh -NoProfile -Command "
+      \$jsonContent = Get-Content -Raw '$MOD_FILE' | ConvertFrom-Json
+      if (-not \$jsonContent.PSObject.Properties.Name -contains 'version') {
+        Write-Error 'No top-level version found in mod.json. Aborting.'
+        exit 1
+      }
       \$versionParts = \$jsonContent.version -split '\.'
-	  if (\$versionParts.Count -ne 3) {
-		  Write-Error 'Version format is not valid semver (major.minor.patch)'
-		  exit 1
-	  }
+      if (\$versionParts.Count -ne 3) {
+        Write-Error 'Version format is not valid semver (major.minor.patch)'
+        exit 1
+      }
       [int]\$major = \$versionParts[0]
       [int]\$minor = \$versionParts[1]
       [int]\$patch = \$versionParts[2]
-	  \$patch++
-	  \$jsonContent.version = \"\$major.\$minor.\$patch\"
-	  \$jsonContent | ConvertTo-Json -Depth 10 | Set-Content -NoNewline '$MOD_FILE'
-	  "
+      \$patch++
+      \$jsonContent.version = \"\$major.\$minor.\$patch\"
+      \$jsonContent | ConvertTo-Json -Depth 10 | Set-Content -NoNewline '$MOD_FILE'
+    "
   elif command -v powershell >/dev/null 2>&1; then
     powershell -NoProfile -Command "(Get-Content $MOD_FILE) -replace '(\"version\"[ \t]*:[ \t]*\")([^\"\r\n]+)(\")', '\$1$NEW_VERSION\$3',1 | Set-Content $MOD_FILE"
   else
-    sed "0,/\"version\"[[:space:]]*:[[:space:]]*\"[^\"]*\"/{s/\"version\"[[:space:]]*:[[:space:]]*\"[^\"]*\"/\"version\": \"$NEW_VERSION\"/}" "$MOD_FILE" > "$MOD_FILE.tmp" && mv "$MOD_FILE.tmp" "$MOD_FILE"
+    sed -E "s/\"version\"[[:space:]]*:[[:space:]]*\"[^\"]*\"/\"version\": \"$NEW_VERSION\"/" "$MOD_FILE" > "$MOD_FILE.tmp" && mv "$MOD_FILE.tmp" "$MOD_FILE"
   fi
 
   git add "$MOD_FILE"
@@ -66,4 +77,3 @@ if echo "$CHANGED_FILES" | grep -q '^src/'; then
 fi
 
 exit 0
-

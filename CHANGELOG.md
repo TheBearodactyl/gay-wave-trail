@@ -1,4 +1,14 @@
-### update stuff (HEAD -> main)
+### make `RainbowTrail::get_rainbow` more readable (HEAD -> main)
+>Thu, 16 Oct 2025 17:15:04 -0500
+
+>Author: The Bearodactyl (dabewodactowluwu@gmail.com)
+
+>Commiter: The Bearodactyl (dabewodactowluwu@gmail.com)
+
+
+
+
+### update stuff
 >Thu, 16 Oct 2025 17:11:54 -0500
 
 >Author: The Bearodactyl (dabewodactowluwu@gmail.com)
