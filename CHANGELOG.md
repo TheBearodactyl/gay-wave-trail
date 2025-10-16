@@ -1,4 +1,14 @@
-### add pre-commit hook (HEAD -> main)
+### rename `ColorUtils::owo` to `ColorUtils::phase` (HEAD -> main)
+>Thu, 16 Oct 2025 17:11:08 -0500
+
+>Author: The Bearodactyl (dabewodactowluwu@gmail.com)
+
+>Commiter: The Bearodactyl (dabewodactowluwu@gmail.com)
+
+
+
+
+### add pre-commit hook
 >Thu, 16 Oct 2025 16:58:30 -0500
 
 >Author: The Bearodactyl (dabewodactowluwu@gmail.com)

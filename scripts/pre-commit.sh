@@ -37,7 +37,24 @@ if echo "$CHANGED_FILES" | grep -q '^src/'; then
   if command -v jq >/dev/null 2>&1; then
     jq --arg v "$NEW_VERSION" '.version = $v' "$MOD_FILE" > "$MOD_FILE.tmp" && mv "$MOD_FILE.tmp" "$MOD_FILE"
   elif command -v pwsh >/dev/null 2>&1; then
-    pwsh -NoProfile -Command "(Get-Content $MOD_FILE) -replace '(\"version\"[ \t]*:[ \t]*\")([^\"\r\n]+)(\")', '\$1$NEW_VERSION\$3',1 | Set-Content $MOD_FILE"
+	  pwsh -NoProfile -Command "
+	  \$jsonContent = Get-Content -Raw '$MOD_FILE' | ConvertFrom-Json
+	  if (-not \$jsonContent.PSObject.Properties.Name -contains 'version') {
+		  Write-Error 'No top-level version found in mod.json. Aborting.'
+		  exit 1
+	  }
+      \$versionParts = \$jsonContent.version -split '\.'
+	  if (\$versionParts.Count -ne 3) {
+		  Write-Error 'Version format is not valid semver (major.minor.patch)'
+		  exit 1
+	  }
+      [int]\$major = \$versionParts[0]
+      [int]\$minor = \$versionParts[1]
+      [int]\$patch = \$versionParts[2]
+	  \$patch++
+	  \$jsonContent.version = \"\$major.\$minor.\$patch\"
+	  \$jsonContent | ConvertTo-Json -Depth 10 | Set-Content -NoNewline '$MOD_FILE'
+	  "
   elif command -v powershell >/dev/null 2>&1; then
     powershell -NoProfile -Command "(Get-Content $MOD_FILE) -replace '(\"version\"[ \t]*:[ \t]*\")([^\"\r\n]+)(\")', '\$1$NEW_VERSION\$3',1 | Set-Content $MOD_FILE"
   else
