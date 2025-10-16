@@ -11,20 +11,58 @@ using namespace gay::utils::color_conversion;
 using namespace gay::utils::hex_code;
 
 _ccColor3B RainbowTrail::get_rainbow(float offset, float saturation) {
-	constexpr float inv60 = 1.0f / 60.0f;
-	constexpr float inv100 = 1.0f / 100.0f;
+	constexpr float degrees_per_sector = 1.0f / 60.0f;
+	constexpr float percent_to_fract = 1.0f / 100.0f;
 
 	float hue = fmodf(ColorUtils::phase + offset, 360.0f);
-	float c = saturation * inv100;
-	float m = 1.0f - c;
-	float h = hue * inv60;
-	int sector = static_cast<int>(h);
-	float x = c * (1.0f - fabsf(fmodf(h, 2.0f) - 1.0f));
-	float r = ((sector == 0) | (sector == 5)) ? c : ((sector == 1) | (sector == 4)) ? x : 0.0f;
-	float g = ((sector == 1) | (sector == 2)) ? c : ((sector == 0) | (sector == 3)) ? x : 0.0f;
-	float b = ((sector == 3) | (sector == 4)) ? c : ((sector == 2) | (sector == 5)) ? x : 0.0f;
+	float chroma = saturation * percent_to_fract;
+	float match = 1.0f - chroma;
+	float sector_pos = hue * degrees_per_sector;
+	int sector_idx = static_cast<int>(sector_pos);
+	float intermediate = chroma * (1.0f - fabsf(fmodf(sector_pos, 2.0f) - 1.0f));
 
-	return {static_cast<GLubyte>((r + m) * 255.0f), static_cast<GLubyte>((g + m) * 255.0f), static_cast<GLubyte>((b + m) * 255.0f)};
+	float red = 0.0f;
+	float green = 0.0f;
+	float blue = 0.0f;
+
+	switch (sector_idx) {
+		case 0:
+			red = chroma;
+			green = intermediate;
+			blue = 0.0f;
+			break;
+		case 1:
+			red = intermediate;
+			green = chroma;
+			blue = 0.0f;
+			break;
+		case 2:
+			red = 0.0f;
+			green = chroma;
+			blue = intermediate;
+			break;
+		case 3:
+			red = 0.0f;
+			green = intermediate;
+			blue = chroma;
+			break;
+		case 4:
+			red = intermediate;
+			green = 0.0f;
+			blue = chroma;
+			break;
+		case 5:
+			red = chroma;
+			green = 0.0f;
+			blue = intermediate;
+			break;
+	}
+
+	return {
+		static_cast<GLubyte>((red + match) * 255.0f),
+		static_cast<GLubyte>((green + match) * 255.0f),
+		static_cast<GLubyte>((blue + match) * 255.0f)
+	};
 }
 
 _ccColor3B RainbowTrail::get_gradient(float phase, float offset, bool smooth, const ColorList& colors) {
