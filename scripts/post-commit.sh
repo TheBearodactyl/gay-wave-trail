@@ -22,10 +22,10 @@ fi
 
 mv $TEMP_FILE $OUTPUT_FILE
 
-res=$(git status --porcelain | grep -c "$OUTPUT_FILE")
+res=$(git status --porcelain | grep -c ".\$OUTPUT_FILE$")
 if [ "$res" -gt 0 ]; then
 	git add $OUTPUT_FILE
-	git commit --amend --no-edit
+	git commit --amend
 
 	echo "Populated Changelog in $OUTPUT_FILE"
 else
