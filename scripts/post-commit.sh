@@ -11,29 +11,42 @@ cat > "$TEMP_FILE" << 'EOF'
 EOF
 
 COMMIT_HASHES=$(git rev-list --no-merges --reverse HEAD)
-LAST_VERSION=""
+declare -A VERSION_COMMITS
 
 for COMMIT_HASH in $COMMIT_HASHES
 do
     VERSION=$(git show "$COMMIT_HASH:mod.json" 2>/dev/null | grep -o '\"version\": \"[0-9.]*\"' | awk -F'"' '{print $4}')
-
-    if [ -n "$VERSION" ] && [ "$VERSION" != "$LAST_VERSION" ]; then
-        echo -e "\n## [$VERSION] - $(git show -s --format=%ci "$COMMIT_HASH" | cut -d ' ' -f 1)\n" >> "$TEMP_FILE"
-        LAST_VERSION=$VERSION
-    fi
+    [ -z "$VERSION" ] && VERSION="Unreleased"
 
     COMMIT_SUBJECT=$(git log -1 --format="%s" "$COMMIT_HASH")
     COMMIT_AUTHOR=$(git log -1 --format="%aN <%aE>" "$COMMIT_HASH")
     COMMIT_DATE=$(git log -1 --format="%aD" "$COMMIT_HASH")
     COMMIT_BODY=$(git log -1 --format="%b" "$COMMIT_HASH")
 
-    echo -e "- **$COMMIT_SUBJECT**  \n  **Date:** $COMMIT_DATE  \n  **Author:** $COMMIT_AUTHOR  \n  **Commit:** \`$COMMIT_HASH\`" >> "$TEMP_FILE"
-
+    ENTRY="- **$COMMIT_SUBJECT**  \n  **Date:** $COMMIT_DATE  \n  **Author:** $COMMIT_AUTHOR  \n  **Commit:** \`$COMMIT_HASH\`"
     if [ -n "$COMMIT_BODY" ]; then
-        echo -e "  \n  $COMMIT_BODY" >> "$TEMP_FILE"
+        ENTRY="$ENTRY  \n  $COMMIT_BODY"
     fi
+    ENTRY="$ENTRY\n"
 
-    echo >> "$TEMP_FILE"
+    if [ -n "${VERSION_COMMITS[$VERSION]}" ]; then
+        VERSION_COMMITS[$VERSION]="${VERSION_COMMITS[$VERSION]}$ENTRY"
+    else
+        VERSION_COMMITS[$VERSION]="$ENTRY"
+    fi
+done
+
+VERSIONS=$(printf "%s\n" "${!VERSION_COMMITS[@]}" | grep -v "Unreleased" | sort -V)
+
+for VER in $VERSIONS; do
+    FIRST_COMMIT=$(git rev-list --no-merges --reverse HEAD | while read H; do
+        V=$(git show "$H:mod.json" 2>/dev/null | grep -o '\"version\": \"[0-9.]*\"' | awk -F'"' '{print $4}')
+        [ "$V" = "$VER" ] && echo $H && break
+    done)
+    VER_DATE=$(git show -s --format=%ci "$FIRST_COMMIT" | cut -d ' ' -f 1)
+
+    echo -e "\n## [$VER] - $VER_DATE\n" >> "$TEMP_FILE"
+    echo -e "${VERSION_COMMITS[$VER]}" >> "$TEMP_FILE"
 done
 
 if [ -f "$OUTPUT_FILE" ]; then
@@ -56,4 +69,3 @@ if [ "$res" -gt 0 ]; then
 else
     echo "No changes to $OUTPUT_FILE"
 fi
-
