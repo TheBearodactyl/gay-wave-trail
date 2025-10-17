@@ -11,7 +11,6 @@ local colors = {
 
 local enable = {
 	git = false,
-	post_commit = false,
 	pre_commit = false,
 	cmake = false,
 }
@@ -71,7 +70,6 @@ local function print_help()
 			.. "'git pull'"
 			.. colors.reset
 	)
-	print("  " .. colors.yellow .. "--post-commit" .. colors.reset .. "      Link the git post-commit hook")
 	print("  " .. colors.yellow .. "--pre-commit" .. colors.reset .. "       Link the git pre-commit hook")
 	print("  " .. colors.yellow .. "--cmake" .. colors.reset .. "            Configure CMake")
 	print("  " .. colors.yellow .. "-h, --help" .. colors.reset .. "         Show this help message\n")
@@ -85,8 +83,6 @@ end
 for _, arg in ipairs(arg) do
 	if arg == "--git" then
 		enable.git = true
-	elseif arg == "--post-commit" then
-		enable.post_commit = true
 	elseif arg == "--pre-commit" then
 		enable.pre_commit = true
 	elseif arg == "--cmake" then
@@ -149,12 +145,12 @@ local function abs_path(path)
 	return out or path
 end
 
-if enable.post_commit then
+if enable.pre_commit then
 	if dir_exists(".git") then
-		info(".git directory found, setting up hook...")
+		info(".git directory found, setting up pre-commit hook...")
 
-		local src = abs_path("scripts/post-commit.sh")
-		local dest = abs_path(".git/hooks/post-commit")
+		local src = abs_path("scripts/pre-commit.sh")
+		local dest = abs_path(".git/hooks/pre-commit")
 
 		if is_windows then
 			os.execute(string.format('if exist "%s" del "%s"', dest, dest))
@@ -177,7 +173,7 @@ if enable.post_commit then
 		warn("No .git directory found, skipping hook setup.")
 	end
 else
-	warn("Skipped hook setup (flag: --no-hook).")
+	warn("Skipped pre-commit hook setup")
 end
 
 if enable.cmake then
