@@ -3,13 +3,7 @@
 
 #pragma once
 
-#include <Geode/cocos/base_nodes/CCNode.h>
-
-#include <Geode/binding/CCMenuItemToggler.hpp>
-#include <Geode/ui/ColorPickPopup.hpp>
-#include <Geode/ui/TextInput.hpp>
-
-#include "../types/color.hpp"
+#include <gay/types/color.hpp>
 
 using namespace geode::prelude;
 using namespace cocos2d;

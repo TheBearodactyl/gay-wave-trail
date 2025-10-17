@@ -1,6 +1,4 @@
-#include "color_utils.hpp"
-
-#include <cmath>
+#include <gay/utils/color_utils.hpp>
 
 namespace gay::utils::color_conversion {
 	float ColorUtils::phase = 0;

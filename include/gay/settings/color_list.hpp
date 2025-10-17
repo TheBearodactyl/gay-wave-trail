@@ -1,10 +1,11 @@
 #ifndef COLOR_LIST_SETTING_HPP
 #define COLOR_LIST_SETTING_HPP
 
-#include <cocos2d.h>
+#include <Geode/loader/SettingV3.hpp>
 
-#include "../../types/color.hpp"
-#include "Geode/loader/SettingV3.hpp"
+#include <gay/types/color.hpp>
+
+#include <cocos2d.h>
 
 using namespace cocos2d;
 using namespace geode::prelude;

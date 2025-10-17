@@ -1,10 +1,7 @@
-#include "color_list_setting.hpp"
-
-#include <Geode/cocos/base_nodes/CCNode.h>
+#include <gay/settings/color_list.hpp>
+#include <gay/ui/color_popup.hpp>
 
 #include <utility>
-
-#include "../../ui/color_popup.hpp"
 
 using namespace geode::prelude;
 

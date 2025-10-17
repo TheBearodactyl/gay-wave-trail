@@ -1,11 +1,11 @@
-#include "rainbow_trail.hpp"
-
 #include <Geode/modify/PlayLayer.hpp>
-#include <cmath>
 
-#include "../settings/gay_settings.hpp"
-#include "../utils/color_utils.hpp"
-#include "../utils/hex_utils.hpp"
+#include <gay/customization/rainbow.hpp>
+#include <gay/settings/gay_settings.hpp>
+#include <gay/utils/color_utils.hpp>
+#include <gay/utils/hex_utils.hpp>
+
+#include <cmath>
 
 using namespace gay::utils::color_conversion;
 using namespace gay::utils::hex_code;

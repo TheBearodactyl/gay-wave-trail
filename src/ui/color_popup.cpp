@@ -1,8 +1,7 @@
-#include "color_popup.hpp"
+#include <gay/ui/color_cell.hpp>
+#include <gay/ui/color_popup.hpp>
 
 #include <utility>
-
-#include "color_cell.hpp"
 
 using namespace geode::prelude;
 

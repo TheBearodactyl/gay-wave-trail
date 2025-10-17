@@ -1,11 +1,11 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 
-#include "../settings/gay_settings.hpp"
+#include <gay/settings/gay_settings.hpp>
 
 using namespace geode::prelude;
 
-class $modify(PlayLayer) {
+struct TrailSizePlayLayer: Modify<TrailSizePlayLayer, PlayLayer> {
 	void postUpdate(float dt) {
 		PlayLayer::postUpdate(dt);
 

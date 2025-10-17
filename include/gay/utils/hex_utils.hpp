@@ -1,7 +1,6 @@
 #ifndef HEX_UTILS_HPP
 #define HEX_UTILS_HPP
 
-#include "ccTypes.h"
 #pragma once
 
 #include <cocos2d.h>

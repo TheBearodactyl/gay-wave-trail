@@ -1,6 +1,6 @@
 #include <Geode/modify/HardStreak.hpp>
 
-#include "../settings/gay_settings.hpp"
+#include <gay/settings/gay_settings.hpp>
 
 using namespace geode::prelude;
 

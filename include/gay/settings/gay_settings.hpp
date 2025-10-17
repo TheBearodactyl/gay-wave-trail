@@ -5,8 +5,8 @@
 
 #include <Geode/Geode.hpp>
 
-#include "../settings/color_list/color_list_setting.hpp"
-#include "../types/color.hpp"
+#include <gay/settings/color_list.hpp>
+#include <gay/types/color.hpp>
 
 using namespace geode::prelude;
 

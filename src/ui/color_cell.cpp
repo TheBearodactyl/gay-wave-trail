@@ -1,11 +1,11 @@
-#include "color_cell.hpp"
-
 #include <Geode/binding/CCMenuItemSpriteExtra.hpp>
 #include <Geode/ui/ColorPickPopup.hpp>
 #include <Geode/ui/TextInput.hpp>
-#include <utility>
 
-#include "../utils/hex_utils.hpp"
+#include <gay/ui/color_cell.hpp>
+#include <gay/utils/hex_utils.hpp>
+
+#include <utility>
 
 using namespace geode::prelude;
 using namespace gay::utils::hex_code;

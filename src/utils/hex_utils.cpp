@@ -1,4 +1,4 @@
-#include "hex_utils.hpp"
+#include <gay/utils/hex_utils.hpp>
 
 namespace gay::utils::hex_code {
 	ccColor3B HexUtils::hex_to_rgb(const std::string& hex_code) {

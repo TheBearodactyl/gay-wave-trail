@@ -4,7 +4,7 @@
 #include <Geode/modify/PauseLayer.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 
-#include "../settings/gay_settings.hpp"
+#include <gay/settings/gay_settings.hpp>
 
 using namespace geode::prelude;
 using namespace gay::settings;

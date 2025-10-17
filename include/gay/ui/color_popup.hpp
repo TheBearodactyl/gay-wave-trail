@@ -5,7 +5,7 @@
 
 #include <Geode/ui/Popup.hpp>
 
-#include "../types/color.hpp"
+#include <gay/types/color.hpp>
 
 using namespace geode::prelude;
 

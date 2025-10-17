@@ -36,22 +36,15 @@ DerivePointerAlignment: false
 FixNamespaceComments: true
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex: '^<ext/.*\.h>'
+  - Regex: "^<gay/"
     Priority: 2
-    SortPriority: 0
-    CaseSensitive: false
-  - Regex: '^<.*\.h>'
+  - Regex: "^<Geode/"
+    CaseSensitive: true
     Priority: 1
-    SortPriority: 0
-    CaseSensitive: false
-  - Regex: "^<.*"
-    Priority: 2
-    SortPriority: 0
-    CaseSensitive: false
-  - Regex: ".*"
+  - Regex: "^<[a-z_]+>$"
     Priority: 3
-    SortPriority: 0
-    CaseSensitive: false
+  - Regex: '^"'
+    Priority: 4
 IncludeIsMainRegex: "([-_](test|unittest))?$"
 IndentCaseLabels: true
 IndentPPDirectives: BeforeHash

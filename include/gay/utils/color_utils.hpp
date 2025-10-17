@@ -1,6 +1,8 @@
 #ifndef COLOR_UTILS_HPP
 #define COLOR_UTILS_HPP
 
+#include <cmath>
+
 #include <cocos2d.h>
 
 using namespace cocos2d;
@@ -9,7 +11,6 @@ namespace gay::utils::color_conversion {
 	class ColorUtils {
 	  public:
 		static float phase;
-
 		static ccColor3B hsv_to_rgb(float h, float s, float v);
 	};
 } // namespace gay::utils::color_conversion

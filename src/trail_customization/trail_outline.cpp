@@ -2,10 +2,11 @@
 #include <Geode/modify/CCDrawNode.hpp>
 #include <Geode/modify/HardStreak.hpp>
 #include <Geode/modify/PlayLayer.hpp>
-#include <cmath>
 
-#include "../settings/gay_settings.hpp"
-#include "rainbow_trail.hpp"
+#include <gay/customization/rainbow.hpp>
+#include <gay/settings/gay_settings.hpp>
+
+#include <cmath>
 
 using namespace geode::prelude;
 using namespace gay;

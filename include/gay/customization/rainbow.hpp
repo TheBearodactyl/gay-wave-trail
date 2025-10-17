@@ -1,9 +1,9 @@
-#ifndef RAINBOW_TRAIL_HPP
-#define RAINBOW_TRAIL_HPP
+#ifndef RAINBOW_HPP
+#define RAINBOW_HPP
+
+#include <gay/types/color.hpp>
 
 #include <cocos2d.h>
-
-#include "../types/color.hpp"
 
 using namespace cocos2d;
 
