@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Have the pre-commit hook open the changelog instead of updating mod version every time
+
 ## [4.3.2] - 2025-10-16
 
 ### Added

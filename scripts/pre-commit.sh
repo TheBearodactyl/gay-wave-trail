@@ -7,4 +7,6 @@ CHANGELOG_FILE="CHANGELOG.md"
 
 nvim "$CHANGELOG_FILE"
 
+git add "$CHANGELOG_FILE"
+
 exit 0
