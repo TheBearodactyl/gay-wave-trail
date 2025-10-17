@@ -8,13 +8,13 @@ using namespace geode::prelude;
 
 class $modify(PlayerObject) {
 	void createFadeOutDartStreak() {
-		if (!gay::settings::get<bool>("persist-trail")) {
+		if (!gay::settings::get<bool>("persist-trail") || !gay::settings::get<bool>("segment-persist")) {
 			PlayerObject::createFadeOutDartStreak();
 		}
 	}
 
 	void fadeOutStreak2(float dt) {
-		if (!gay::settings::get<bool>("persist-trail")) {
+		if (!gay::settings::get<bool>("persist-trail") || !gay::settings::get<bool>("segment-persist")) {
 			PlayerObject::fadeOutStreak2(dt);
 		}
 	}
@@ -22,15 +22,15 @@ class $modify(PlayerObject) {
 
 class $modify(HardStreak) {
 	void updateStroke(float dt) {
-		HardStreak::updateStroke(dt);
-
-		if (gay::settings::get<bool>("persist-trail")) {
+		if (gay::settings::get<bool>("persist-trail") || gay::settings::get<bool>("segment-persist")) {
 			this->m_drawStreak = true;
 		}
+
+		HardStreak::updateStroke(dt);
 	}
 
 	void stopStroke() {
-		if (!gay::settings::get<bool>("persist-trail")) {
+		if (!gay::settings::get<bool>("persist-trail") || !gay::settings::get<bool>("segment-persist")) {
 			HardStreak::stopStroke();
 		}
 	}

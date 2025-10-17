@@ -30,6 +30,22 @@
       "description": "Enable the quick-settings button in the pause menu",
       "default": true
     },
+    "trail-brightness": {
+      "name": "Trail Brightness",
+      "type": "float",
+      "default": 1.0,
+      "min": 0.1,
+      "max": 2.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.05,
+        "big-arrow-step": 0.1
+      },
+      "description": "Multiplier for trail brightness"
+    },
     "speed": {
       "name": "Color Cycle Speed",
       "type": "float",
@@ -242,6 +258,34 @@
         }
       ]
     },
+    "separate-player-colors": {
+      "name": "Independent Player Colors",
+      "type": "bool",
+      "default": false,
+      "description": "Allow player 1 and player 2 to have completely different color cycles"
+    },
+    "p2-gaydient-colors": {
+      "name": "Player 2 Gaydient Colors",
+      "description": "Custom gradient colors for player 2 (when independent colors enabled)",
+      "type": "custom:gaydient-colors",
+      "default": [
+        {
+          "hex": "#FF6B9D",
+          "enabled": true,
+          "userAdded": true
+        },
+        {
+          "hex": "#C44569",
+          "enabled": true,
+          "userAdded": true
+        },
+        {
+          "hex": "#786FA6",
+          "enabled": true,
+          "userAdded": true
+        }
+      ]
+    },
     "tilted-section": {
       "name": "Tilted Trail Section",
       "type": "title",
@@ -282,6 +326,114 @@
         "arrow-step": 0.1,
         "big-arrow-step": 1
       }
+    },
+    "trail-fade-section": {
+      "name": "Trail Fade Settings",
+      "type": "title",
+      "description": "Control how the wave trail fades in and out"
+    },
+    "trail-fade-speed": {
+      "name": "Trail Fade Speed",
+      "type": "float",
+      "default": 1.0,
+      "min": 0.1,
+      "max": 5.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 0.5
+      },
+      "description": "Controls how quickly the trail fades out"
+    },
+    "trail-min-opacity": {
+      "name": "Minimum Trail Opacity",
+      "type": "int",
+      "default": 0,
+      "min": 0,
+      "max": 255,
+      "control": {
+        "slider": true
+      },
+      "description": "Sets the minimum opacity the trail will fade to"
+    },
+    "misc-section": {
+      "type": "title",
+      "name": "Misc Options"
+    },
+    "trail-thickness-variation": {
+      "name": "Dynamic Thickness",
+      "type": "bool",
+      "default": false,
+      "description": "Makes trail thickness vary based on speed"
+    },
+    "thickness-multiplier": {
+      "name": "Thickness Speed Multiplier",
+      "type": "float",
+      "default": 0.5,
+      "min": 0.1,
+      "max": 2.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 0.25
+      },
+      "description": "How much speed affects trail thickness"
+    },
+    "sync-to-music": {
+      "name": "Sync Color to Music",
+      "type": "bool",
+      "default": false,
+      "description": "Changes color cycle speed based on music BPM"
+    },
+    "trail-segments": {
+      "name": "Enable Segmented Trail",
+      "type": "bool",
+      "default": false,
+      "description": "Breaks trail into discrete segments instead of continuous"
+    },
+    "segment-persist": {
+      "name": "Persist Trail Segments",
+      "type": "bool",
+      "default": false,
+      "description": "Breaks trail into discrete segments instead of continuous"
+    },
+    "segment-length": {
+      "name": "Segment Length",
+      "type": "float",
+      "default": 10.0,
+      "min": 5.0,
+      "max": 50.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 1.0,
+        "big-arrow-step": 5.0
+      },
+      "description": "Length of each trail segment"
+    },
+    "segment-gap": {
+      "name": "Segment Gap",
+      "type": "float",
+      "default": 5.0,
+      "min": 0,
+      "max": 25.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.5,
+        "big-arrow-step": 2.5
+      },
+      "description": "Gap between each segment"
     }
   },
   "resources": {
