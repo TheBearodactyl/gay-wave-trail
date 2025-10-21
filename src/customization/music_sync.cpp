@@ -7,6 +7,8 @@
 using namespace geode::prelude;
 using namespace gay::utils::color_conversion;
 
+using gay::settings::CheckMode;
+
 struct MusicSyncPlayLayer: Modify<MusicSyncPlayLayer, PlayLayer> {
 	struct Fields {
 		float base_speed = 1.0f;
@@ -17,10 +19,11 @@ struct MusicSyncPlayLayer: Modify<MusicSyncPlayLayer, PlayLayer> {
 	void postUpdate(float dt) override {
 		PlayLayer::postUpdate(dt);
 
-		if (!gay::settings::get<bool>("sync-to-music") || !gay::settings::get_mod_enabled()) {
+		if (!gay::settings::check<CheckMode::Any>("sync-to-music", "enabled")) {
 			if (m_fields->calculated_base) {
 				ColorUtils::phase = fmodf(ColorUtils::phase + (gay::settings::get_float("speed") * 60.0f * dt), 360.0f);
 			}
+
 			return;
 		}
 

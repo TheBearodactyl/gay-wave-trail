@@ -27,7 +27,7 @@ void create_bool_setting(const char* id, MenuTab& tab) {
 
 	eclipse::config::set<bool>(Mod::get()->expandSpriteName(id).data(), Mod::get()->getSettingValue<bool>(id));
 
-	listenForSettingChanges(id, [id](bool value) {
+	listenForSettingChanges(id, [id](bool _) {
 		eclipse::config::set<bool>(Mod::get()->expandSpriteName(id).data(), Mod::get()->getSettingValue<bool>(id));
 	});
 }
@@ -46,7 +46,7 @@ void create_float_setting(const char* id, MenuTab& tab) {
 
 	eclipse::config::set<double>(Mod::get()->expandSpriteName(id).data(), Mod::get()->getSettingValue<double>(id));
 
-	listenForSettingChanges(id, [id](double value) {
+	listenForSettingChanges(id, [id](double _) {
 		eclipse::config::set<double>(Mod::get()->expandSpriteName(id).data(), Mod::get()->getSettingValue<double>(id));
 	});
 }

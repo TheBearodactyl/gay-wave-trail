@@ -5,7 +5,7 @@
 
 using namespace geode::prelude;
 
-class $modify(HardStreak) {
+struct EditorTrailHardStreak: Modify<EditorTrailHardStreak, HardStreak> {
 	void updateStroke(float p0) {
 		if (LevelEditorLayer::get() and gay::settings::get<bool>("editor-trail")) {
 			m_drawStreak = true;
@@ -15,7 +15,7 @@ class $modify(HardStreak) {
 	}
 };
 
-class $modify(PlayerObject) {
+struct EditorTrailPlayerObject: Modify<EditorTrailPlayerObject, PlayerObject> {
 	void placeStreakPoint() {
 		if (LevelEditorLayer::get() and gay::settings::get<bool>("editor-trail") and this->m_isDart) {
 			this->m_waveTrail->addPoint(this->getPosition());

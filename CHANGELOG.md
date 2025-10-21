@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.3] - 2025-10-21
+
+### Changed
+
+- Trail Outline now uses the global delta time instead of `0.5` for changing colors.
+
 ## [4.3.2] - 2025-10-16
 
 ### Added

@@ -1,0 +1,5 @@
+-Wall
+-Wextra
+-Wpedantic
+-Wno-reserved-id-macro
+-Wno-dollar-in-identifier

@@ -94,7 +94,7 @@ struct TrailOutline: Modify<TrailOutline, cocos2d::CCDrawNode> {
 
 		float& color_phase = is_pl1_trail ? color_phase_p1 : color_phase_p2;
 
-		color_phase += settings::get<float>("speed") * 0.5f;
+		color_phase += settings::get<float>("speed") * CCDirector::sharedDirector()->getDeltaTime();
 		if (color_phase >= 360.0f) {
 			color_phase -= 360.0f;
 		}

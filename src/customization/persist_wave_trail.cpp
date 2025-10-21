@@ -6,23 +6,25 @@
 
 using namespace geode::prelude;
 
-class $modify(PlayerObject) {
+using gay::settings::CheckMode;
+
+struct PersistTrailPlayerObject: Modify<PersistTrailPlayerObject, PlayerObject> {
 	void createFadeOutDartStreak() {
-		if (!gay::settings::get<bool>("persist-trail") || !gay::settings::get<bool>("segment-persist")) {
+		if (!gay::settings::check<CheckMode::Any>("persist-trail", "segment-persist")) {
 			PlayerObject::createFadeOutDartStreak();
 		}
 	}
 
 	void fadeOutStreak2(float dt) {
-		if (!gay::settings::get<bool>("persist-trail") || !gay::settings::get<bool>("segment-persist")) {
+		if (!gay::settings::check<CheckMode::Any>("persist-trail", "segment-persist")) {
 			PlayerObject::fadeOutStreak2(dt);
 		}
 	}
 };
 
-class $modify(HardStreak) {
+struct PersistTrailHardStreak: Modify<PersistTrailHardStreak, HardStreak> {
 	void updateStroke(float dt) {
-		if (gay::settings::get<bool>("persist-trail") || gay::settings::get<bool>("segment-persist")) {
+		if (gay::settings::check<CheckMode::Any>("persist-trail", "segment-persist")) {
 			this->m_drawStreak = true;
 		}
 
@@ -30,7 +32,7 @@ class $modify(HardStreak) {
 	}
 
 	void stopStroke() {
-		if (!gay::settings::get<bool>("persist-trail") || !gay::settings::get<bool>("segment-persist")) {
+		if (gay::settings::check<CheckMode::None>("persist-trail", "segment-persist")) {
 			HardStreak::stopStroke();
 		}
 	}
