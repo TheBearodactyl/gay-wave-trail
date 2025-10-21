@@ -12,8 +12,6 @@ include_directories(AFTER ${PROJECT_NAME} include)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
-target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
-
 if(NOT DEFINED ENV{GEODE_SDK})
     message(
         FATAL_ERROR

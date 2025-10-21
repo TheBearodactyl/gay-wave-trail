@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Remove invalid cmake code for enabling `-Wall -Wextra -Wpedantic`
+- Remove CMake code for enabling `-Wall -Wextra -Wpedantic`
 
 ## [4.3.3] - 2025-10-21
 
