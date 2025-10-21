@@ -10,10 +10,6 @@ file(GLOB_RECURSE SOURCES src/**.cpp)
 
 include_directories(AFTER ${PROJECT_NAME} include)
 
-add_compile_options(
-	$<$<COMPILE_LANGUAGE:CXX>:-Wall -Wextra -Wpedantic -Wno-reserved-id-macro -Wno-dollar-in-identifier-extension>
-)
-
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
