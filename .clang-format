@@ -4,7 +4,7 @@ AlignConsecutiveMacros: false
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: DontAlign
-AlignOperands: false
+AlignOperands: AlignAfterOperator
 AlignTrailingComments: false
 AllowAllArgumentsOnNextLine: false
 AllowAllConstructorInitializersOnNextLine: false
@@ -15,12 +15,12 @@ AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: false
 BinPackParameters: false
-BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: AfterColon
@@ -40,9 +40,9 @@ IncludeCategories:
     Priority: 2
   - Regex: "^<Geode/"
     CaseSensitive: true
-    Priority: 1
-  - Regex: "^<[a-z_]+>$"
     Priority: 3
+  - Regex: "^<[a-z_]+>$"
+    Priority: 1
   - Regex: '^"'
     Priority: 4
 IncludeIsMainRegex: "([-_](test|unittest))?$"
@@ -50,12 +50,13 @@ IndentCaseLabels: true
 IndentPPDirectives: BeforeHash
 IndentWidth: 4
 IndentWrappedFunctionNames: false
+InsertBraces: true
 KeepEmptyLinesAtTheStartOfBlocks: false
-MaxEmptyLinesToKeep: 1
+MaxEmptyLinesToKeep: 2
 NamespaceIndentation: All
 PointerAlignment: Left
 ReferenceAlignment: Left
-ReflowComments: false
+ReflowComments: true
 SeparateDefinitionBlocks: Always
 SortIncludes: true
 SortUsingDeclarations: true

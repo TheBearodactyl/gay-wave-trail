@@ -7,9 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-02-22
+
+### Fixed
+
+- Update to Geode V5
+
+### Added
+
+- Use a custom settings menu for the pause button
+- Add separate modes for displaying settings in the custom popup
+- Add "Gay Mode" for the settings menu
+- Add `support.md`
+
 ### Changed
 
 - Remove CMake code for enabling `-Wall -Wextra -Wpedantic`
+- Refactor so that there's less files
 
 ## [4.3.3] - 2025-10-21
 

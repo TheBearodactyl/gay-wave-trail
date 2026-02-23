@@ -1,15 +1,15 @@
-#include <gay/settings/color_list.hpp>
+#include <gay/settings.hpp>
 #include <gay/ui/color_popup.hpp>
 
 #include <utility>
 
 using namespace geode::prelude;
 
-Result<std::shared_ptr<SettingV3>> ColorListSetting::parse(const std::string& key, const std::string& modID, const matjson::Value& json) {
+Result<std::shared_ptr<SettingV3>> ColorListSetting::parse(const std::string& key, const std::string& mod_id, const matjson::Value& json) {
 	auto ret = std::make_shared<ColorListSetting>();
 	auto root = checkJson(json, "ColorListSetting");
 
-	ret->parseBaseProperties(key, modID, root);
+	ret->parseBaseProperties(key, mod_id, root);
 	root.checkUnknownKeys();
 
 	return root.ok(ret).map([](std::shared_ptr<ColorListSetting> value) { return std::static_pointer_cast<SettingV3>(std::move(value)); });
@@ -20,41 +20,39 @@ bool ColorListSettingNode::init(std::shared_ptr<ColorListSetting> setting, float
 		return false;
 	}
 
-	float height = 40.0f;
-	this->setContentSize({width, height});
+	constexpr float HEIGHT = 40.0f;
+	this->setContentSize({width, HEIGHT});
 
-	CCMenu* menu = CCMenu::create();
+	auto* menu = CCMenu::create();
 	menu->setPosition({0.0f, 0.0f});
 	menu->setID("colors-menu");
 
-	auto view_spr = ButtonSprite::create("View");
+	auto* view_spr = ButtonSprite::create("View");
 	view_spr->setScale(0.72f);
 
-	auto view_btn = CCMenuItemSpriteExtra::create(view_spr, this, menu_selector(ColorListSettingNode::onView));
-	view_btn->setPosition(width - 40.f, height - 20.f);
+	auto* view_btn = CCMenuItemSpriteExtra::create(view_spr, this, menu_selector(ColorListSettingNode::on_view));
+	view_btn->setPosition(width - 40.f, HEIGHT - 20.f);
 
 	menu->addChild(view_btn);
 	this->addChild(menu);
-
 	handleTouchPriority(this);
 
 	return true;
 }
 
-void ColorListSettingNode::onView(cocos2d::CCObject*) {
+void ColorListSettingNode::on_view(cocos2d::CCObject*) {
 	auto setting = this->getSetting();
-	ColorListPopup::create(setting->getValue().colors, [this](std::vector<ColorEntry> colors) {
-		this->setValue(ColorList {std::move(colors)}, this);
+	ColorListPopup::create(setting->getValue().colors, [this](std::vector<gay::ColorEntry> colors) {
+		this->setValue(gay::ColorList {std::move(colors)}, this);
 	})->show();
 }
 
 ColorListSettingNode* ColorListSettingNode::create(std::shared_ptr<ColorListSetting> setting, float width) {
-	auto ret = new ColorListSettingNode();
+	auto* ret = new ColorListSettingNode();
 	if (ret->init(std::move(setting), width)) {
 		ret->autorelease();
 		return ret;
 	}
-
 	CC_SAFE_DELETE(ret);
 	return nullptr;
 }

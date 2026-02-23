@@ -1,21 +1,17 @@
 {
-  "geode": "4.9.0",
+  "geode": "5.0.0-beta.3",
   "gd": {
-    "win": "2.2074",
-    "android": "2.2074",
-    "mac": "2.2074",
-    "ios": "2.2074"
+    "win": "2.2081",
+    "android": "2.2081",
+    "mac": "2.2081",
+    "ios": "2.2081"
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "4.3.3",
+  "version": "5.0.0",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
-  "tags": [
-    "offline",
-    "customization",
-    "enhancement"
-  ],
+  "tags": ["offline", "customization", "enhancement"],
   "settings": {
     "main-section": {
       "type": "title",
@@ -129,6 +125,17 @@
       "description": "Makes the wave trail solid",
       "default": true
     },
+    "trail-opacity": {
+      "name": "Trail Opacity",
+      "type": "int",
+      "default": 255,
+      "min": 0,
+      "max": 255,
+      "control": {
+        "slider": true
+      },
+      "description": "Sets the base opacity of the wave trail"
+    },
     "editor-trail": {
       "name": "Editor Trail",
       "type": "bool",
@@ -205,22 +212,22 @@
         {
           "hex": "#5BCEFA",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         },
         {
           "hex": "#F5A9B8",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         },
         {
           "hex": "#FFFFFF",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         },
         {
           "hex": "#F5A9B8",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         }
       ]
     },
@@ -243,22 +250,22 @@
         {
           "hex": "#5BCEFA",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         },
         {
           "hex": "#F5A9B8",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         },
         {
           "hex": "#FFFFFF",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         },
         {
           "hex": "#F5A9B8",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         }
       ]
     },
@@ -276,17 +283,17 @@
         {
           "hex": "#FF6B9D",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         },
         {
           "hex": "#C44569",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         },
         {
           "hex": "#786FA6",
           "enabled": true,
-          "userAdded": true
+          "user_added": true
         }
       ]
     },
@@ -335,6 +342,12 @@
       "name": "Trail Fade Settings",
       "type": "title",
       "description": "Control how the wave trail fades in and out"
+    },
+    "enable-trail-fade": {
+      "name": "Enable Trail Fade",
+      "type": "bool",
+      "default": false,
+      "description": "Enables the trail fade-out effect"
     },
     "trail-fade-speed": {
       "name": "Trail Fade Speed",
@@ -393,7 +406,7 @@
       "name": "Sync Color to Music",
       "type": "bool",
       "default": false,
-      "description": "Changes color cycle speed based on music BPM"
+      "description": "Ties color cycling to level time position for deterministic sync"
     },
     "trail-segments": {
       "name": "Enable Segmented Trail",
@@ -405,7 +418,7 @@
       "name": "Persist Trail Segments",
       "type": "bool",
       "default": false,
-      "description": "Breaks trail into discrete segments instead of continuous"
+      "description": "Keeps trail segments visible through portals"
     },
     "segment-length": {
       "name": "Segment Length",
@@ -438,12 +451,16 @@
         "big-arrow-step": 2.5
       },
       "description": "Gap between each segment"
+    },
+    "display-mode": {
+      "name": "Display Mode",
+      "type": "int",
+      "default": 0,
+      "description": "0 = Gay mode, 1 = straight mode"
     }
   },
   "resources": {
-    "sprites": [
-      "resources/*.png"
-    ],
+    "sprites": ["resources/*.png"],
     "fonts": {
       "FiraCodeNerdMono": {
         "path": "resources/firacodemono.ttf",
@@ -454,7 +471,7 @@
   "dependencies": {
     "eclipse.eclipse-menu": {
       "version": ">=v1.2.2",
-      "importance": "suggested"
+      "required": false
     }
   },
   "links": {

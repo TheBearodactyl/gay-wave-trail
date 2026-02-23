@@ -1,7 +1,4 @@
-#include <Geode/modify/PlayLayer.hpp>
-
-#include <gay/customization/rainbow.hpp>
-#include <gay/settings/color_list.hpp>
+#include <gay/settings.hpp>
 
 using namespace geode::prelude;
 

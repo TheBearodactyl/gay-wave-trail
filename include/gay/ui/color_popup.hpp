@@ -1,30 +1,22 @@
-#ifndef COLOR_POPUP_HPP
-#define COLOR_POPUP_HPP
-
 #pragma once
 
+#include <Geode/Geode.hpp>
 #include <Geode/ui/Popup.hpp>
 
-#include <gay/types/color.hpp>
+#include <gay/types.hpp>
 
-using namespace geode::prelude;
-
-class ColorListPopup: public Popup<std::vector<ColorEntry>, std::function<void(std::vector<ColorEntry>)>>, geode::ColorPickPopupDelegate {
+class ColorListPopup: public geode::Popup {
   protected:
-	std::vector<ColorEntry> m_entries;
-	std::function<void(std::vector<ColorEntry>)> m_callback;
-	ScrollLayer* m_list;
+	std::vector<gay::ColorEntry> m_entries;
+	std::function<void(std::vector<gay::ColorEntry>)> m_callback;
+	geode::ScrollLayer* m_list = nullptr;
 
-	bool setup(std::vector<ColorEntry>, std::function<void(std::vector<ColorEntry>)>) override;
-
+	bool setup(std::vector<gay::ColorEntry>, std::function<void(std::vector<gay::ColorEntry>)>);
 	void create_list();
 
-	void onAdd(CCObject*);
-	void onClose(CCObject*) override;
-	void updateColor(ccColor4B const& color) override;
+	void on_add(cocos2d::CCObject*);
+	void onClose(cocos2d::CCObject*) override;
 
   public:
-	static ColorListPopup* create(std::vector<ColorEntry>, const std::function<void(std::vector<ColorEntry>)>&);
+	static ColorListPopup* create(std::vector<gay::ColorEntry>, const std::function<void(std::vector<gay::ColorEntry>)>&);
 };
-
-#endif
