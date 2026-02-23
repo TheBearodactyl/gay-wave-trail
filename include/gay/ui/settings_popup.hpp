@@ -86,7 +86,7 @@ class GwtSettingsPopup: public geode::Popup {
 	geode::ScrollLayer* m_list = nullptr;
 	geode::TextInput* m_search = nullptr;
 	CCMenuItemSpriteExtra* m_clear_btn = nullptr;
-	cocos2d::CCNode* m_list_bg = nullptr;
+	cocos2d::CCLayerColor* m_list_bg = nullptr;
 
 	static constexpr float WIDTH = 440.f;
 	static constexpr float HEIGHT = 280.f;

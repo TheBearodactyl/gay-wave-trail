@@ -44,7 +44,8 @@ bool GwtSectionHeader::init(std::string_view title, std::string_view tooltip, fl
 
 	float info_reserved = tooltip.empty() ? 0.0f : INFO_BTN_RESERVED;
 
-	auto* label = CCLabelBMFont::create(m_header_title.c_str(), "goldFont.fnt");
+	auto* label = CCLabelBMFont::create(m_header_title.c_str(), "bigFont.fnt");
+	label->setColor(rp::gold);
 	label->setScale(0.48f);
 	label->setAnchorPoint({0.5f, 0.5f});
 
@@ -187,7 +188,7 @@ bool GwtSettingRow::init(const gay::SettingDisplayInfo& info, gay::DisplayMode m
 
 		auto* toggle_menu = CCMenu::create();
 		toggle_menu->setContentSize({30.0f, row_h});
-		toggle_menu->setPosition({width - 40.0f, 0.0f});
+		toggle_menu->setPosition({width - 30.0f, 0.0f});
 		toggler->setPosition({15.0f, row_h / 2.0f});
 		toggle_menu->addChild(toggler);
 		this->addChild(toggle_menu);
@@ -296,6 +297,7 @@ bool GwtSettingRow::init(const gay::SettingDisplayInfo& info, gay::DisplayMode m
 		constexpr float DROPDOWN_H = 22.0f;
 
 		auto* btn_bg = geode::NineSlice::create("square02b_small.png");
+		btn_bg->setID("choice-button-bg");
 		btn_bg->setContentSize({DROPDOWN_W, DROPDOWN_H});
 		btn_bg->setColor({rp::base.r, rp::base.g, rp::base.b});
 		btn_bg->setOpacity(120);
@@ -549,20 +551,19 @@ GwtSettingRow* GwtSettingRow::create(const gay::SettingDisplayInfo& info, gay::D
 }
 
 bool GwtSettingsPopup::setup() {
-	auto* full_bg = NineSlice::create("square02b_001.png");
+	auto* full_bg = CCLayerColor::create(rp_c4(rp::surface, 255));
 	full_bg->setContentSize(m_mainLayer->getContentSize());
-	full_bg->setColor({rp::base.r, rp::base.g, rp::base.b});
-	full_bg->setOpacity(255);
-	full_bg->ignoreAnchorPointForPosition(false);
-	full_bg->setAnchorPoint({0.5f, 0.5f});
-	full_bg->setPosition(m_mainLayer->getContentSize() / 2);
-	m_mainLayer->addChild(full_bg, -1);
+	full_bg->ignoreAnchorPointForPosition(true);
+	full_bg->setPosition({0.f, 0.f});
+	full_bg->setID("full-bg-layer-color");
+	m_mainLayer->addChild(full_bg, -2);
 
-	auto* list_bg_slice = NineSlice::create("square02b_001.png");
-	list_bg_slice->setContentSize({LIST_W, LIST_H + SEARCH_H});
-	list_bg_slice->setColor({rp::surface.r, rp::surface.g, rp::surface.b});
-	list_bg_slice->setOpacity(255);
-	m_list_bg = list_bg_slice;
+	this->m_bgSprite->setOpacity(0);
+
+	m_list_bg = CCLayerColor::create(rp_c4(rp::muted, 255));
+	m_list_bg->setContentSize({LIST_W, LIST_H + SEARCH_H});
+	m_list_bg->setID("list-bg-layer-color");
+	m_list_bg->ignoreAnchorPointForPosition(false);
 	m_mainLayer->addChildAtPosition(m_list_bg, Anchor::Center);
 
 	auto* search_menu = CCMenu::create();
@@ -740,6 +741,7 @@ bool ColorCell::init(
 	this->setAnchorPoint({0.5f, 0.5f});
 
 	m_background = geode::NineSlice::create("square02b_001.png");
+	m_background->setID("color-cell-bg");
 	m_background->setColor({entry_color.r, entry_color.g, entry_color.b});
 	m_background->setOpacity(100);
 	m_background->setScale(0.3f);

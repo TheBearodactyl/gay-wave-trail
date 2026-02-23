@@ -455,7 +455,7 @@
     "display-mode": {
       "name": "Display Mode",
       "type": "int",
-      "default": 0,
+      "default": 1,
       "description": "0 = Gay mode, 1 = straight mode"
     }
   },
