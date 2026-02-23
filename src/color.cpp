@@ -1,14 +1,15 @@
-#include <Geode/Geode.hpp>
-
-#include <gay/color.hpp>
-
 #include <algorithm>
 #include <cmath>
-#include <format>
 #include <ranges>
 #include <string>
 #include <string_view>
 #include <utility>
+
+#include <gay/color.hpp>
+
+#include <Geode/Geode.hpp>
+
+#include <fmt/core.h>
 
 using namespace cocos2d;
 
@@ -65,7 +66,7 @@ namespace gay::color {
 	}
 
 	std::string rgb_to_hex(const ccColor3B& color) {
-		return std::format("#{:02X}{:02X}{:02X}", static_cast<int>(color.r), static_cast<int>(color.g), static_cast<int>(color.b));
+		return fmt::format("#{:02X}{:02X}{:02X}", static_cast<int>(color.r), static_cast<int>(color.g), static_cast<int>(color.b));
 	}
 
 	std::string rgb_to_hex(const ccColor4B& color) {

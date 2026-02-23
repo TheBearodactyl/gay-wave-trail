@@ -19,6 +19,8 @@
 #include <Geode/ui/NineSlice.hpp>
 #include <Geode/ui/TextInput.hpp>
 
+#include <fmt/core.h>
+
 using namespace geode::prelude;
 using namespace gay::color;
 namespace rp = gay::color::rose_pine;
@@ -199,7 +201,7 @@ bool GwtSettingRow::init(const gay::SettingDisplayInfo& info, gay::DisplayMode m
 			cur_str = std::to_string(v);
 		} else {
 			double v = Mod::get()->getSettingValue<double>(m_setting_key);
-			cur_str = std::format("{:.2f}", v);
+			cur_str = fmt::format("{:.2f}", v);
 		}
 
 		constexpr float INPUT_W = 62.0f;
@@ -390,12 +392,12 @@ void GwtSettingRow::on_step(CCObject* sender) {
 	if (m_setting_type == ST::Int) {
 		int64_t next = Mod::get()->getSettingValue<int64_t>(m_setting_key) + static_cast<int64_t>(delta);
 		Mod::get()->setSettingValue<int64_t>(m_setting_key, next);
-		m_num_input->setString(std::format("{}", next), false);
+		m_num_input->setString(fmt::format("{}", next), false);
 	} else {
 		double next = Mod::get()->getSettingValue<double>(m_setting_key) + delta;
 		next = std::round(next / base_step) * base_step;
 		Mod::get()->setSettingValue<double>(m_setting_key, next);
-		m_num_input->setString(std::format("{:.2f}", next), false);
+		m_num_input->setString(fmt::format("{:.2f}", next), false);
 	}
 }
 
