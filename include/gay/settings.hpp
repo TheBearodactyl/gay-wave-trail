@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Geode/Geode.hpp>
-#include <Geode/loader/SettingV3.hpp>
+#include <string_view>
+#include <utility>
 
 #include <gay/types.hpp>
 
-#include <string_view>
-#include <utility>
+#include <Geode/Geode.hpp>
+#include <Geode/loader/SettingV3.hpp>
 
 namespace gay::settings {
 	enum class CheckMode {
@@ -95,6 +95,7 @@ struct matjson::Serialize<gay::ColorList> {
 		for (const auto& elem : value.colors) {
 			arr.push(matjson::Serialize<gay::ColorEntry>::toJson(elem));
 		}
+
 		return arr;
 	}
 };

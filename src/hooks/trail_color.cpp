@@ -1,15 +1,13 @@
-#include <Geode/modify/PlayLayer.hpp>
+#include <cmath>
 
 #include <gay/color.hpp>
 #include <gay/settings.hpp>
 
-#include <cmath>
+#include <Geode/modify/PlayLayer.hpp>
 
 using namespace geode::prelude;
 namespace settings = gay::settings;
 namespace color = gay::color;
-
-static float s_gradient_phase = 0.0f;
 
 struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 	float calc_phase(float phase, float speed, float dt) {
@@ -17,10 +15,19 @@ struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 	}
 
 	void postUpdate(float dt) override {
-		PlayLayer::postUpdate(dt);
-
 		if (!settings::is_enabled()) {
+			PlayLayer::postUpdate(dt);
 			return;
+		}
+
+		bool disable = settings::get<bool>("disable-trail");
+
+		if (this->m_player1 && this->m_player1->m_waveTrail) {
+			this->m_player1->m_waveTrail->setVisible(!disable);
+		}
+
+		if (this->m_player2 && this->m_player2->m_waveTrail) {
+			this->m_player2->m_waveTrail->setVisible(!disable);
 		}
 
 		float speed = settings::get_float("speed");
@@ -28,7 +35,6 @@ struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 		bool separate = settings::get<bool>("separate-player-colors");
 
 		color::g_phase = calc_phase(color::g_phase, speed, dt);
-		s_gradient_phase = calc_phase(s_gradient_phase, speed, dt);
 
 		if (separate && use_gaydient) {
 			apply_separate_gradient(dt, speed);
@@ -37,6 +43,8 @@ struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 		}
 
 		apply_trail_brightness();
+
+		PlayLayer::postUpdate(dt);
 	}
 
 	void apply_separate_gradient(float dt, float speed) {
@@ -45,12 +53,12 @@ struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 		bool smooth = settings::get<bool>("smooth-colors");
 
 		if (this->m_player1 && this->m_player1->m_isDart && this->m_player1->m_waveTrail) {
-			auto c = color::get_gradient(s_gradient_phase, 0.0f, smooth, p1_colors);
+			auto c = color::get_gradient(color::g_phase, 0.0f, smooth, p1_colors);
 			this->m_player1->m_waveTrail->setColor(c);
 		}
 
 		if (this->m_player2 && this->m_player2->m_isDart && this->m_player2->m_waveTrail) {
-			auto c = color::get_gradient(s_gradient_phase, 0.0f, smooth, p2_colors);
+			auto c = color::get_gradient(color::g_phase, 0.0f, smooth, p2_colors);
 			this->m_player2->m_waveTrail->setColor(c);
 		}
 	}
@@ -61,9 +69,9 @@ struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 		auto gradient_colors = settings::get<gay::ColorList>("gaydient-colors");
 
 		auto color_p1 =
-			use_gaydient ? color::get_gradient(s_gradient_phase, 0.0f, smooth, gradient_colors) : color::get_rainbow(0.0f, saturation);
+			use_gaydient ? color::get_gradient(color::g_phase, 0.0f, smooth, gradient_colors) : color::get_rainbow(0.0f, saturation);
 
-		auto color_p2 = use_gaydient ? color::get_gradient(s_gradient_phase + 180.0f, 0.0f, smooth, gradient_colors)
+		auto color_p2 = use_gaydient ? color::get_gradient(color::g_phase + 180.0f, 0.0f, smooth, gradient_colors)
 									 : color::get_rainbow(180.0f, saturation);
 
 		if (this->m_player1 && this->m_player1->m_isDart && this->m_player1->m_waveTrail) {
@@ -109,7 +117,6 @@ struct MusicSyncHook: Modify<MusicSyncHook, PlayLayer> {
 		float level_time = static_cast<float>(this->m_currentTime);
 
 		color::g_phase = std::fmod(level_time * speed * 60.0f, 360.0f);
-		s_gradient_phase = color::g_phase;
 
 		m_fields->last_time = level_time;
 	}

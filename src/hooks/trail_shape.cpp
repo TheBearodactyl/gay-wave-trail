@@ -52,7 +52,7 @@ struct ThicknessHook: Modify<ThicknessHook, PlayLayer> {
 	void postUpdate(float dt) override {
 		PlayLayer::postUpdate(dt);
 
-		if (!settings::is_enabled() || !settings::get<bool>("trail-thickness-variation")) {
+		if (!settings::is_enabled() || !settings::get<bool>("trail-thickness-variation") || settings::get<bool>("disable-pulse")) {
 			return;
 		}
 

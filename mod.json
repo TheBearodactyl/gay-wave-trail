@@ -457,6 +457,12 @@
       "type": "int",
       "default": 1,
       "description": "0 = Gay mode, 1 = straight mode"
+    },
+    "verbose-logging": {
+      "name": "Verbose logging",
+      "type": "bool",
+      "default": false,
+      "description": "Enable verbose logging (for debugging purposes)"
     }
   },
   "resources": {

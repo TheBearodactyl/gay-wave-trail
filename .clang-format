@@ -9,11 +9,11 @@ AlignTrailingComments: false
 AllowAllArgumentsOnNextLine: false
 AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: Empty
+AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
-AllowShortLambdasOnASingleLine: All
+AllowShortLambdasOnASingleLine: None
 AllowShortLoopsOnASingleLine: false
 AllowShortEnumsOnASingleLine: false
 AlwaysBreakAfterReturnType: None
@@ -52,7 +52,7 @@ IndentWidth: 4
 IndentWrappedFunctionNames: false
 InsertBraces: true
 KeepEmptyLinesAtTheStartOfBlocks: false
-MaxEmptyLinesToKeep: 2
+MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
 PointerAlignment: Left
 ReferenceAlignment: Left

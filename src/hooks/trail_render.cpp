@@ -1,11 +1,11 @@
-#include <Geode/modify/CCDrawNode.hpp>
-#include <Geode/modify/HardStreak.hpp>
-#include <Geode/modify/PlayLayer.hpp>
+#include <cmath>
 
 #include <gay/color.hpp>
 #include <gay/settings.hpp>
 
-#include <cmath>
+#include <Geode/modify/CCDrawNode.hpp>
+#include <Geode/modify/HardStreak.hpp>
+#include <Geode/modify/PlayLayer.hpp>
 
 using namespace geode::prelude;
 namespace settings = gay::settings;
@@ -16,7 +16,7 @@ namespace color = gay::color;
 struct SolidDrawHook: Modify<SolidDrawHook, CCDrawNode> {
 	bool drawPolygon(CCPoint* verts, unsigned int cnt, const ccColor4F& fill, float border_width, const ccColor4F& border) {
 		if (typeinfo_cast<HardStreak*>(this) && settings::get<bool>("solid-trail")) {
-			if (fill.r >= 1.0f && fill.g >= 1.0f && fill.b >= 1.0f && this->getColor() != ccc3(255, 255, 255)) {
+			if (fill.r >= 1.0f && fill.g >= 1.0f && fill.b >= 1.0f && fill.a < 1.0f) {
 				return true;
 			}
 
@@ -37,8 +37,8 @@ struct SolidDrawHook: Modify<SolidDrawHook, CCDrawNode> {
 
 struct SolidStreakHook: Modify<SolidStreakHook, HardStreak> {
 	void updateStroke(float dt) {
-		HardStreak::updateStroke(dt);
 		this->m_isSolid = settings::get<bool>("solid-trail");
+		HardStreak::updateStroke(dt);
 	}
 };
 
@@ -55,22 +55,6 @@ struct DisableStreakHook: Modify<DisableStreakHook, HardStreak> {
 	}
 };
 
-struct DisablePlayHook: Modify<DisablePlayHook, PlayLayer> {
-	void postUpdate(float dt) {
-		if (settings::is_enabled()) {
-			bool disable = settings::get<bool>("disable-trail");
-			if (this->m_player1 && this->m_player1->m_waveTrail) {
-				this->m_player1->m_waveTrail->setVisible(!disable);
-			}
-			if (this->m_player2 && this->m_player2->m_waveTrail) {
-				this->m_player2->m_waveTrail->setVisible(!disable);
-			}
-		}
-
-		PlayLayer::postUpdate(dt);
-	}
-};
-
 struct TrailFadeHook: Modify<TrailFadeHook, HardStreak> {
 	struct Fields {
 		float accumulated_time = 0.0f;
@@ -78,6 +62,11 @@ struct TrailFadeHook: Modify<TrailFadeHook, HardStreak> {
 
 	void updateStroke(float dt) {
 		HardStreak::updateStroke(dt);
+
+		if (settings::get<bool>("solid-trail")) {
+			this->setOpacity(255);
+			return;
+		}
 
 		if (!settings::is_enabled()) {
 			return;
@@ -116,6 +105,12 @@ static OutlineStreakState s_outline_p1;
 static OutlineStreakState s_outline_p2;
 
 struct OutlinePlayHook: Modify<OutlinePlayHook, PlayLayer> {
+	void setupHasCompleted() {
+		s_outline_p1.reset();
+		s_outline_p2.reset();
+		PlayLayer::setupHasCompleted();
+	}
+
 	void resetLevel() {
 		s_outline_p1.reset();
 		s_outline_p2.reset();
@@ -154,13 +149,12 @@ struct OutlineStreakHook: Modify<OutlineStreakHook, HardStreak> {
 };
 
 struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
-	struct Fields {
-		float phase_p1 = 0.0f;
-		float phase_p2 = 0.0f;
-	};
-
 	bool drawPolygon(CCPoint* verts, unsigned int count, const ccColor4F& fill, float border_width, const ccColor4F& border) {
-		if (fill.r == 1.0f && fill.g == 1.0f && fill.b == 1.0f && fill.a != 1.0f) {
+		if (fill.a < 0.05f) {
+			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
+		}
+
+		if (!typeinfo_cast<HardStreak*>(this)) {
 			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
 		}
 
@@ -168,8 +162,6 @@ struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
 		if (!is_tracked || !settings::get<bool>("wave-outline")) {
 			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
 		}
-
-		bool is_p1 = (this == s_outline_p1.node);
 
 		auto outline_width = settings::get<double>("wave-outline-width");
 		auto outline_colors = settings::get<gay::ColorList>("outline-colors");
@@ -179,10 +171,7 @@ struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
 		this->setBlendFunc(CCSprite::create()->getBlendFunc());
 		this->setZOrder(-1);
 
-		float& phase = is_p1 ? m_fields->phase_p1 : m_fields->phase_p2;
-
-		float dt = CCDirector::sharedDirector()->getDeltaTime();
-		phase = std::fmod(phase + settings::get_float("speed") * dt, 360.0f);
+		float phase = color::g_phase;
 
 		CCPoint expanded[4];
 		auto copy_verts = [&]() {

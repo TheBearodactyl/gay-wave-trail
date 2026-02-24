@@ -72,7 +72,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		ST::Bool
 	},
 
-
 	gay::SettingDisplayInfo {
 		"smooth-colors",
 		"smoooooooooooOOth",
@@ -116,7 +115,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"The colors used for player 2's custom gradient",
 		ST::ColorList
 	},
-
 
 	gay::SettingDisplayInfo {
 		"solid-trail",
@@ -171,7 +169,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Disables the wave trail pulse completely",
 		ST::Bool
 	},
-
 
 	gay::SettingDisplayInfo {
 		"trail-opacity",
@@ -228,7 +225,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Disables fading the wave trail out in portals",
 		ST::Bool
 	},
-
 
 	gay::SettingDisplayInfo {
 		"wave-outline",
@@ -289,7 +285,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		ST::ColorList
 	},
 
-
 	gay::SettingDisplayInfo {
 		"tilt-enabled",
 		"he got me limping...",
@@ -335,7 +330,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Makes the wave icon rotate when dashing",
 		ST::Bool
 	},
-
 
 	gay::SettingDisplayInfo {
 		"trail-segments",
@@ -383,7 +377,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		ST::Bool
 	},
 
-
 	gay::SettingDisplayInfo {
 		"add-min-width",
 		"minimum girth",
@@ -417,7 +410,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		5.0
 	},
 
-
 	gay::SettingDisplayInfo {
 		"editor-trail",
 		"slid into his DMs AND his editor...",
@@ -437,4 +429,12 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Enable the quick-settings button in the pause menu",
 		ST::Bool
 	},
+	gay::SettingDisplayInfo {
+		"verbose-logging",
+		"Verbose Logging",
+		"Do a LOT of logging",
+		"Verbose Logging",
+		"Do a LOT of logging",
+		ST::Bool
+	}
 };
