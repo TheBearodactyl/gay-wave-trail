@@ -6,6 +6,7 @@
 #include <unordered_map>
 
 #include <Geode/Geode.hpp>
+#include <Geode/binding/Slider.hpp>
 #include <Geode/ui/General.hpp>
 #include <Geode/ui/Popup.hpp>
 #include <Geode/ui/ScrollLayer.hpp>
@@ -20,7 +21,7 @@ namespace gay {
 		Float,
 		Int,
 		ColorList,
-		Choice,
+		Choice
 	};
 
 	struct SettingDisplayInfo {
@@ -33,16 +34,14 @@ namespace gay {
 		std::string_view section_straight = "";
 		std::string_view section_gay = "";
 		std::string_view section_tooltip = "";
-
 		double min_val = 0.0;
 		double max_val = 10.0;
-
 		std::span<const std::string_view> choices = {};
 	};
 
 	enum class DisplayMode : int {
 		Gay = 0,
-		Straight = 1,
+		Straight = 1
 	};
 } // namespace gay
 
@@ -64,23 +63,49 @@ class GwtSettingRow: public cocos2d::CCNode {
   protected:
 	std::string m_setting_key;
 	gay::SettingType m_setting_type = gay::SettingType::Bool;
-	geode::TextInput* m_num_input = nullptr;
-	std::vector<std::string_view> m_choices;
-	int m_choice_index = 0;
-	cocos2d::CCLabelBMFont* m_choice_label = nullptr;
 	std::function<void()> m_on_change;
 	CCMenuItemSpriteExtra* m_reset_btn = nullptr;
 	GwtSettingsPopup* m_popup = nullptr;
 
+	float m_control_left_x = 0.f;
+
+	geode::TextInput* m_num_input = nullptr;
+	CCMenuItemSpriteExtra* m_arrow_left_btn = nullptr;
+	CCMenuItemSpriteExtra* m_big_arrow_left_btn = nullptr;
+	CCMenuItemSpriteExtra* m_arrow_right_btn = nullptr;
+	CCMenuItemSpriteExtra* m_big_arrow_right_btn = nullptr;
+	cocos2d::CCSprite* m_arrow_left_spr = nullptr;
+	cocos2d::CCSprite* m_big_arrow_left_spr = nullptr;
+	cocos2d::CCSprite* m_arrow_right_spr = nullptr;
+	cocos2d::CCSprite* m_big_arrow_right_spr = nullptr;
+
+	double m_min_val = 0.0;
+	double m_max_val = 10.0;
+
+	std::vector<std::string_view> m_choices;
+	int m_choice_index = 0;
+	cocos2d::CCLabelBMFont* m_choice_label = nullptr;
+
 	bool init(const gay::SettingDisplayInfo& info, gay::DisplayMode mode, float width, GwtSettingsPopup* popup);
-	void on_bool_toggle(cocos2d::CCObject* sender);
-	void on_info_btn(cocos2d::CCObject* sender);
-	void on_view_colors(cocos2d::CCObject* sender);
-	void on_step(cocos2d::CCObject* sender);
-	void on_choice_dropdown(cocos2d::CCObject* sender);
-	void on_reset(cocos2d::CCObject* sender);
+	void build_bool_control(float width);
+	void build_numeric_control(const gay::SettingDisplayInfo& info, float width);
+	void build_colorlist_control(float width);
+	void build_choice_control(const gay::SettingDisplayInfo& info, float width);
+
+	void update_state(cocos2d::CCNode* invoker = nullptr);
 	void update_choice_label();
 	void update_reset_btn();
+
+	void on_bool_toggle(cocos2d::CCObject*);
+	void on_info_btn(cocos2d::CCObject*);
+	void on_view_colors(cocos2d::CCObject*);
+
+	void on_arrow(cocos2d::CCObject*);
+	void on_choice_dropdown(cocos2d::CCObject*);
+	void on_reset(cocos2d::CCObject*);
+
+	float value_to_slider(double value) const;
+	double value_from_slider(float t) const;
 
   public:
 	static GwtSettingRow* create(const gay::SettingDisplayInfo& info, gay::DisplayMode mode, float width, GwtSettingsPopup* popup);
@@ -97,12 +122,13 @@ class GwtSettingsPopup: public geode::Popup {
 	CCMenuItemSpriteExtra* m_clear_btn = nullptr;
 	cocos2d::CCLayerColor* m_list_bg = nullptr;
 	CCMenuItemSpriteExtra* m_apply_btn = nullptr;
+	CCMenuItemSpriteExtra* m_close_btn = nullptr;
 	CCMenuItemSpriteExtra* m_discard_btn = nullptr;
 
 	std::unordered_map<std::string, matjson::Value> m_pending;
 
 	static constexpr float WIDTH = 440.f;
-	static constexpr float HEIGHT = 280.f;
+	static constexpr float HEIGHT = 315.f;
 	static constexpr float LIST_W = 400.f;
 	static constexpr float SEARCH_H = 30.f;
 	static constexpr float LIST_H = 210.f;
@@ -113,7 +139,7 @@ class GwtSettingsPopup: public geode::Popup {
 	void on_clear_search(cocos2d::CCObject*);
 	void on_apply(cocos2d::CCObject*);
 	void on_discard(cocos2d::CCObject*);
-	void onClose(cocos2d::CCObject* sender) override;
+	void onClose(cocos2d::CCObject*) override;
 	void update_apply_btn();
 
   public:
@@ -129,9 +155,9 @@ class GwtSettingsPopup: public geode::Popup {
 	T get_effective_value(const std::string& key) const {
 		auto it = m_pending.find(key);
 		if (it != m_pending.end()) {
-			auto result = it->second.template as<T>();
-			if (result.isOk()) {
-				return result.unwrap();
+			auto r = it->second.template as<T>();
+			if (r.isOk()) {
+				return r.unwrap();
 			}
 		}
 		return geode::Mod::get()->getSettingValue<T>(key);

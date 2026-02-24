@@ -9,13 +9,23 @@ using settings::CheckMode;
 
 struct PersistPlayerHook: Modify<PersistPlayerHook, PlayerObject> {
 	void createFadeOutDartStreak() {
+		if (settings::is_enabled() && settings::check<CheckMode::Any>("persist-trail", "segment-persist")) {
+			m_alwaysShowStreak = true;
+		}
+
 		if (!settings::is_enabled() || !settings::check<CheckMode::Any>("persist-trail", "segment-persist")) {
+			m_alwaysShowStreak = false;
 			PlayerObject::createFadeOutDartStreak();
 		}
 	}
 
 	void fadeOutStreak2(float dt) {
+		if (settings::is_enabled() && settings::check<CheckMode::Any>("persist-trail", "segment-persist")) {
+			m_alwaysShowStreak = true;
+		}
+
 		if (!settings::is_enabled() || !settings::check<CheckMode::Any>("persist-trail", "segment-persist")) {
+			m_alwaysShowStreak = false;
 			PlayerObject::fadeOutStreak2(dt);
 		}
 	}

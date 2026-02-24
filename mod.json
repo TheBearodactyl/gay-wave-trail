@@ -1,5 +1,5 @@
 {
-  "geode": "5.0.0",
+  "geode": "5.0.1",
   "gd": {
     "win": "2.2081",
     "android": "2.2081",
@@ -8,7 +8,7 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "5.0.2",
+  "version": "5.1.0",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "tags": ["offline", "customization", "enhancement"],
@@ -28,6 +28,12 @@
       "name": "Enable Pause Menu Button",
       "type": "bool",
       "description": "Enable the quick-settings button in the pause menu",
+      "default": true
+    },
+    "disable-behind-streak": {
+      "name": "Disable Behind Streak",
+      "type": "bool",
+      "description": "Disable the regular trail",
       "default": true
     },
     "trail-brightness": {

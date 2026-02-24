@@ -36,4 +36,51 @@ namespace gay::util {
 				break;
 		}
 	}
+
+	struct FuzzyResult {
+		bool matched = false;
+		int score = 0;
+	};
+
+	static FuzzyResult fuzzy_match(const std::string& query, const std::string& target) {
+		if (query.empty()) {
+			gay::util::log(gay::util::LogLevel::Debug, "Query empty");
+			return {true, 0};
+		}
+
+		auto to_lower = [](char c) {
+			return static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+		};
+
+		size_t qi = 0;
+		int score = 0;
+		int consecutive = 0;
+		size_t last_match = std::string::npos;
+
+		for (size_t ti = 0; ti < target.size() && qi < query.size(); ti++) {
+			if (to_lower(query[qi]) == to_lower(target[ti])) {
+				score += 1;
+
+				if (last_match != std::string::npos && ti == last_match + 1) {
+					consecutive++;
+					score += consecutive * 2;
+				} else {
+					consecutive = 0;
+				}
+
+				if (ti == 0 || target[ti - 1] == ' ' || target[ti - 1] == '-' || target[ti - 1] == '_') {
+					score += 3;
+				}
+
+				last_match = ti;
+				qi++;
+			}
+		}
+
+		return {qi == query.size(), score};
+	}
+
+	static constexpr ccColor4B rp_c4(ccColor3B c, uint8_t a) {
+		return {c.r, c.g, c.b, a};
+	}
 } // namespace gay::util

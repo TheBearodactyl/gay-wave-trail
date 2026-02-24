@@ -38,6 +38,17 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		10.0
 	},
 	gay::SettingDisplayInfo {
+		"disable-behind-streak",
+		"not from behind",
+		"i want you to look me in my eyes when you disable my regular streak >:3",
+		"Disable Regular Streak",
+		"Disables the secondary streak",
+		ST::Bool,
+		"",
+		"",
+		"",
+	},
+	gay::SettingDisplayInfo {
 		"saturation",
 		"gayness",
 		"how gay are you????",

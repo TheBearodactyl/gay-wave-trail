@@ -6,6 +6,7 @@
 #include <Geode/modify/CCDrawNode.hpp>
 #include <Geode/modify/HardStreak.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include <Geode/modify/PlayerObject.hpp>
 
 using namespace geode::prelude;
 namespace settings = gay::settings;
@@ -14,26 +15,23 @@ namespace color = gay::color;
 #ifndef GEODE_IS_MACOS
 
 struct SolidDrawHook: Modify<SolidDrawHook, CCDrawNode> {
-	bool drawPolygon(CCPoint* verts, unsigned int cnt, const ccColor4F& fill, float border_width, const ccColor4F& border) {
+	void draw() override {
 		if (typeinfo_cast<HardStreak*>(this) && settings::get<bool>("solid-trail")) {
-			if (fill.r >= 1.0f && fill.g >= 1.0f && fill.b >= 1.0f && fill.a < 1.0f) {
-				return true;
+			for (GLsizei i = 0; i < m_nBufferCount; i++) {
+				m_pBuffer[i].colors.a = 255;
 			}
 
-			if (this->getTag() != 1) {
-				this->setTag(1);
-				this->setBlendFunc(CCSprite::create()->getBlendFunc());
-				this->setZOrder(-1);
-			}
+			m_bDirty = true;
 
-			ccColor4F solid_fill = fill;
-			solid_fill.a = 1.0f;
-			return CCDrawNode::drawPolygon(verts, cnt, solid_fill, border_width, border);
+			this->setBlendFunc({GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
+			this->setZOrder(-1);
 		}
 
-		return CCDrawNode::drawPolygon(verts, cnt, fill, border_width, border);
+		CCDrawNode::draw();
 	}
 };
+
+#endif
 
 struct SolidStreakHook: Modify<SolidStreakHook, HardStreak> {
 	void updateStroke(float dt) {
@@ -41,8 +39,6 @@ struct SolidStreakHook: Modify<SolidStreakHook, HardStreak> {
 		HardStreak::updateStroke(dt);
 	}
 };
-
-#endif
 
 struct DisableStreakHook: Modify<DisableStreakHook, HardStreak> {
 	void updateStroke(float dt) {
@@ -61,14 +57,14 @@ struct TrailFadeHook: Modify<TrailFadeHook, HardStreak> {
 	};
 
 	void updateStroke(float dt) {
-		HardStreak::updateStroke(dt);
-
-		if (settings::get<bool>("solid-trail")) {
+		if (settings::get<bool>("solid-trail") || this->m_isSolid) {
 			this->setOpacity(255);
+			HardStreak::updateStroke(dt);
 			return;
 		}
 
 		if (!settings::is_enabled()) {
+			HardStreak::updateStroke(dt);
 			return;
 		}
 
@@ -76,6 +72,7 @@ struct TrailFadeHook: Modify<TrailFadeHook, HardStreak> {
 
 		if (!settings::get<bool>("enable-trail-fade")) {
 			this->setOpacity(static_cast<GLubyte>(trail_opacity));
+			HardStreak::updateStroke(dt);
 			return;
 		}
 
@@ -88,78 +85,57 @@ struct TrailFadeHook: Modify<TrailFadeHook, HardStreak> {
 		auto target = static_cast<GLubyte>(std::max(min_opacity, faded));
 
 		this->setOpacity(target);
+		HardStreak::updateStroke(dt);
 	}
 };
 
-struct OutlineStreakState {
-	CCDrawNode* node = nullptr;
-	bool is_p1 = false;
+struct RegularStreakHook: Modify<RegularStreakHook, PlayerObject> {
+	void update(float dt) {
+		bool disable_regular_streak = settings::get<bool>("disable-behind-streak");
+		auto* pl = PlayLayer::get();
 
-	void reset() {
-		node = nullptr;
-		is_p1 = false;
-	}
-};
-
-static OutlineStreakState s_outline_p1;
-static OutlineStreakState s_outline_p2;
-
-struct OutlinePlayHook: Modify<OutlinePlayHook, PlayLayer> {
-	void setupHasCompleted() {
-		s_outline_p1.reset();
-		s_outline_p2.reset();
-		PlayLayer::setupHasCompleted();
-	}
-
-	void resetLevel() {
-		s_outline_p1.reset();
-		s_outline_p2.reset();
-		PlayLayer::resetLevel();
-	}
-
-	void onQuit() {
-		s_outline_p1.reset();
-		s_outline_p2.reset();
-		PlayLayer::onQuit();
-	}
-};
-
-struct OutlineStreakHook: Modify<OutlineStreakHook, HardStreak> {
-	void updateStroke(float delta) {
-		auto* play_layer = GameManager::sharedState()->m_playLayer;
-
-		if (play_layer) {
-			if (play_layer->m_player1 && play_layer->m_player1->m_waveTrail && this == play_layer->m_player1->m_waveTrail) {
-				s_outline_p1.node = this;
-				s_outline_p1.is_p1 = true;
-			} else if (s_outline_p1.node == this) {
-				s_outline_p1.reset();
-			}
-
-			if (play_layer->m_player2 && play_layer->m_player2->m_waveTrail && this == play_layer->m_player2->m_waveTrail) {
-				s_outline_p2.node = this;
-				s_outline_p2.is_p1 = false;
-			} else if (s_outline_p2.node == this) {
-				s_outline_p2.reset();
-			}
+		if (!pl) {
+			PlayerObject::update(dt);
+			return;
 		}
 
-		HardStreak::updateStroke(delta);
+		bool is_wave_trail = (pl->m_player1 && pl->m_player1->m_isDart) || (pl->m_player2 && pl->m_player2->m_isDart);
+
+		if (disable_regular_streak && is_wave_trail) {
+			m_disableStreakTint = true;
+			m_regularTrail->setVisible(false);
+		}
+
+		PlayerObject::update(dt);
 	}
 };
 
 struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
 	bool drawPolygon(CCPoint* verts, unsigned int count, const ccColor4F& fill, float border_width, const ccColor4F& border) {
+		HardStreak* streak = typeinfo_cast<HardStreak*>(this);
+
+		if (!streak) {
+			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
+		}
+
+		if (!settings::get<bool>("wave-outline")) {
+			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
+		}
+
+		auto* pl = PlayLayer::get();
+
+		if (!pl) {
+			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
+		}
+
+		bool is_wave_trail =
+			(pl->m_player1 && pl->m_player1->m_waveTrail == streak) || (pl->m_player2 && pl->m_player2->m_waveTrail == streak);
+
+		if (!is_wave_trail) {
+			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
+		}
+
 		if (fill.a < 0.05f) {
-			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
-		}
-
-		if (!typeinfo_cast<HardStreak*>(this)) {
-			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
-		}
-
-		bool is_tracked = (this == s_outline_p1.node) || (this == s_outline_p2.node);
-		if (!is_tracked || !settings::get<bool>("wave-outline")) {
 			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
 		}
 
