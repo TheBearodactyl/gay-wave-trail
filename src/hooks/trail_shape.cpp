@@ -1,11 +1,16 @@
+#include <cmath>
+#include <unordered_set>
+
+#include <gay/settings.hpp>
+
 #include <Geode/modify/HardStreak.hpp>
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/PlayerObject.hpp>
 
-#include <gay/settings.hpp>
-
 using namespace geode::prelude;
 namespace settings = gay::settings;
+
+std::unordered_set<HardStreak*> g_streaks_in_gap;
 
 struct TrailSizeHook: Modify<TrailSizeHook, PlayLayer> {
 	void postUpdate(float dt) override {
@@ -105,12 +110,14 @@ struct SegmentsPlayHook: Modify<SegmentsPlayHook, PlayLayer> {
 	void resetLevel() {
 		s_segment_p1 = {};
 		s_segment_p2 = {};
+		g_streaks_in_gap.clear();
 		PlayLayer::resetLevel();
 	}
 
 	void onQuit() {
 		s_segment_p1 = {};
 		s_segment_p2 = {};
+		g_streaks_in_gap.clear();
 		PlayLayer::onQuit();
 	}
 };
@@ -151,35 +158,29 @@ struct SegmentsStreakHook: Modify<SegmentsStreakHook, HardStreak> {
 
 		float distance = ccpDistance(point, state->last_point);
 		state->accumulated_distance += distance;
+		state->last_point = point;
 
 		if (state->in_gap) {
 			state->gap_distance += distance;
 			if (state->gap_distance >= seg_gap) {
+				float overshoot = state->gap_distance - seg_gap;
+				g_streaks_in_gap.erase(this);
 				state->in_gap = false;
 				state->gap_distance = 0.0f;
-				state->accumulated_distance = 0.0f;
-				this->stopStroke();
+				state->accumulated_distance = overshoot;
 				this->resumeStroke();
 			}
 		} else {
-			if (state->accumulated_distance >= seg_length) {
-				state->in_gap = true;
-				state->gap_distance = 0.0f;
-				state->accumulated_distance = 0.0f;
-			}
 			HardStreak::addPoint(point);
-		}
 
-		state->last_point = point;
-	}
-};
-
-struct DashingHook: Modify<DashingHook, PlayerObject> {
-	void update(float dt) {
-		PlayerObject::update(dt);
-
-		if (this->m_isDart && this->m_isDashing && settings::get<bool>("trail-dashing")) {
-			this->setRotation(this->getRotation() + this->m_dashAngle * dt);
+			if (state->accumulated_distance >= seg_length) {
+				float overshoot = state->accumulated_distance - seg_length;
+				g_streaks_in_gap.insert(this);
+				state->in_gap = true;
+				state->gap_distance = overshoot;
+				state->accumulated_distance = 0.0f;
+				this->stopStroke();
+			}
 		}
 	}
 };

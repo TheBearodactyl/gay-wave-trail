@@ -23,6 +23,8 @@ namespace rp = gay::color::rose_pine;
 using ST = gay::SettingType;
 using gay::util::rp_c4;
 
+float GwtSettingsPopup::s_saved_scroll_y = 0.f;
+
 bool GwtSettingsPopup::setup() {
 	m_closeBtn->setVisible(false);
 	m_bgSprite->setVisible(false);
@@ -108,6 +110,10 @@ bool GwtSettingsPopup::setup() {
 
 	rebuild_list();
 
+	if (s_saved_scroll_y != 0.f) {
+		m_list->m_contentLayer->setPositionY(s_saved_scroll_y);
+	}
+
 	auto* scrollbar = Scrollbar::create(m_list);
 	scrollbar->setID("scrollbar");
 	m_mainLayer->addChildAtPosition(scrollbar, Anchor::Center, ccp(LIST_W / 2.f + 10.f, -SEARCH_H / 2.f - 4.f));
@@ -156,7 +162,7 @@ void GwtSettingsPopup::on_search_changed(const std::string& query) {
 	spr->setOpacity(active ? 255 : 90);
 }
 
-void GwtSettingsPopup::rebuild_list() {
+void GwtSettingsPopup::rebuild_list(bool preserve_scroll) {
 	auto mode = static_cast<gay::DisplayMode>(get_effective_value<int64_t>("display-mode"));
 	std::string query = m_search ? std::string(m_search->getString()) : std::string {};
 	bool has_query = !query.empty();
@@ -227,8 +233,13 @@ void GwtSettingsPopup::rebuild_list() {
 		m_list->m_contentLayer->addChild(row);
 	}
 
+	float saved_y = m_list->m_contentLayer->getPositionY();
 	m_list->m_contentLayer->updateLayout();
-	m_list->scrollToTop();
+	if (preserve_scroll) {
+		m_list->m_contentLayer->setPositionY(saved_y);
+	} else {
+		m_list->scrollToTop();
+	}
 	handleTouchPriority(this);
 }
 
@@ -289,6 +300,10 @@ void GwtSettingsPopup::on_discard(CCObject*) {
 }
 
 void GwtSettingsPopup::onClose(CCObject* sender) {
+	if (m_list) {
+		s_saved_scroll_y = m_list->m_contentLayer->getPositionY();
+	}
+
 	if (!m_pending.empty()) {
 		geode::createQuickPopup(
 			"Unsaved Changes",
@@ -360,5 +375,5 @@ GwtSettingsPopup* GwtSettingsPopup::create() {
 }
 
 void GwtSettingsPopup::request_rebuild() {
-	rebuild_list();
+	rebuild_list(true);
 }

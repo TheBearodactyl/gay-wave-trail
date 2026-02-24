@@ -133,8 +133,10 @@ class GwtSettingsPopup: public geode::Popup {
 	static constexpr float SEARCH_H = 30.f;
 	static constexpr float LIST_H = 210.f;
 
+	static float s_saved_scroll_y;
+
 	bool setup();
-	void rebuild_list();
+	void rebuild_list(bool preserve_scroll = false);
 	void on_search_changed(const std::string& query);
 	void on_clear_search(cocos2d::CCObject*);
 	void on_apply(cocos2d::CCObject*);

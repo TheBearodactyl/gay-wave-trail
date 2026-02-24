@@ -196,7 +196,8 @@ void GwtSettingRow::build_numeric_control(const gay::SettingDisplayInfo& info, f
 
 	std::string key_cp = m_setting_key;
 	GwtSettingsPopup* pp = m_popup;
-	m_num_input->setCallback([this, key_cp, is_int, pp](const std::string& s) {
+	double min_v = m_min_val, max_v = m_max_val;
+	m_num_input->setCallback([this, key_cp, is_int, pp, min_v, max_v](const std::string& s) {
 		if (s.empty() || s == "-" || s == "-." || s == ".") {
 			return;
 		}
@@ -206,20 +207,22 @@ void GwtSettingRow::build_numeric_control(const gay::SettingDisplayInfo& info, f
 			if (!r.isOk()) {
 				return;
 			}
+			int64_t val = std::clamp(r.unwrap(), (int64_t)min_v, (int64_t)max_v);
 			if (pp) {
-				pp->set_pending(key_cp, matjson::Value(r.unwrap()));
+				pp->set_pending(key_cp, matjson::Value(val));
 			} else {
-				Mod::get()->setSettingValue<int64_t>(key_cp, r.unwrap());
+				Mod::get()->setSettingValue<int64_t>(key_cp, val);
 			}
 		} else {
 			auto r = geode::utils::numFromString<double>(s);
 			if (!r.isOk()) {
 				return;
 			}
+			double val = std::clamp(r.unwrap(), min_v, max_v);
 			if (pp) {
-				pp->set_pending(key_cp, matjson::Value(r.unwrap()));
+				pp->set_pending(key_cp, matjson::Value(val));
 			} else {
-				Mod::get()->setSettingValue<double>(key_cp, r.unwrap());
+				Mod::get()->setSettingValue<double>(key_cp, val);
 			}
 		}
 		update_state(m_num_input);
