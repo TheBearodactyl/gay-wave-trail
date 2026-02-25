@@ -1,15 +1,15 @@
 #if 0 // __has_include("eclipse.eclipse-menu/include/eclipse.hpp")
 
-	#include <string>
-	#include <vector>
+#include <string>
+#include <vector>
 
-	#include <Geode/Geode.hpp>
-	#include <Geode/loader/Loader.hpp>
-	#include <Geode/loader/Mod.hpp>
-	#include <Geode/loader/ModEvent.hpp>
+#include <Geode/Geode.hpp>
+#include <Geode/loader/Loader.hpp>
+#include <Geode/loader/Mod.hpp>
+#include <Geode/loader/ModEvent.hpp>
 
-	#include <eclipse.eclipse-menu/include/components.hpp>
-	#include <eclipse.eclipse-menu/include/config.hpp>
+#include <eclipse.eclipse-menu/include/components.hpp>
+#include <eclipse.eclipse-menu/include/config.hpp>
 
 using namespace eclipse;
 using namespace geode::prelude;

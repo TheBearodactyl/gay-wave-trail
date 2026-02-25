@@ -37,6 +37,15 @@ namespace gay::util {
 		}
 	}
 
+	template<typename... Args>
+	void debug(fmt::format_string<Args...> msg, Args&&... args) {
+		if (!Mod::get()->getSettingValue<bool>("verbose-logging")) {
+			return;
+		}
+
+		gay::util::log(LogLevel::Debug, msg, std::forward<Args>(args)...);
+	}
+
 	struct FuzzyResult {
 		bool matched = false;
 		int score = 0;

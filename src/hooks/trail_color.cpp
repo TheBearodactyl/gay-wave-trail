@@ -5,18 +5,22 @@
 
 #include <Geode/modify/PlayLayer.hpp>
 
+#include "gay/utils.hpp"
+
 using namespace geode::prelude;
 namespace settings = gay::settings;
 namespace color = gay::color;
 
 struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 	float calc_phase(float phase, float speed, float dt) {
+		gay::util::debug("[ColorApplyHook::calc_phase]: {{phase: {}, speed: {}, dt: {}}}", phase, speed, dt);
 		return std::fmod(phase + (speed * 60.0f * dt), 360.0f);
 	}
 
 	void postUpdate(float dt) override {
 		if (!settings::is_enabled()) {
 			PlayLayer::postUpdate(dt);
+			gay::util::debug("[ColorApplyHook::postUpdate]: Mod isn't enabled, skipping hook");
 			return;
 		}
 
