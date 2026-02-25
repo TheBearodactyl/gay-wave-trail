@@ -1,6 +1,11 @@
 #if __has_include("eclipse.eclipse-menu/include/eclipse.hpp")
 
+#include <algorithm>
+#include <optional>
+#include <ranges>
 #include <string>
+
+#include <gay/setting_defs.hpp>
 
 #include <Geode/Geode.hpp>
 #include <Geode/loader/Loader.hpp>
@@ -14,27 +19,65 @@
 using namespace eclipse;
 using namespace geode::prelude;
 
-static std::string key(const char* id) {
+static bool is_gay_mode() {
+	return Mod::get()->getSettingValue<int64_t>("display-mode") == 0;
+}
+
+[[nodiscard]]
+static std::optional<const gay::SettingDisplayInfo*> find_info(std::string_view id) {
+	auto it = std::ranges::find_if(
+		SETTING_DISPLAY_INFO,
+		[id](std::string_view k) { return k == id; },
+		&gay::SettingDisplayInfo::key
+	);
+
+	if (it == std::ranges::end(SETTING_DISPLAY_INFO)) {
+		return std::nullopt;
+	}
+
+	return &*it;
+}
+
+[[nodiscard]]
+static std::string find_name(std::string_view id) {
+	if (auto info = find_info(id)) {
+		return std::string(is_gay_mode() ? (*info)->gay_name : (*info)->straight_name);
+	}
+
+	return std::string(id);
+}
+
+[[nodiscard]]
+static std::string find_desc(std::string_view id) {
+	if (auto info = find_info(id)) {
+		return std::string(is_gay_mode() ? (*info)->gay_desc : (*info)->straight_desc);
+	}
+	return {};
+}
+
+[[nodiscard]]
+static std::string config_key(const char* id) {
 	return std::string(Mod::get()->expandSpriteName(id));
 }
 
 static components::Toggle register_bool(const char* id, MenuTab& tab) {
-	auto setting = Mod::get()->getSetting(id);
-	auto toggle = tab.addToggle(
-						 key(id),
-						 std::string(setting->getDisplayName()),
-						 [id](bool val) {
-							 Mod::get()->setSettingValue<bool>(id, val);
-							 config::set<bool>(key(id), val);
-						 }
-	).setDescription(std::string(setting->getDescription().value_or("")));
+    const auto ckey = config_key(id);
 
-	config::set<bool>(key(id), Mod::get()->getSettingValue<bool>(id));
-	listenForSettingChanges<bool>(id, [id](bool) {
-		config::set<bool>(key(id), Mod::get()->getSettingValue<bool>(id));
-	});
+    auto toggle = tab.addToggle(
+        ckey,
+        find_name(id),
+        [id, ckey](bool val) {
+            Mod::get()->setSettingValue<bool>(id, val);
+            config::set<bool>(ckey, val);
+        }
+    ).setDescription(find_desc(id));
 
-	return toggle;
+    config::set<bool>(ckey, Mod::get()->getSettingValue<bool>(id));
+    listenForSettingChanges<bool>(id, [id, ckey](bool) {
+        config::set<bool>(ckey, Mod::get()->getSettingValue<bool>(id));
+    });
+
+    return toggle;
 }
 
 static components::InputFloat register_float(
@@ -43,15 +86,16 @@ static components::InputFloat register_float(
 	std::optional<float> min = std::nullopt,
 	std::optional<float> max = std::nullopt
 ) {
-	auto setting = Mod::get()->getSetting(id);
+	const auto ckey = config_key(id);
+
 	auto input = tab.addInputFloat(
-						key(id),
-						std::string(setting->getDisplayName()),
-						[id](float val) {
+						find_name(id),
+						ckey,
+						[id, ckey](float val) {
 							Mod::get()->setSettingValue<double>(id, static_cast<double>(val));
-							config::set<double>(key(id), static_cast<double>(val));
+							config::set<double>(ckey, static_cast<double>(val));
 						}
-	).setDescription(std::string(setting->getDescription().value_or("")));
+	).setDescription(find_desc(id));
 
 	if (min) {
 		input.setMinValue(*min);
@@ -60,9 +104,9 @@ static components::InputFloat register_float(
 		input.setMaxValue(*max);
 	}
 
-	config::set<double>(key(id), Mod::get()->getSettingValue<double>(id));
-	listenForSettingChanges<double>(id, [id](double) {
-		config::set<double>(key(id), Mod::get()->getSettingValue<double>(id));
+	config::set<double>(ckey, Mod::get()->getSettingValue<double>(id));
+	listenForSettingChanges<double>(id, [id, ckey](double) {
+		config::set<double>(ckey, Mod::get()->getSettingValue<double>(id));
 	});
 
 	return input;
@@ -74,18 +118,18 @@ static components::InputFloat register_int(
 	std::optional<float> min = std::nullopt,
 	std::optional<float> max = std::nullopt
 ) {
-	auto setting = Mod::get()->getSetting(id);
-	auto input = tab.addInputFloat(
-						key(id),
-						std::string(setting->getDisplayName()),
-						[id](float val) {
-							auto rounded = static_cast<int64_t>(std::round(val));
-							Mod::get()->setSettingValue<int64_t>(id, rounded);
+	const auto ckey = config_key(id);
 
-							config::set<int>(key(id), static_cast<int>(rounded));
+	auto input = tab.addInputFloat(
+						find_name(id),
+						ckey,
+						[id, ckey](float val) {
+							const auto rounded = static_cast<int64_t>(std::round(val));
+							Mod::get()->setSettingValue<int64_t>(id, rounded);
+							config::set<int>(ckey, static_cast<int>(rounded));
 						}
 	)
-					 .setDescription(std::string(setting->getDescription().value_or("")))
+					 .setDescription(find_desc(id))
 					 .setFormat("%.0f");
 
 	if (min) {
@@ -95,9 +139,9 @@ static components::InputFloat register_int(
 		input.setMaxValue(*max);
 	}
 
-	config::set<int>(key(id), static_cast<int>(Mod::get()->getSettingValue<int64_t>(id)));
-	listenForSettingChanges<int64_t>(id, [id](int64_t) {
-		config::set<int>(key(id), static_cast<int>(Mod::get()->getSettingValue<int64_t>(id)));
+	config::set<int>(ckey, static_cast<int>(Mod::get()->getSettingValue<int64_t>(id)));
+	listenForSettingChanges<int64_t>(id, [id, ckey](int64_t) {
+		config::set<int>(ckey, static_cast<int>(Mod::get()->getSettingValue<int64_t>(id)));
 	});
 
 	return input;
@@ -106,11 +150,9 @@ static components::InputFloat register_int(
 static void register_display_mode(MenuTab& tab) {
 	static constexpr const char* ID = "display-mode";
 
-	auto key_gay = key("display-mode-gay");
-	auto key_straight = key("display-mode-straight");
-
-	auto setting = Mod::get()->getSetting(ID);
-	auto desc = std::string(setting->getDescription().value_or(""));
+	const auto key_gay = config_key("display-mode-gay");
+	const auto key_straight = config_key("display-mode-straight");
+	const auto desc = find_desc(ID);
 
 	tab.addLabel("Display Mode");
 
@@ -118,13 +160,9 @@ static void register_display_mode(MenuTab& tab) {
 		   key_gay,
 		   "Gay mode BABYYYYYYYY :3333",
 		   [key_straight](bool val) {
-			   if (val) {
-				   Mod::get()->setSettingValue<int64_t>(ID, 0);
-				   config::set<bool>(key_straight, false);
-			   } else {
-				   Mod::get()->setSettingValue<int64_t>(ID, 1);
-				   config::set<bool>(key_straight, true);
-			   }
+			   const int64_t mode = val ? 0 : 1;
+			   Mod::get()->setSettingValue<int64_t>(ID, mode);
+			   config::set<bool>(key_straight, !val);
 		   }
 	).setDescription(desc);
 
@@ -132,17 +170,13 @@ static void register_display_mode(MenuTab& tab) {
 		   key_straight,
 		   "straight mode.",
 		   [key_gay](bool val) {
-			   if (val) {
-				   Mod::get()->setSettingValue<int64_t>(ID, 1);
-				   config::set<bool>(key_gay, false);
-			   } else {
-				   Mod::get()->setSettingValue<int64_t>(ID, 0);
-				   config::set<bool>(key_gay, true);
-			   }
+			   const int64_t mode = val ? 1 : 0;
+			   Mod::get()->setSettingValue<int64_t>(ID, mode);
+			   config::set<bool>(key_gay, !val);
 		   }
 	).setDescription(desc);
 
-	bool is_gay = Mod::get()->getSettingValue<int64_t>(ID) == 0;
+	const bool is_gay = Mod::get()->getSettingValue<int64_t>(ID) == 0;
 	config::set<bool>(key_gay, is_gay);
 	config::set<bool>(key_straight, !is_gay);
 
@@ -152,27 +186,29 @@ static void register_display_mode(MenuTab& tab) {
 	});
 }
 
-static constexpr const char* TAB_GENERAL = "Gay Wave Trail - General";
-static constexpr const char* TAB_COLORS = "Gay Wave Trail - Colors";
-static constexpr const char* TAB_SHAPE = "Gay Wave Trail - Trail Shape";
-static constexpr const char* TAB_OPACITY = "Gay Wave Trail - Trail Opacity";
-static constexpr const char* TAB_OUTLINE = "Gay Wave Trail - Outline";
-static constexpr const char* TAB_TILT = "Gay Wave Trail - Tilt";
-static constexpr const char* TAB_SEGMENTS = "Gay Wave Trail - Segments";
-static constexpr const char* TAB_THICKNESS = "Gay Wave Trail - Thickness";
-static constexpr const char* TAB_MISC = "Gay Wave Trail - Misc";
+static constexpr std::string_view TAB_GENERAL = "Gay Wave Trail - General";
+static constexpr std::string_view TAB_COLORS = "Gay Wave Trail - Colors";
+static constexpr std::string_view TAB_SHAPE = "Gay Wave Trail - Trail Shape";
+static constexpr std::string_view TAB_OPACITY = "Gay Wave Trail - Trail Opacity";
+static constexpr std::string_view TAB_OUTLINE = "Gay Wave Trail - Outline";
+static constexpr std::string_view TAB_TILT = "Gay Wave Trail - Tilt";
+static constexpr std::string_view TAB_SEGMENTS = "Gay Wave Trail - Segments";
+static constexpr std::string_view TAB_THICKNESS = "Gay Wave Trail - Thickness";
+static constexpr std::string_view TAB_MISC = "Gay Wave Trail - Misc";
 
 $on_mod(Loaded) {
 	Loader::get()->queueInMainThread([] {
-		auto general = MenuTab::find(TAB_GENERAL);
-		auto colors = MenuTab::find(TAB_COLORS);
-		auto shape = MenuTab::find(TAB_SHAPE);
-		auto opacity = MenuTab::find(TAB_OPACITY);
-		auto outline = MenuTab::find(TAB_OUTLINE);
-		auto tilt = MenuTab::find(TAB_TILT);
-		auto segments = MenuTab::find(TAB_SEGMENTS);
-		auto thickness = MenuTab::find(TAB_THICKNESS);
-		auto misc = MenuTab::find(TAB_MISC);
+		const auto tab = [](std::string_view name) { return MenuTab::find(std::string(name)); };
+
+		auto general = tab(TAB_GENERAL);
+		auto colors = tab(TAB_COLORS);
+		auto shape = tab(TAB_SHAPE);
+		auto opacity = tab(TAB_OPACITY);
+		auto outline = tab(TAB_OUTLINE);
+		auto tilt = tab(TAB_TILT);
+		auto segments = tab(TAB_SEGMENTS);
+		auto thickness = tab(TAB_THICKNESS);
+		auto misc = tab(TAB_MISC);
 
 		register_display_mode(general);
 		register_bool("enabled", general);
@@ -184,7 +220,6 @@ $on_mod(Loaded) {
 
 		register_bool("smooth-colors", colors);
 		register_bool("enable-gaydient", colors);
-
 		register_bool("separate-player-colors", colors);
 
 		register_bool("solid-trail", shape);
