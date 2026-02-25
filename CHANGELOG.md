@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 5.1.3 - 2026-02-25
+
+### Fixed
+
+- Redid Eclipse integration
+
+## 5.1.2 - 2026-02-24
+
+### Added
+
+- Started on adding debug logging for the `verbose-logging` setting
+
+## 5.1.1 - 2026-02-24
+
+### Changed
+
+- Scroll position now gets saved when closing the custom settings popup.
+
+### Fixed
+
+- Trail segmentation now somewhat works
+
+## 5.1.0 - 2026-02-24
+
+### Changed
+
+- `src/ui.cpp` is now separated into multiple files instead of being a single 1k line file
+- The custom settings popup has more polish to it now and has a lot of new QOL changes
+
+### Fixed
+
+- "Solid Wave Trail" now actually works via a custom hook for `drawPolygon`
+- "Trail Fade" and "Solid Wave Trail" are now fully compatible
+- "Trail Outline" should be much more consistent now
+- "Persist Trail" now works for real lmao
+
+### Added
+
+- New "Disable Regular Streak" setting
+- New setting for verbose logging
+
 ## [5.0.0] - 2026-02-22
 
 ### Fixed
