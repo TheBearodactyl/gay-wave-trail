@@ -37,7 +37,7 @@ struct TrailSizeHook: Modify<TrailSizeHook, PlayLayer> {
 
 struct TrailTiltHook: Modify<TrailTiltHook, HardStreak> {
 	void addPoint(CCPoint point) {
-		if (settings::is_enabled() && settings::get<bool>("tilt-enabled")) {
+		if (settings::is_enabled() && settings::get<bool>("tilt-enabled") && !settings::get<bool>("rewrite-trail")) {
 			point.x += settings::get_float("tilt-x-offset");
 			point.y += settings::get_float("tilt-y-offset");
 		}
@@ -124,7 +124,7 @@ struct SegmentsPlayHook: Modify<SegmentsPlayHook, PlayLayer> {
 
 struct SegmentsStreakHook: Modify<SegmentsStreakHook, HardStreak> {
 	void addPoint(CCPoint point) {
-		if (!settings::is_enabled() || !settings::get<bool>("trail-segments")) {
+		if (!settings::is_enabled() || !settings::get<bool>("trail-segments") || settings::get<bool>("rewrite-trail")) {
 			HardStreak::addPoint(point);
 			return;
 		}

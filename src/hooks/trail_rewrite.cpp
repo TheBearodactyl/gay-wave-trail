@@ -18,11 +18,13 @@ static constexpr size_t RING_MASK = RING_CAP - 1;
 static constexpr float MITER_LIMIT = 4.0f;
 static constexpr float MIN_DIST = 0.1f;
 
-struct alignas(16) TrailPt {
+struct TrailPt {
 	float x;
 	float y;
 	float t;
+	float w;
 	uint32_t seg;
+	uint32_t _pad;
 };
 
 struct Triangle {
@@ -103,15 +105,21 @@ namespace geom {
 		return std::sqrt(x * x + y * y);
 	}
 
+	static constexpr float OUTLINE_MITER_LIMIT = 2.0f;
+
 	static void miter(
 		const float* xs,
 		const float* ys,
+		const float* ws,
 		size_t i,
 		size_t n,
 		float half_w,
+		float miter_limit,
 		float& ox,
 		float& oy
 	) noexcept {
+		float hw = ws ? ws[i] : half_w;
+
 		float nx1 = 0;
 		float ny1 = 0;
 
@@ -133,17 +141,22 @@ namespace geom {
 			float dx = xs[i + 1] - xs[i];
 			float dy = ys[i + 1] - ys[i];
 			float ln = len(dx, dy);
+
+			if (ln > 1e-6f) {
+				nx2 = -dy / ln;
+				ny2 = dx / ln;
+			}
 		}
 
 		if (i == 0) {
-			ox = nx2 * half_w;
-			oy = ny2 * half_w;
+			ox = nx2 * hw;
+			oy = ny2 * hw;
 			return;
 		}
 
 		if (i + 1 == n) {
-			ox = nx1 * half_w;
-			oy = ny1 * half_w;
+			ox = nx1 * hw;
+			oy = ny1 * hw;
 			return;
 		}
 
@@ -152,8 +165,8 @@ namespace geom {
 		float bl = len(bx, by);
 
 		if (bl < 1e-4f) {
-			ox = nx1 * half_w;
-			oy = ny1 * half_w;
+			ox = nx1 * hw;
+			oy = ny1 * hw;
 			return;
 		}
 
@@ -162,13 +175,13 @@ namespace geom {
 
 		float cs = bx * nx1 + by * ny1;
 
-		if (cs < 1.0f / MITER_LIMIT) {
-			ox = nx1 * half_w;
-			oy = ny1 * half_w;
+		if (cs < 1.0f / miter_limit) {
+			ox = nx1 * hw;
+			oy = ny1 * hw;
 			return;
 		}
 
-		float scale = half_w / cs;
+		float scale = hw / cs;
 
 		ox = bx * scale;
 		oy = by * scale;
@@ -177,8 +190,10 @@ namespace geom {
 	static void build_offset(
 		const float* xs,
 		const float* ys,
+		const float* ws,
 		size_t n,
 		float half_w,
+		float miter_limit,
 		float* ux,
 		float* uy,
 		float* lx,
@@ -188,7 +203,7 @@ namespace geom {
 			float ox;
 			float oy;
 
-			miter(xs, ys, i, n, half_w, ox, oy);
+			miter(xs, ys, ws, i, n, half_w, miter_limit, ox, oy);
 
 			ux[i] = xs[i] + ox;
 			uy[i] = ys[i] + oy;
@@ -233,7 +248,6 @@ namespace geom {
 } // namespace geom
 
 struct WorkerParams {
-	float trail_width = 1.0f;
 	float outline_width = 0.0f;
 	bool do_outline = false;
 };
@@ -354,6 +368,8 @@ struct TrailWorker {
 
 		thread_local Vec<float> xs;
 		thread_local Vec<float> ys;
+		thread_local Vec<float> ws;
+		thread_local Vec<float> ows;
 		thread_local Vec<float> ux;
 		thread_local Vec<float> uy;
 		thread_local Vec<float> lx;
@@ -362,9 +378,6 @@ struct TrailWorker {
 		thread_local Vec<float> oy;
 		thread_local Vec<float> ix;
 		thread_local Vec<float> iy;
-
-		const float hw = p.trail_width;
-		const float ohw = p.trail_width + p.outline_width;
 
 		size_t seg_start = 0;
 		uint32_t curr_seg = pts[0].seg;
@@ -378,10 +391,12 @@ struct TrailWorker {
 
 			xs.resize(n);
 			ys.resize(n);
+			ws.resize(n);
 
 			for (size_t k = 0; k < n; ++k) {
 				xs[k] = pts[start + k].x;
 				ys[k] = pts[start + k].y;
+				ws[k] = pts[start + k].w;
 			}
 
 			ux.resize(n);
@@ -392,8 +407,10 @@ struct TrailWorker {
 			geom::build_offset(
 				xs.data(),
 				ys.data(),
+				ws.data(),
 				n,
-				hw,
+				0.0f,
+				MITER_LIMIT,
 				ux.data(),
 				uy.data(),
 				lx.data(),
@@ -408,11 +425,18 @@ struct TrailWorker {
 				ix.resize(n);
 				iy.resize(n);
 
+				ows.resize(n);
+				for (size_t k = 0; k < n; ++k) {
+					ows[k] = ws[k] + p.outline_width;
+				}
+
 				geom::build_offset(
 					xs.data(),
 					ys.data(),
+					ows.data(),
 					n,
-					ohw,
+					0.0f,
+					geom::OUTLINE_MITER_LIMIT,
 					ox.data(),
 					oy.data(),
 					ix.data(),
@@ -507,11 +531,7 @@ class $modify(TrailRewriteHook, HardStreak) {
 			return;
 		}
 
-		this->m_currentPoint = CCPointApplyAffineTransform(
-			point,
-			CCAffineTransformInvert(this->nodeToParentTransform())
-		);
-
+		this->m_currentPoint = point;
 		this->m_drawStreak = true;
 	}
 
@@ -595,13 +615,11 @@ class $modify(TrailRewriteHook, HardStreak) {
 		f.ring.cull_before(f.game_time - ttl);
 
 		const float opacity = calc_opacity(dt);
-		const float width = calc_width();
 		const bool do_ol = settings::get<bool>("wave-outline");
 		const float ol_w = do_ol ? to(float, settings::get<double>("wave-outline-width")) : 0.0f;
 		const size_t cnt = f.ring.snapshot(f.snap_scratch.data(), RING_CAP);
 
 		WorkerParams wp;
-		wp.trail_width = width;
 		wp.outline_width = ol_w;
 		wp.do_outline = do_ol;
 		f.worker.submit(f.snap_scratch.data(), cnt, wp);
@@ -631,7 +649,7 @@ class $modify(TrailRewriteHook, HardStreak) {
 
 		f.simple_last_x = pos.x;
 		f.simple_last_y = pos.y;
-		f.ring.push({pos.x, pos.y, f.game_time, f.seg_id});
+		f.ring.push({pos.x, pos.y, f.game_time, calc_width(), f.seg_id, 0});
 	}
 
 	void push_segmented(CCPoint pos) {
@@ -642,7 +660,7 @@ class $modify(TrailRewriteHook, HardStreak) {
 		if (f.seg_last_x == 0.0f && f.seg_last_y == 0.0f) {
 			f.seg_last_x = pos.x;
 			f.seg_last_y = pos.y;
-			f.ring.push({pos.x, pos.y, f.game_time, f.seg_id});
+			f.ring.push({pos.x, pos.y, f.game_time, calc_width(), f.seg_id, 0});
 			return;
 		}
 
@@ -656,6 +674,8 @@ class $modify(TrailRewriteHook, HardStreak) {
 		f.seg_last_x = pos.x;
 		f.seg_last_y = pos.y;
 
+		const float w = calc_width();
+
 		while (remaining > 0.0f) {
 			if (f.seg_in_gap) {
 				float space = seg_gap - f.seg_gap_dist;
@@ -668,20 +688,20 @@ class $modify(TrailRewriteHook, HardStreak) {
 					f.seg_gap_dist = 0.0f;
 					f.seg_accumulated = 0.0f;
 					f.seg_id++;
-					f.ring.push({pos.x, pos.y, f.game_time, f.seg_id});
+					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id, 0});
 				}
 			} else {
 				float space = seg_length - f.seg_accumulated;
 				if (remaining < space) {
 					f.seg_accumulated += remaining;
-					f.ring.push({pos.x, pos.y, f.game_time, f.seg_id});
+					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id, 0});
 					remaining = 0.0f;
 				} else {
 					remaining -= space;
 					f.seg_accumulated = 0.0f;
 					f.seg_in_gap = true;
 					f.seg_gap_dist = 0.0f;
-					f.ring.push({pos.x, pos.y, f.game_time, f.seg_id});
+					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id, 0});
 				}
 			}
 		}
@@ -735,6 +755,8 @@ class $modify(TrailRewriteHook, HardStreak) {
 			return;
 		}
 
+		auto inv = CCAffineTransformInvert(this->nodeToParentTransform());
+
 		ccColor3B c = this->getColor();
 		const float br = settings::get_float("trail-brightness");
 		if (br != 1.0f) {
@@ -744,7 +766,9 @@ class $modify(TrailRewriteHook, HardStreak) {
 		const ccColor4F fill_col = {c.r / 255.0f, c.g / 255.0f, c.b / 255.0f, opacity};
 
 		for (const auto& tri : geo->fill) {
-			CCPoint pts[3] = {tri.v[0], tri.v[1], tri.v[2]};
+			CCPoint pts[3] = {CCPointApplyAffineTransform(tri.v[0], inv),
+				CCPointApplyAffineTransform(tri.v[1], inv),
+				CCPointApplyAffineTransform(tri.v[2], inv)};
 			this->drawPolygon(pts, 3, fill_col, 0.0f, {0, 0, 0, 0});
 		}
 
@@ -767,12 +791,16 @@ class $modify(TrailRewriteHook, HardStreak) {
 				const ccColor4F oc = {gc.r / 255.0f, gc.g / 255.0f, gc.b / 255.0f, layer_a};
 
 				for (const auto& tri : geo->outline_upper) {
-					CCPoint pts[3] = {tri.v[0], tri.v[1], tri.v[2]};
+					CCPoint pts[3] = {CCPointApplyAffineTransform(tri.v[0], inv),
+						CCPointApplyAffineTransform(tri.v[1], inv),
+						CCPointApplyAffineTransform(tri.v[2], inv)};
 					this->drawPolygon(pts, 3, oc, 0.0f, {0, 0, 0, 0});
 				}
 
 				for (const auto& tri : geo->outline_lower) {
-					CCPoint pts[3] = {tri.v[0], tri.v[1], tri.v[2]};
+					CCPoint pts[3] = {CCPointApplyAffineTransform(tri.v[0], inv),
+						CCPointApplyAffineTransform(tri.v[1], inv),
+						CCPointApplyAffineTransform(tri.v[2], inv)};
 					this->drawPolygon(pts, 3, oc, 0.0f, {0, 0, 0, 0});
 				}
 			}
