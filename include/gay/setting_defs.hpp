@@ -6,9 +6,12 @@
 
 using ST = gay::SettingType;
 
-static constexpr std::string_view DISPLAY_MODE_CHOICES[] = {"Gay mode BABYYYYYYYY :3333", "straight mode."};
-static constexpr std::array SETTING_DISPLAY_INFO = {
+static constexpr std::string_view DISPLAY_MODE_CHOICES[] = {
+	"Gay mode BABYYYYYYYY :3333",
+	"straight mode.",
+};
 
+static constexpr std::array SETTING_DISPLAY_INFO = {
 	gay::SettingDisplayInfo {
 		"display-mode",
 		"Display Mode",
@@ -23,7 +26,14 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		1,
 		DISPLAY_MODE_CHOICES,
 	},
-	gay::SettingDisplayInfo {"enabled", "Gay Mode", "Turn the gay on/off", "Enable GWT", "Enable the mod", ST::Bool},
+	gay::SettingDisplayInfo {
+		"enabled",
+		"Gay Mode",
+		"Turn the gay on/off",
+		"Enable GWT",
+		"Enable the mod",
+		ST::Bool,
+	},
 	gay::SettingDisplayInfo {
 		"speed",
 		"rainbow road",
@@ -35,7 +45,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.0,
-		10.0
+		10.0,
 	},
 	gay::SettingDisplayInfo {
 		"disable-behind-streak",
@@ -44,6 +54,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Disable Regular Streak",
 		"Disables the secondary streak",
 		ST::Bool,
+
 		"",
 		"",
 		"",
@@ -59,7 +70,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.0,
-		100.0
+		100.0,
 	},
 	gay::SettingDisplayInfo {
 		"trail-brightness",
@@ -72,7 +83,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.0,
-		3.0
+		3.0,
 	},
 	gay::SettingDisplayInfo {
 		"sync-to-music",
@@ -80,7 +91,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"so in tune with rhythm you could say i'm... UNBEATABLE",
 		"Sync to Music",
 		"Ties color cycling to level time position",
-		ST::Bool
+		ST::Bool,
 	},
 
 	gay::SettingDisplayInfo {
@@ -90,9 +101,10 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Smooth Color Cycling",
 		"Smooths the transition between each color",
 		ST::Bool,
+
 		/*section_straight=*/"Colors",
 		/*section_gay=*/"the plus in LGBTQIA+ stands for RGB",
-		/*section_tooltip=*/"Control how the trail colors look and cycle."
+		/*section_tooltip=*/"Control how the trail colors look and cycle.",
 	},
 	gay::SettingDisplayInfo {
 		"enable-gaydient",
@@ -100,7 +112,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"it's a gradient... BUT GAY",
 		"Enable Gaydient",
 		"Enables the custom gradient and disables the base rainbow",
-		ST::Bool
+		ST::Bool,
 	},
 	gay::SettingDisplayInfo {
 		"gaydient-colors",
@@ -108,7 +120,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"\"you disrespect me, you disrespect my sexuality, and you expect to get a loan?\" - john gay",
 		"Gaydient Color List",
 		"The colors used for the custom gradient",
-		ST::ColorList
+		ST::ColorList,
 	},
 	gay::SettingDisplayInfo {
 		"separate-player-colors",
@@ -116,7 +128,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"you killed john gay and now the mafia has been dissolved. this is the result.",
 		"Independent Player Colors",
 		"Allow P1 and P2 to have different color cycles",
-		ST::Bool
+		ST::Bool,
 	},
 	gay::SettingDisplayInfo {
 		"p2-gaydient-colors",
@@ -124,7 +136,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"yeah i don't have a storyline for this one",
 		"P2 Gaydient Color List",
 		"The colors used for player 2's custom gradient",
-		ST::ColorList
+		ST::ColorList,
 	},
 
 	gay::SettingDisplayInfo {
@@ -134,17 +146,19 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Solid Trail",
 		"Makes the wave trail solid",
 		ST::Bool,
+
 		/*section_straight=*/"Trail Shape",
 		/*section_gay=*/"Size matters, but not as much as shape (iykyk)",
-		/*section_tooltip=*/"Adjust the physical dimensions and style of the wave trail."
+		/*section_tooltip=*/"Adjust the physical dimensions and style of the wave trail.",
 	},
 	gay::SettingDisplayInfo {
 		"rewrite-trail",
-		"built different...",
+		"built different... (VERY WIP, DOES NOT WORK WELL)",
 		"threw away the blueprint and started from scratch. custom geometry baby",
-		"Rewrite Trail",
+		"Rewrite Trail (VERY WIP, DOES NOT WORK WELL)",
 		"Replaces the default trail rendering with a custom draw pipeline",
-		ST::Bool
+		ST::Bool,
+
 	},
 	gay::SettingDisplayInfo {
 		"trail-size",
@@ -157,7 +171,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.1,
-		5.0
+		5.0,
 	},
 	gay::SettingDisplayInfo {
 		"pulse-size",
@@ -170,7 +184,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.0,
-		5.0
+		5.0,
 	},
 	gay::SettingDisplayInfo {
 		"disable-trail",
@@ -178,7 +192,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"how could you kill your trail, you're a monster.",
 		"Disable Wave Trail",
 		"Disables the wave trail completely",
-		ST::Bool
+		ST::Bool,
 	},
 	gay::SettingDisplayInfo {
 		"disable-pulse",
@@ -186,7 +200,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"idk what you did but it's not erect anymore",
 		"Disable Wave Pulse",
 		"Disables the wave trail pulse completely",
-		ST::Bool
+		ST::Bool,
 	},
 
 	gay::SettingDisplayInfo {
@@ -200,7 +214,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		/*section_gay=*/"i see through your mask. so you're jim carrey huh?",
 		/*section_tooltip=*/"Control how transparent the trail is, with optional fade effects.",
 		0,
-		255
+		255,
 	},
 	gay::SettingDisplayInfo {
 		"enable-trail-fade",
@@ -208,7 +222,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"fade out of existence",
 		"Trail Fade",
 		"Enables the trail fade-out effect",
-		ST::Bool
+		ST::Bool,
 	},
 	gay::SettingDisplayInfo {
 		"trail-fade-speed",
@@ -221,7 +235,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.0,
-		5.0
+		5.0,
 	},
 	gay::SettingDisplayInfo {
 		"trail-min-opacity",
@@ -234,7 +248,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0,
-		255
+		255,
 	},
 	gay::SettingDisplayInfo {
 		"persist-trail",
@@ -242,7 +256,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"immortality...",
 		"Persist Trail",
 		"Disables fading the wave trail out in portals",
-		ST::Bool
+		ST::Bool,
 	},
 
 	gay::SettingDisplayInfo {
@@ -252,9 +266,10 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Wave Outline",
 		"Enables an outline effect on the wave trail",
 		ST::Bool,
+
 		/*section_straight=*/"Outline",
 		/*section_gay=*/"Outline",
-		/*section_tooltip=*/"Add a colorful glow/outline around the wave trail."
+		/*section_tooltip=*/"Add a colorful glow/outline around the wave trail.",
 	},
 	gay::SettingDisplayInfo {
 		"wave-outline-width",
@@ -267,7 +282,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.0,
-		20.0
+		20.0,
 	},
 	gay::SettingDisplayInfo {
 		"wave-outline-blur",
@@ -280,7 +295,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0,
-		10
+		10,
 	},
 	gay::SettingDisplayInfo {
 		"wave-outline-opacity",
@@ -293,7 +308,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0,
-		255
+		255,
 	},
 	gay::SettingDisplayInfo {
 		"outline-colors",
@@ -301,7 +316,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"the RGB mafia boss body guards",
 		"Outline Color List",
 		"The colors used for the wave outline",
-		ST::ColorList
+		ST::ColorList,
 	},
 
 	gay::SettingDisplayInfo {
@@ -311,9 +326,10 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Tilted Trail",
 		"Enable/Disable wave trail tilting",
 		ST::Bool,
+
 		/*section_straight=*/"Tilt",
 		/*section_gay=*/"Tilt",
-		/*section_tooltip=*/"Offset the trail position diagonally for a tilted look."
+		/*section_tooltip=*/"Offset the trail position diagonally for a tilted look.",
 	},
 	gay::SettingDisplayInfo {
 		"tilt-x-offset",
@@ -326,7 +342,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		-50.0,
-		50.0
+		50.0,
 	},
 	gay::SettingDisplayInfo {
 		"tilt-y-offset",
@@ -339,7 +355,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		-50.0,
-		50.0
+		50.0,
 	},
 	gay::SettingDisplayInfo {
 		"trail-dashing",
@@ -347,7 +363,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"got doordash and the delivery boy was quite cute :3",
 		"Trail Dash Effect",
 		"Makes the wave icon rotate when dashing",
-		ST::Bool
+		ST::Bool,
 	},
 
 	gay::SettingDisplayInfo {
@@ -357,9 +373,11 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Segmented Trail",
 		"Breaks trail into discrete segments",
 		ST::Bool,
+
 		/*section_straight=*/"Segments",
 		/*section_gay=*/"Segments",
-		/*section_tooltip=*/"Break the wave trail into dashed segments with adjustable gap/length."
+		/*section_tooltip=*/
+		"Break the wave trail into dashed segments with adjustable gap/length.",
 	},
 	gay::SettingDisplayInfo {
 		"segment-length",
@@ -372,7 +390,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		1.0,
-		200.0
+		200.0,
 	},
 	gay::SettingDisplayInfo {
 		"segment-gap",
@@ -385,7 +403,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.0,
-		100.0
+		100.0,
 	},
 	gay::SettingDisplayInfo {
 		"segment-persist",
@@ -393,7 +411,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"eternally gaping...",
 		"Persist Trail Segments",
 		"Keeps trail segments visible through portals",
-		ST::Bool
+		ST::Bool,
 	},
 
 	gay::SettingDisplayInfo {
@@ -403,9 +421,11 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Add Min Width",
 		"Adds minimum width to the trail",
 		ST::Bool,
+
 		/*section_straight=*/"Thickness",
 		/*section_gay=*/"Thickness",
-		/*section_tooltip=*/"Make the trail thicker or vary its thickness based on movement speed."
+		/*section_tooltip=*/
+		"Make the trail thicker or vary its thickness based on movement speed.",
 	},
 	gay::SettingDisplayInfo {
 		"trail-thickness-variation",
@@ -413,7 +433,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"well, maybe i SHOULD give you a chance...",
 		"Dynamic Thickness",
 		"Makes trail thickness vary based on speed",
-		ST::Bool
+		ST::Bool,
 	},
 	gay::SettingDisplayInfo {
 		"thickness-multiplier",
@@ -426,7 +446,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"",
 		"",
 		0.0,
-		5.0
+		5.0,
 	},
 
 	gay::SettingDisplayInfo {
@@ -438,7 +458,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		ST::Bool,
 		/*section_straight=*/"Misc",
 		/*section_gay=*/"Misc",
-		/*section_tooltip=*/"Miscellaneous settings."
+		/*section_tooltip=*/"Miscellaneous settings.",
 	},
 	gay::SettingDisplayInfo {
 		"enable-pause-btn",
@@ -446,7 +466,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Show the button in pause menu",
 		"Enable Pause Menu Button",
 		"Enable the quick-settings button in the pause menu",
-		ST::Bool
+		ST::Bool,
 	},
 	gay::SettingDisplayInfo {
 		"verbose-logging",
@@ -454,6 +474,6 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		"Do a LOT of logging",
 		"Verbose Logging",
 		"Do a LOT of logging",
-		ST::Bool
-	}
+		ST::Bool,
+	},
 };

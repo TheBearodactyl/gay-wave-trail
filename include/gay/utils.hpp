@@ -1,11 +1,53 @@
 #pragma once
 
+#include <array>
+#include <atomic>
+#include <condition_variable>
+#include <deque>
+#include <mutex>
+#include <optional>
+#include <thread>
+#include <utility>
+#include <vector>
+
 #include <Geode/loader/Log.hpp>
 #include <Geode/loader/Mod.hpp>
 
 #include <fmt/base.h>
 
 using namespace geode::prelude;
+
+template<typename T>
+using Vec = std::vector<T>;
+
+template<typename T>
+using Deque = std::deque<T>;
+
+template<typename T, typename U>
+using Pair = std::pair<T, U>;
+
+template<typename T, size_t Size>
+using Array = std::array<T, Size>;
+
+template<typename T>
+using Option = std::optional<T>;
+
+template<typename T>
+using Atomic = std::atomic<T>;
+
+template<typename T>
+using LockGuard = std::lock_guard<T>;
+
+template<typename T>
+using UniqueLock = std::unique_lock<T>;
+
+#define to(type, var) static_cast<type>(var)
+
+using Mutex = std::mutex;
+using Thread = std::thread;
+using CondVar = std::condition_variable;
+
+#define None std::nullopt
 
 namespace gay::util {
 	enum class LogLevel {
@@ -77,7 +119,8 @@ namespace gay::util {
 					consecutive = 0;
 				}
 
-				if (ti == 0 || target[ti - 1] == ' ' || target[ti - 1] == '-' || target[ti - 1] == '_') {
+				if (ti == 0 || target[ti - 1] == ' ' || target[ti - 1] == '-' ||
+					target[ti - 1] == '_') {
 					score += 3;
 				}
 

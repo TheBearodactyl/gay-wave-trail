@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.0] - 2026-03-2
+
+### Added
+
+- The `Trail Rewrite` implementation is now multithreaded (the math is, nothing else though lol)
+
 ## [5.2.0] - 2026-03-1
 
 ### Added
