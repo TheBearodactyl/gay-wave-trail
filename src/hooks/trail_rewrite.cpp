@@ -18,7 +18,7 @@ static constexpr size_t RING_MASK = RING_CAP - 1;
 static constexpr float MITER_LIMIT = 4.0f;
 static constexpr float MIN_DIST = 0.1f;
 
-struct TrailPt {
+struct alignas(16) TrailPt {
 	float x;
 	float y;
 	float t;
@@ -105,105 +105,75 @@ namespace geom {
 		return std::sqrt(x * x + y * y);
 	}
 
-	static constexpr float OUTLINE_MITER_LIMIT = 2.0f;
-
-	static void miter(
-		const float* xs,
-		const float* ys,
-		const float* ws,
-		size_t i,
-		size_t n,
-		float half_w,
-		float miter_limit,
-		float& ox,
-		float& oy
-	) noexcept {
-		float hw = ws ? ws[i] : half_w;
-
-		float nx1 = 0;
-		float ny1 = 0;
-
-		if (i > 0) {
-			float dx = xs[i] - xs[i - 1];
-			float dy = ys[i] - ys[i - 1];
-			float ln = len(dx, dy);
-
-			if (ln > 1e-6f) {
-				nx1 = -dy / ln;
-				ny1 = dx / ln;
-			}
-		}
-
-		float nx2 = 0;
-		float ny2 = 0;
-
-		if (i + 1 < n) {
-			float dx = xs[i + 1] - xs[i];
-			float dy = ys[i + 1] - ys[i];
-			float ln = len(dx, dy);
-
-			if (ln > 1e-6f) {
-				nx2 = -dy / ln;
-				ny2 = dx / ln;
-			}
-		}
-
-		if (i == 0) {
-			ox = nx2 * hw;
-			oy = ny2 * hw;
-			return;
-		}
-
-		if (i + 1 == n) {
-			ox = nx1 * hw;
-			oy = ny1 * hw;
-			return;
-		}
-
-		float bx = nx1 + nx2;
-		float by = ny1 + ny2;
-		float bl = len(bx, by);
-
-		if (bl < 1e-4f) {
-			ox = nx1 * hw;
-			oy = ny1 * hw;
-			return;
-		}
-
-		bx /= bl;
-		by /= bl;
-
-		float cs = bx * nx1 + by * ny1;
-
-		if (cs < 1.0f / miter_limit) {
-			ox = nx1 * hw;
-			oy = ny1 * hw;
-			return;
-		}
-
-		float scale = hw / cs;
-
-		ox = bx * scale;
-		oy = by * scale;
-	}
-
 	static void build_offset(
 		const float* xs,
 		const float* ys,
 		const float* ws,
 		size_t n,
-		float half_w,
-		float miter_limit,
 		float* ux,
 		float* uy,
 		float* lx,
 		float* ly
 	) noexcept {
-		for (size_t i = 0; i < n; ++i) {
-			float ox;
-			float oy;
+		thread_local Vec<float> snx;
+		thread_local Vec<float> sny;
 
-			miter(xs, ys, ws, i, n, half_w, miter_limit, ox, oy);
+		const size_t segs = n - 1;
+		snx.resize(segs);
+		sny.resize(segs);
+
+		for (size_t i = 0; i < segs; ++i) {
+			float dx = xs[i + 1] - xs[i];
+			float dy = ys[i + 1] - ys[i];
+			float ln = len(dx, dy);
+
+			if (ln > 1e-6f) {
+				snx[i] = -dy / ln;
+				sny[i] = dx / ln;
+			} else {
+				snx[i] = 0.f;
+				sny[i] = 0.f;
+			}
+		}
+
+		for (size_t i = 0; i < n; ++i) {
+			const float nx1 = (i > 0) ? snx[i - 1] : 0.f;
+			const float ny1 = (i > 0) ? sny[i - 1] : 0.f;
+			const float nx2 = (i < segs) ? snx[i] : 0.f;
+			const float ny2 = (i < segs) ? sny[i] : 0.f;
+
+			const float hw = ws[i];
+			float ox, oy;
+
+			if (i == 0) {
+				ox = nx2 * hw;
+				oy = ny2 * hw;
+			} else if (i == segs) {
+				ox = nx1 * hw;
+				oy = ny1 * hw;
+			} else {
+				float bx = nx1 + nx2;
+				float by = ny1 + ny2;
+				float bl = len(bx, by);
+
+				if (bl < 1e-4f) {
+					ox = nx1 * hw;
+					oy = ny1 * hw;
+				} else {
+					bx /= bl;
+					by /= bl;
+					const float cs = bx * nx1 + by * ny1;
+
+					if (cs < 1.0f / MITER_LIMIT) {
+						ox = nx1 * hw;
+						oy = ny1 * hw;
+					} else {
+						const float scale = hw / cs;
+						ox = bx * scale;
+						oy = by * scale;
+					}
+				}
+			}
 
 			ux[i] = xs[i] + ox;
 			uy[i] = ys[i] + oy;
@@ -248,6 +218,7 @@ namespace geom {
 } // namespace geom
 
 struct WorkerParams {
+	float trail_width = 1.0f;
 	float outline_width = 0.0f;
 	bool do_outline = false;
 };
@@ -369,7 +340,6 @@ struct TrailWorker {
 		thread_local Vec<float> xs;
 		thread_local Vec<float> ys;
 		thread_local Vec<float> ws;
-		thread_local Vec<float> ows;
 		thread_local Vec<float> ux;
 		thread_local Vec<float> uy;
 		thread_local Vec<float> lx;
@@ -378,6 +348,8 @@ struct TrailWorker {
 		thread_local Vec<float> oy;
 		thread_local Vec<float> ix;
 		thread_local Vec<float> iy;
+
+		const float hw = p.trail_width;
 
 		size_t seg_start = 0;
 		uint32_t curr_seg = pts[0].seg;
@@ -409,8 +381,6 @@ struct TrailWorker {
 				ys.data(),
 				ws.data(),
 				n,
-				0.0f,
-				MITER_LIMIT,
 				ux.data(),
 				uy.data(),
 				lx.data(),
@@ -420,23 +390,22 @@ struct TrailWorker {
 			geom::emit_strip(out.fill, ux.data(), uy.data(), lx.data(), ly.data(), n);
 
 			if (p.do_outline && p.outline_width > 0.0f) {
-				ox.resize(n);
-				oy.resize(n);
-				ix.resize(n);
-				iy.resize(n);
-
+				thread_local Vec<float> ows;
 				ows.resize(n);
 				for (size_t k = 0; k < n; ++k) {
 					ows[k] = ws[k] + p.outline_width;
 				}
+
+				ox.resize(n);
+				oy.resize(n);
+				ix.resize(n);
+				iy.resize(n);
 
 				geom::build_offset(
 					xs.data(),
 					ys.data(),
 					ows.data(),
 					n,
-					0.0f,
-					geom::OUTLINE_MITER_LIMIT,
 					ox.data(),
 					oy.data(),
 					ix.data(),
@@ -615,11 +584,13 @@ class $modify(TrailRewriteHook, HardStreak) {
 		f.ring.cull_before(f.game_time - ttl);
 
 		const float opacity = calc_opacity(dt);
+		const float width = calc_width();
 		const bool do_ol = settings::get<bool>("wave-outline");
 		const float ol_w = do_ol ? to(float, settings::get<double>("wave-outline-width")) : 0.0f;
 		const size_t cnt = f.ring.snapshot(f.snap_scratch.data(), RING_CAP);
 
 		WorkerParams wp;
+		wp.trail_width = width;
 		wp.outline_width = ol_w;
 		wp.do_outline = do_ol;
 		f.worker.submit(f.snap_scratch.data(), cnt, wp);
@@ -649,7 +620,7 @@ class $modify(TrailRewriteHook, HardStreak) {
 
 		f.simple_last_x = pos.x;
 		f.simple_last_y = pos.y;
-		f.ring.push({pos.x, pos.y, f.game_time, calc_width(), f.seg_id, 0});
+		f.ring.push({pos.x, pos.y, f.game_time, calc_width(), f.seg_id});
 	}
 
 	void push_segmented(CCPoint pos) {
@@ -660,7 +631,7 @@ class $modify(TrailRewriteHook, HardStreak) {
 		if (f.seg_last_x == 0.0f && f.seg_last_y == 0.0f) {
 			f.seg_last_x = pos.x;
 			f.seg_last_y = pos.y;
-			f.ring.push({pos.x, pos.y, f.game_time, calc_width(), f.seg_id, 0});
+			f.ring.push({pos.x, pos.y, f.game_time, calc_width(), f.seg_id});
 			return;
 		}
 
@@ -688,20 +659,20 @@ class $modify(TrailRewriteHook, HardStreak) {
 					f.seg_gap_dist = 0.0f;
 					f.seg_accumulated = 0.0f;
 					f.seg_id++;
-					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id, 0});
+					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id});
 				}
 			} else {
 				float space = seg_length - f.seg_accumulated;
 				if (remaining < space) {
 					f.seg_accumulated += remaining;
-					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id, 0});
+					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id});
 					remaining = 0.0f;
 				} else {
 					remaining -= space;
 					f.seg_accumulated = 0.0f;
 					f.seg_in_gap = true;
 					f.seg_gap_dist = 0.0f;
-					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id, 0});
+					f.ring.push({pos.x, pos.y, f.game_time, w, f.seg_id});
 				}
 			}
 		}
@@ -749,62 +720,97 @@ class $modify(TrailRewriteHook, HardStreak) {
 		return base;
 	}
 
+	void reserve_buff(size_t needed) {
+		if (needed <= m_uBufferCapacity) {
+			return;
+		}
+
+		size_t cap = std::max(needed, size_t {64});
+		cap--;
+		cap |= cap >> 1;
+		cap |= cap >> 2;
+		cap |= cap >> 4;
+		cap |= cap >> 8;
+		cap |= cap >> 16;
+		cap |= cap >> 32;
+		cap++;
+
+		m_pBuffer = static_cast<ccV2F_C4B_T2F*>(malloc(cap * sizeof(ccV2F_C4B_T2F)));
+		m_uBufferCapacity = cap;
+	}
+
 	void draw_frame(float opacity, bool do_outline) {
 		const FrameGeo* geo = F().worker.get_frame();
 		if (!geo) {
 			return;
 		}
 
-		auto inv = CCAffineTransformInvert(this->nodeToParentTransform());
+		int layers = 1;
+		if (do_outline && (!geo->outline_upper.empty() || !geo->outline_lower.empty())) {
+			const auto blur = settings::get<double>("wave-outline-blur");
+			layers = (blur == 0.0) ? 1 : to(int, std::round(blur));
+		}
 
+		const size_t outline_tris = do_outline
+			? size_t(layers) * (geo->outline_upper.size() + geo->outline_lower.size())
+			: 0u;
+
+		reserve_buff((geo->fill.size() + outline_tris) * 3);
+
+		const auto inv = CCAffineTransformInvert(this->nodeToParentTransform());
+		const float ma = inv.a, mb = inv.b, mc = inv.c, md = inv.d, mtx = inv.tx, mty = inv.ty;
 		ccColor3B c = this->getColor();
 		const float br = settings::get_float("trail-brightness");
+
 		if (br != 1.0f) {
 			c = color::apply_brightness(c, br);
 		}
 
-		const ccColor4F fill_col = {c.r / 255.0f, c.g / 255.0f, c.b / 255.0f, opacity};
+		const ccColor4B fill_col = {c.r, c.g, c.b, static_cast<GLubyte>(opacity * 255.0f)};
+		ccV2F_C4B_T2F* dst = m_pBuffer;
+
+		auto write_tri = [&](const Triangle& tri, ccColor4B color) {
+			for (int k = 0; k < 3; ++k) {
+				const float px = tri.v[k].x, py = tri.v[k].y;
+				dst->vertices = {ma * px + mc * py + mtx, mb * px + md * py + mty};
+				dst->colors = color;
+				dst->texCoords = {0.f, 0.f};
+				++dst;
+			}
+		};
 
 		for (const auto& tri : geo->fill) {
-			CCPoint pts[3] = {CCPointApplyAffineTransform(tri.v[0], inv),
-				CCPointApplyAffineTransform(tri.v[1], inv),
-				CCPointApplyAffineTransform(tri.v[2], inv)};
-			this->drawPolygon(pts, 3, fill_col, 0.0f, {0, 0, 0, 0});
+			write_tri(tri, fill_col);
 		}
 
-		if (do_outline && (!geo->outline_upper.empty() || !geo->outline_lower.empty())) {
+		if (outline_tris > 0) {
 			const float phase = color::g_phase;
-			const auto blur = settings::get<double>("wave-outline-blur");
 			const float oa = to(float, settings::get<int>("wave-outline-opacity")) / 255.0f;
 			const auto colors = settings::get<gay::ColorList>("outline-colors");
-			int layers = (blur == 0.0) ? 1 : to(int, std::round(blur));
 
 			for (int layer = 0; layer < layers; ++layer) {
-				const float phase_off = to(float, layer) * 5.0f;
-				const auto gc = color::get_gradient(phase, phase_off, true, colors);
+				const auto gc =
+					color::get_gradient(phase, static_cast<float>(layer) * 5.0f, true, colors);
 				float layer_a = oa;
 
 				if (layers > 1) {
-					layer_a *= std::max(0.05f, 0.8f * to(float, std::pow(0.7, layer)));
+					layer_a *= std::max(0.05f, 0.8f * static_cast<float>(std::pow(0.7, layer)));
 				}
 
-				const ccColor4F oc = {gc.r / 255.0f, gc.g / 255.0f, gc.b / 255.0f, layer_a};
+				const ccColor4B oc = {gc.r, gc.g, gc.b, static_cast<GLubyte>(layer_a * 255.0f)};
 
 				for (const auto& tri : geo->outline_upper) {
-					CCPoint pts[3] = {CCPointApplyAffineTransform(tri.v[0], inv),
-						CCPointApplyAffineTransform(tri.v[1], inv),
-						CCPointApplyAffineTransform(tri.v[2], inv)};
-					this->drawPolygon(pts, 3, oc, 0.0f, {0, 0, 0, 0});
+					write_tri(tri, oc);
 				}
 
 				for (const auto& tri : geo->outline_lower) {
-					CCPoint pts[3] = {CCPointApplyAffineTransform(tri.v[0], inv),
-						CCPointApplyAffineTransform(tri.v[1], inv),
-						CCPointApplyAffineTransform(tri.v[2], inv)};
-					this->drawPolygon(pts, 3, oc, 0.0f, {0, 0, 0, 0});
+					write_tri(tri, oc);
 				}
 			}
 		}
+
+		m_nBufferCount = static_cast<unsigned int>(dst - m_pBuffer);
+		m_bDirty = true;
 	}
 
 	void reset_state() {

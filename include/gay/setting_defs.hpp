@@ -153,9 +153,9 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 	},
 	gay::SettingDisplayInfo {
 		"rewrite-trail",
-		"built different... (VERY WIP, DOES NOT WORK WELL)",
+		"built different...",
 		"threw away the blueprint and started from scratch. custom geometry baby",
-		"Rewrite Trail (VERY WIP, DOES NOT WORK WELL)",
+		"Rewrite Trail",
 		"Replaces the default trail rendering with a custom draw pipeline",
 		ST::Bool,
 

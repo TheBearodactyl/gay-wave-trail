@@ -8,7 +8,7 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
   "tags": ["offline", "customization", "enhancement"],
@@ -135,7 +135,7 @@
       "name": "Rewrite Trail",
       "type": "bool",
       "description": "Replaces the default trail rendering with a custom draw pipeline",
-      "default": false
+      "default": true
     },
     "trail-opacity": {
       "name": "Trail Opacity",
