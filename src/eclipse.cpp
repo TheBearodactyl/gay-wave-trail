@@ -61,23 +61,23 @@ static std::string config_key(const char* id) {
 }
 
 static components::Toggle register_bool(const char* id, MenuTab& tab) {
-    const auto ckey = config_key(id);
+	const auto ckey = config_key(id);
 
-    auto toggle = tab.addToggle(
-        ckey,
-        find_name(id),
-        [id, ckey](bool val) {
-            Mod::get()->setSettingValue<bool>(id, val);
-            config::set<bool>(ckey, val);
-        }
-    ).setDescription(find_desc(id));
+	auto toggle = tab.addToggle(
+						 ckey,
+						 find_name(id),
+						 [id, ckey](bool val) {
+							 Mod::get()->setSettingValue<bool>(id, val);
+							 config::set<bool>(ckey, val);
+						 }
+	).setDescription(find_desc(id));
 
-    config::set<bool>(ckey, Mod::get()->getSettingValue<bool>(id));
-    listenForSettingChanges<bool>(id, [id, ckey](bool) {
-        config::set<bool>(ckey, Mod::get()->getSettingValue<bool>(id));
-    });
+	config::set<bool>(ckey, Mod::get()->getSettingValue<bool>(id));
+	listenForSettingChanges<bool>(id, [id, ckey](bool) {
+		config::set<bool>(ckey, Mod::get()->getSettingValue<bool>(id));
+	});
 
-    return toggle;
+	return toggle;
 }
 
 static components::InputFloat register_float(
@@ -223,6 +223,7 @@ $on_mod(Loaded) {
 		register_bool("separate-player-colors", colors);
 
 		register_bool("solid-trail", shape);
+		register_bool("rewrite-trail", shape);
 		register_float("trail-size", shape, 0.1f, 5.f);
 		register_float("pulse-size", shape, 0.f, 5.f);
 		register_bool("disable-trail", shape);

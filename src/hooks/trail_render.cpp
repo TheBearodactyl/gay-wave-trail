@@ -118,7 +118,7 @@ struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
 			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
 		}
 
-		if (!settings::get<bool>("wave-outline")) {
+		if (!settings::get<bool>("wave-outline") || settings::get<bool>("rewrite-trail")) {
 			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
 		}
 

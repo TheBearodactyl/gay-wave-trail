@@ -18,8 +18,17 @@ namespace gay::color {
 	float g_phase = 0.0f;
 
 	GLubyte lerp_channel(GLubyte a, GLubyte b, float t) {
-		auto result = static_cast<GLubyte>(static_cast<int>(a) + static_cast<int>(static_cast<int>(b) - static_cast<int>(a)) * t);
-		gay::util::log(LogLevel::Debug, "[lerp_channel] a={} b={} t={:.4f} -> result={}", (int)a, (int)b, t, (int)result);
+		auto result = static_cast<GLubyte>(
+			static_cast<int>(a) + static_cast<int>(static_cast<int>(b) - static_cast<int>(a)) * t
+		);
+		gay::util::log(
+			LogLevel::Debug,
+			"[lerp_channel] a={} b={} t={:.4f} -> result={}",
+			(int)a,
+			(int)b,
+			t,
+			(int)result
+		);
 		return result;
 	}
 
@@ -30,7 +39,13 @@ namespace gay::color {
 		float x = c * (1.0f - std::abs(std::fmod(h / 60.0f, 2.0f) - 1.0f));
 		float m = v - c;
 
-		gay::util::log(LogLevel::Debug, "[hsv_to_rgb] computed c={:.4f} x={:.4f} m={:.4f}", c, x, m);
+		gay::util::log(
+			LogLevel::Debug,
+			"[hsv_to_rgb] computed c={:.4f} x={:.4f} m={:.4f}",
+			c,
+			x,
+			m
+		);
 
 		float r = 0.0f, g = 0.0f, b = 0.0f;
 
@@ -60,12 +75,16 @@ namespace gay::color {
 			b = x;
 		}
 
-		auto result = ccColor3B {
-			static_cast<GLubyte>((r + m) * 255.0f),
+		auto result = ccColor3B {static_cast<GLubyte>((r + m) * 255.0f),
 			static_cast<GLubyte>((g + m) * 255.0f),
-			static_cast<GLubyte>((b + m) * 255.0f)
-		};
-		gay::util::log(LogLevel::Debug, "[hsv_to_rgb] result rgb=({},{},{})", (int)result.r, (int)result.g, (int)result.b);
+			static_cast<GLubyte>((b + m) * 255.0f)};
+		gay::util::log(
+			LogLevel::Debug,
+			"[hsv_to_rgb] result rgb=({},{},{})",
+			(int)result.r,
+			(int)result.g,
+			(int)result.b
+		);
 		return result;
 	}
 
@@ -84,42 +103,79 @@ namespace gay::color {
 		}
 
 		if (clean.size() < 6) {
-			gay::util::log(LogLevel::Warn, "[hex_to_rgb] hex too short (size={}), returning white", clean.size());
+			gay::util::log(
+				LogLevel::Warn,
+				"[hex_to_rgb] hex too short (size={}), returning white",
+				clean.size()
+			);
 			return {255, 255, 255};
 		}
 
 		int value = geode::utils::numFromString<int>(std::string(clean), 16).unwrapOr(0);
 		gay::util::log(LogLevel::Debug, "[hex_to_rgb] parsed int value=0x{:06X}", value);
 
-		auto result = ccColor3B {
-			static_cast<GLubyte>((value >> 16) & 0xFF),
+		auto result = ccColor3B {static_cast<GLubyte>((value >> 16) & 0xFF),
 			static_cast<GLubyte>((value >> 8) & 0xFF),
-			static_cast<GLubyte>(value & 0xFF)
-		};
-		gay::util::log(LogLevel::Debug, "[hex_to_rgb] result rgb=({},{},{})", (int)result.r, (int)result.g, (int)result.b);
+			static_cast<GLubyte>(value & 0xFF)};
+		gay::util::log(
+			LogLevel::Debug,
+			"[hex_to_rgb] result rgb=({},{},{})",
+			(int)result.r,
+			(int)result.g,
+			(int)result.b
+		);
 		return result;
 	}
 
 	std::string rgb_to_hex(const ccColor3B& color) {
-		auto result = fmt::format("#{:02X}{:02X}{:02X}", static_cast<int>(color.r), static_cast<int>(color.g), static_cast<int>(color.b));
-		gay::util::log(LogLevel::Debug, "[rgb_to_hex] rgb=({},{},{}) -> '{}'", (int)color.r, (int)color.g, (int)color.b, result);
+		auto result = fmt::format(
+			"#{:02X}{:02X}{:02X}",
+			static_cast<int>(color.r),
+			static_cast<int>(color.g),
+			static_cast<int>(color.b)
+		);
+		gay::util::log(
+			LogLevel::Debug,
+			"[rgb_to_hex] rgb=({},{},{}) -> '{}'",
+			(int)color.r,
+			(int)color.g,
+			(int)color.b,
+			result
+		);
 		return result;
 	}
 
 	std::string rgb_to_hex(const ccColor4B& color) {
-		gay::util::log(LogLevel::Debug, "[rgb_to_hex (4B)] rgba=({},{},{},{})", (int)color.r, (int)color.g, (int)color.b, (int)color.a);
+		gay::util::log(
+			LogLevel::Debug,
+			"[rgb_to_hex (4B)] rgba=({},{},{},{})",
+			(int)color.r,
+			(int)color.g,
+			(int)color.b,
+			(int)color.a
+		);
 		return rgb_to_hex(ccColor3B {color.r, color.g, color.b});
 	}
 
 	ccColor3B get_rainbow(float offset, float saturation) {
-		gay::util::log(LogLevel::Debug, "[get_rainbow] offset={:.2f} saturation={:.2f} g_phase={:.2f}", offset, saturation, g_phase);
+		gay::util::log(
+			LogLevel::Debug,
+			"[get_rainbow] offset={:.2f} saturation={:.2f} g_phase={:.2f}",
+			offset,
+			saturation,
+			g_phase
+		);
 
 		constexpr float DEGREES_PER_SECTOR = 1.0f / 60.0f;
 		constexpr float PERCENT_TO_FRACT = 1.0f / 100.0f;
 
 		float hue = std::fmod(g_phase + offset, 360.0f);
 		if (hue < 0.0f) {
-			gay::util::log(LogLevel::Debug, "[get_rainbow] hue was negative ({:.2f}), wrapping", hue);
+			gay::util::log(
+				LogLevel::Debug,
+				"[get_rainbow] hue was negative ({:.2f}), wrapping",
+				hue
+			);
 			hue += 360.0f;
 		}
 		float chroma = saturation * PERCENT_TO_FRACT;
@@ -172,18 +228,26 @@ namespace gay::color {
 				b = intermediate;
 				break;
 			default:
-				gay::util::log(LogLevel::Warn, "[get_rainbow] unexpected sector_idx={}, falling back to sector 0 behavior", sector_idx);
+				gay::util::log(
+					LogLevel::Warn,
+					"[get_rainbow] unexpected sector_idx={}, falling back to sector 0 behavior",
+					sector_idx
+				);
 				r = chroma;
 				g = intermediate;
 				break;
 		}
 
-		auto result = ccColor3B {
-			static_cast<GLubyte>((r + match) * 255.0f),
+		auto result = ccColor3B {static_cast<GLubyte>((r + match) * 255.0f),
 			static_cast<GLubyte>((g + match) * 255.0f),
-			static_cast<GLubyte>((b + match) * 255.0f)
-		};
-		gay::util::log(LogLevel::Debug, "[get_rainbow] result rgb=({},{},{})", (int)result.r, (int)result.g, (int)result.b);
+			static_cast<GLubyte>((b + match) * 255.0f)};
+		gay::util::log(
+			LogLevel::Debug,
+			"[get_rainbow] result rgb=({},{},{})",
+			(int)result.r,
+			(int)result.g,
+			(int)result.b
+		);
 		return result;
 	}
 
@@ -197,10 +261,9 @@ namespace gay::color {
 			colors.colors.size()
 		);
 
-		auto clrs = colors.colors | std::views::filter([](const ColorEntry& e) {
-						return e.enabled;
-					}) |
-					std::ranges::to<std::vector>();
+		auto clrs = colors.colors |
+			std::views::filter([](const ColorEntry& e) { return e.enabled; }) |
+			std::ranges::to<std::vector>();
 
 		gay::util::log(LogLevel::Debug, "[get_gradient] enabled colors count={}", clrs.size());
 
@@ -210,14 +273,22 @@ namespace gay::color {
 		}
 
 		if (clrs.size() == 1) {
-			gay::util::log(LogLevel::Debug, "[get_gradient] single color '{}', returning it directly", clrs[0].hex);
+			gay::util::log(
+				LogLevel::Debug,
+				"[get_gradient] single color '{}', returning it directly",
+				clrs[0].hex
+			);
 			return hex_to_rgb(clrs[0].hex);
 		}
 
 		float normalized = std::fmodf(phase + offset, 360.0f);
 
 		if (normalized < 0.0f) {
-			gay::util::log(LogLevel::Debug, "[get_gradient] normalized was negative ({:.2f}), wrapping", normalized);
+			gay::util::log(
+				LogLevel::Debug,
+				"[get_gradient] normalized was negative ({:.2f}), wrapping",
+				normalized
+			);
 			normalized += 360.0f;
 		}
 
@@ -225,7 +296,11 @@ namespace gay::color {
 		float segment_size = 360.0f / static_cast<float>(count);
 		float segment_float = normalized / segment_size;
 		int current = static_cast<int>(segment_float) % count;
-		float t = std::clamp(segment_float - static_cast<float>(static_cast<int>(segment_float)), 0.0f, 1.0f);
+		float t = std::clamp(
+			segment_float - static_cast<float>(static_cast<int>(segment_float)),
+			0.0f,
+			1.0f
+		);
 		ccColor3B current_color = hex_to_rgb(clrs[current].hex);
 
 		gay::util::log(
@@ -248,7 +323,10 @@ namespace gay::color {
 		);
 
 		if (!smooth) {
-			gay::util::log(LogLevel::Debug, "[get_gradient] smooth=false, returning current color directly");
+			gay::util::log(
+				LogLevel::Debug,
+				"[get_gradient] smooth=false, returning current color directly"
+			);
 			return current_color;
 		}
 
@@ -269,7 +347,13 @@ namespace gay::color {
 			lerp_channel(current_color.g, next_color.g, t),
 			lerp_channel(current_color.b, next_color.b, t),
 		};
-		gay::util::log(LogLevel::Debug, "[get_gradient] interpolated result rgb=({},{},{})", (int)result.r, (int)result.g, (int)result.b);
+		gay::util::log(
+			LogLevel::Debug,
+			"[get_gradient] interpolated result rgb=({},{},{})",
+			(int)result.r,
+			(int)result.g,
+			(int)result.b
+		);
 		return result;
 	}
 
@@ -283,12 +367,16 @@ namespace gay::color {
 			brightness
 		);
 
-		auto result = ccColor3B {
-			static_cast<GLubyte>(std::min(255.0f, color.r * brightness)),
+		auto result = ccColor3B {static_cast<GLubyte>(std::min(255.0f, color.r * brightness)),
 			static_cast<GLubyte>(std::min(255.0f, color.g * brightness)),
-			static_cast<GLubyte>(std::min(255.0f, color.b * brightness))
-		};
-		gay::util::log(LogLevel::Debug, "[apply_brightness] result rgb=({},{},{})", (int)result.r, (int)result.g, (int)result.b);
+			static_cast<GLubyte>(std::min(255.0f, color.b * brightness))};
+		gay::util::log(
+			LogLevel::Debug,
+			"[apply_brightness] result rgb=({},{},{})",
+			(int)result.r,
+			(int)result.g,
+			(int)result.b
+		);
 		return result;
 	}
 } // namespace gay::color

@@ -7,25 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 5.1.4 - 2026-02-25
+## [5.2.0] - 2026-03-1
+
+### Added
+
+- Added new Trail Rewrite setting that enables the usage of a new fully custom implementation of the Wave Trail (WIP)
+
+### Changed
+
+- Upgrade to Geode v5.3.0
+
+## [5.1.4] - 2026-02-25
 
 ### Added
 
 - Now supports iOS
 
-## 5.1.3 - 2026-02-25
+## [5.1.3] - 2026-02-25
 
 ### Fixed
 
 - Redid Eclipse integration
 
-## 5.1.2 - 2026-02-24
+## [5.1.2] - 2026-02-24
 
 ### Added
 
 - Started on adding debug logging for the `verbose-logging` setting
 
-## 5.1.1 - 2026-02-24
+## [5.1.1] - 2026-02-24
 
 ### Changed
 
@@ -35,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Trail segmentation now somewhat works
 
-## 5.1.0 - 2026-02-24
+## [5.1.0] - 2026-02-24
 
 ### Changed
 

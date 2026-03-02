@@ -13,4 +13,7 @@ namespace gay {
 	static constexpr float CTRL_W = 140.0f;
 	static constexpr float CTRL_RIGHT_PAD = 6.0f;
 	static constexpr float RESET_BTN_WIDTH = 18.0f;
+
+	static constexpr float MAX_DT = 1.0f / 20.0f;
+	static constexpr size_t MAX_TRAIL_POINTS = 200000;
 } // namespace gay

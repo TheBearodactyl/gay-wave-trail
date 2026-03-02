@@ -139,6 +139,14 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		/*section_tooltip=*/"Adjust the physical dimensions and style of the wave trail."
 	},
 	gay::SettingDisplayInfo {
+		"rewrite-trail",
+		"built different...",
+		"threw away the blueprint and started from scratch. custom geometry baby",
+		"Rewrite Trail",
+		"Replaces the default trail rendering with a custom draw pipeline",
+		ST::Bool
+	},
+	gay::SettingDisplayInfo {
 		"trail-size",
 		"it's big...",
 		"size does in fact matte",
