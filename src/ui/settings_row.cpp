@@ -1,5 +1,4 @@
-
-
+#include <gay/api.hpp>
 #include <gay/color.hpp>
 #include <gay/constants.hpp>
 #include <gay/setting_defs.hpp>
@@ -14,20 +13,24 @@
 #include <matjson.hpp>
 
 using namespace geode::prelude;
+using gay::ext::RustStr;
 namespace rp = gay::color::rose_pine;
 using ST = gay::SettingType;
 using gay::util::rp_c4;
 
 class GwtChoiceDropdown: public CCLayerColor {
+	using CCLayerColor::init;
+
   protected:
-	std::vector<std::string_view> m_options;
-	int m_selected = 0;
+	Vec<std::string_view> m_options;
+	int32_t m_selected = 0;
 	std::function<void(int)> m_callback;
 
-	bool init(std::vector<std::string_view> opts, int sel, std::function<void(int)> cb, CCPoint anchor) {
+	bool init(Vec<std::string_view> opts, int sel, std::function<void(int)> cb, CCPoint anchor) {
 		if (!CCLayerColor::initWithColor({0, 0, 0, 0})) {
 			return false;
 		}
+
 		m_options = std::move(opts);
 		m_selected = sel;
 		m_callback = std::move(cb);
@@ -57,11 +60,12 @@ class GwtChoiceDropdown: public CCLayerColor {
 			auto* bg = NineSlice::create("square02b_small.png");
 			bg->setContentSize({IW, IH - 2.f});
 			bg->setColor(
-				i == m_selected ? ccColor3B {rp::pine.r, rp::pine.g, rp::pine.b} : ccColor3B {rp::overlay.r, rp::overlay.g, rp::overlay.b}
+				i == m_selected ? ccColor3B {rp::pine.r, rp::pine.g, rp::pine.b}
+								: ccColor3B {rp::overlay.r, rp::overlay.g, rp::overlay.b}
 			);
 			bg->setOpacity(200);
 
-			auto* lbl = CCLabelBMFont::create(std::string(m_options[i]).c_str(), "bigFont.fnt");
+			auto* lbl = CCLabelBMFont::create(RustStr(m_options[i]).as_ptr(), "bigFont.fnt");
 			lbl->setScale(0.28f);
 			lbl->setAnchorPoint({0.f, 0.5f});
 			lbl->setColor({rp::text.r, rp::text.g, rp::text.b});
@@ -98,7 +102,7 @@ class GwtChoiceDropdown: public CCLayerColor {
 	}
 
   public:
-	static GwtChoiceDropdown* create(std::vector<std::string_view> opts, int sel, std::function<void(int)> cb, CCPoint anchor) {
+	static GwtChoiceDropdown* create(Vec<std::string_view> opts, int sel, std::function<void(int)> cb, CCPoint anchor) {
 		auto* r = new GwtChoiceDropdown();
 		if (r->init(std::move(opts), sel, std::move(cb), anchor)) {
 			r->autorelease();
@@ -137,9 +141,11 @@ static CCSprite* make_small_arrow_spr(bool point_right) {
 }
 
 void GwtSettingRow::build_bool_control(float width) {
-	bool cur = m_popup ? m_popup->get_effective_value<bool>(m_setting_key) : Mod::get()->getSettingValue<bool>(m_setting_key);
+	bool cur =
+		m_popup ? m_popup->get_effective_value<bool>(m_setting_key) : Mod::get()->getSettingValue<bool>(m_setting_key);
 
-	auto* toggler = CCMenuItemToggler::createWithStandardSprites(this, menu_selector(GwtSettingRow::on_bool_toggle), 0.55f);
+	auto* toggler =
+		CCMenuItemToggler::createWithStandardSprites(this, menu_selector(GwtSettingRow::on_bool_toggle), 0.55f);
 
 	toggler->m_onButton->setContentSize({25.f, 25.f});
 	toggler->m_offButton->setContentSize({25.f, 25.f});
@@ -172,7 +178,8 @@ void GwtSettingRow::build_numeric_control(const gay::SettingDisplayInfo& info, f
 	m_arrow_right_spr = make_small_arrow_spr(true);
 	m_big_arrow_right_spr = make_big_arrow_spr(true);
 
-	m_big_arrow_left_btn = CCMenuItemSpriteExtra::create(m_big_arrow_left_spr, this, menu_selector(GwtSettingRow::on_arrow));
+	m_big_arrow_left_btn =
+		CCMenuItemSpriteExtra::create(m_big_arrow_left_spr, this, menu_selector(GwtSettingRow::on_arrow));
 	m_big_arrow_left_btn->setUserObject(ObjWrapper<double>::create(-big_step));
 	m_big_arrow_left_btn->setID("big-arrow-left-btn");
 
@@ -184,7 +191,8 @@ void GwtSettingRow::build_numeric_control(const gay::SettingDisplayInfo& info, f
 	m_arrow_right_btn->setUserObject(ObjWrapper<double>::create(+small_step));
 	m_arrow_right_btn->setID("arrow-right-btn");
 
-	m_big_arrow_right_btn = CCMenuItemSpriteExtra::create(m_big_arrow_right_spr, this, menu_selector(GwtSettingRow::on_arrow));
+	m_big_arrow_right_btn =
+		CCMenuItemSpriteExtra::create(m_big_arrow_right_spr, this, menu_selector(GwtSettingRow::on_arrow));
 	m_big_arrow_right_btn->setUserObject(ObjWrapper<double>::create(+big_step));
 	m_big_arrow_right_btn->setID("big-arrow-right-btn");
 
@@ -194,20 +202,23 @@ void GwtSettingRow::build_numeric_control(const gay::SettingDisplayInfo& info, f
 	m_num_input->setScale(0.7f);
 	m_num_input->setCommonFilter(CommonFilter::Any);
 
-	std::string key_cp = m_setting_key;
+	RustStr key_cp = m_setting_key;
 	GwtSettingsPopup* pp = m_popup;
 	double min_v = m_min_val, max_v = m_max_val;
-	m_num_input->setCallback([this, key_cp, is_int, pp, min_v, max_v](const std::string& s) {
-		if (s.empty() || s == "-" || s == "-." || s == ".") {
+	m_num_input->setCallback([this, key_cp, is_int, pp, min_v, max_v](const RustStr& s) {
+		if (s.is_empty() || s == "-" || s == "-." || s == ".") {
 			return;
 		}
 
 		if (is_int) {
 			auto r = geode::utils::numFromString<int64_t>(s);
+
 			if (!r.isOk()) {
 				return;
 			}
-			int64_t val = std::clamp(r.unwrap(), (int64_t)min_v, (int64_t)max_v);
+
+			int64_t val = std::clamp(r.unwrap(), static_cast<int64_t>(min_v), static_cast<int64_t>(max_v));
+
 			if (pp) {
 				pp->set_pending(key_cp, matjson::Value(val));
 			} else {
@@ -215,10 +226,13 @@ void GwtSettingRow::build_numeric_control(const gay::SettingDisplayInfo& info, f
 			}
 		} else {
 			auto r = geode::utils::numFromString<double>(s);
+
 			if (!r.isOk()) {
 				return;
 			}
+
 			double val = std::clamp(r.unwrap(), min_v, max_v);
+
 			if (pp) {
 				pp->set_pending(key_cp, matjson::Value(val));
 			} else {
@@ -266,10 +280,20 @@ void GwtSettingRow::build_colorlist_control(float width) {
 
 void GwtSettingRow::build_choice_control(const gay::SettingDisplayInfo& info, float width) {
 	m_choices.assign(info.choices.begin(), info.choices.end());
-	int64_t stored = m_popup ? m_popup->get_effective_value<int64_t>(m_setting_key) : Mod::get()->getSettingValue<int64_t>(m_setting_key);
+
+	if (info.key == "display-mode") {
+		for (const auto& cm : gay::api::get_custom_modes()) {
+			m_choices.push_back(cm.label);
+		}
+	}
+
+	int64_t stored = m_popup ? m_popup->get_effective_value<int64_t>(m_setting_key)
+							 : Mod::get()->getSettingValue<int64_t>(m_setting_key);
 	m_choice_index = (int)std::clamp<int64_t>(stored, 0, (int64_t)m_choices.size() - 1);
 
-	constexpr float DW = 140.f, DH = 22.f;
+	constexpr float DW = 140.f;
+	constexpr float DH = 22.f;
+
 	auto* bg = NineSlice::create("square02b_small.png");
 	bg->setContentSize({DW, DH});
 	bg->setColor({rp::base.r, rp::base.g, rp::base.b});
@@ -302,7 +326,12 @@ void GwtSettingRow::build_choice_control(const gay::SettingDisplayInfo& info, fl
 	update_choice_label();
 }
 
-bool GwtSettingRow::init(const gay::SettingDisplayInfo& info, gay::DisplayMode mode, float width, GwtSettingsPopup* popup) {
+bool GwtSettingRow::init(
+	const gay::SettingDisplayInfo& info,
+	gay::DisplayMode mode,
+	float width,
+	GwtSettingsPopup* popup
+) {
 	if (!CCNode::init()) {
 		return false;
 	}
@@ -352,9 +381,9 @@ bool GwtSettingRow::init(const gay::SettingDisplayInfo& info, gay::DisplayMode m
 	float h = getContentSize().height;
 	float cy = h / 2.f;
 
-	bool is_gay = (mode == gay::DisplayMode::Gay);
-	std::string_view name = is_gay ? info.gay_name : info.straight_name;
-	std::string_view desc = is_gay ? info.gay_desc : info.straight_desc;
+	let mt = gay::get_mode_text(info, static_cast<int>(mode));
+	std::string_view name = mt.name;
+	std::string_view desc = mt.desc;
 
 	constexpr float LABEL_PAD = 6.f;
 	float ctrl_left = width - gay::CTRL_W - gay::CTRL_RIGHT_PAD;
@@ -417,10 +446,14 @@ void GwtSettingRow::update_state(CCNode* invoker) {
 	}
 
 	bool is_int = (m_setting_type == ST::Int);
-	double cur =
-		is_int
-			? (double)(m_popup ? m_popup->get_effective_value<int64_t>(m_setting_key) : Mod::get()->getSettingValue<int64_t>(m_setting_key))
-			: (m_popup ? m_popup->get_effective_value<double>(m_setting_key) : Mod::get()->getSettingValue<double>(m_setting_key));
+	double cur = is_int ? double(
+							  m_popup ? m_popup->get_effective_value<int64_t>(m_setting_key)
+									  : Mod::get()->getSettingValue<int64_t>(m_setting_key)
+						  )
+						: double(
+							  m_popup ? m_popup->get_effective_value<double>(m_setting_key)
+									  : Mod::get()->getSettingValue<double>(m_setting_key)
+						  );
 
 	if (m_num_input && invoker != m_num_input) {
 		double rounded = std::round(cur * 100000.0) / 100000.0;
@@ -452,16 +485,18 @@ void GwtSettingRow::on_arrow(CCObject* sender) {
 
 	bool is_int = (m_setting_type == ST::Int);
 	if (is_int) {
-		int64_t cur = m_popup ? m_popup->get_effective_value<int64_t>(m_setting_key) : Mod::get()->getSettingValue<int64_t>(m_setting_key);
+		int64_t cur = m_popup ? m_popup->get_effective_value<int64_t>(m_setting_key)
+							  : Mod::get()->getSettingValue<int64_t>(m_setting_key);
 		int64_t next = cur + (int64_t)delta;
-		next = (int64_t)std::clamp((double)next, m_min_val, m_max_val);
+		next = (int64_t)std::clamp<double>((double)next, m_min_val, m_max_val);
 		if (m_popup) {
 			m_popup->set_pending(m_setting_key, matjson::Value(next));
 		} else {
 			Mod::get()->setSettingValue<int64_t>(m_setting_key, next);
 		}
 	} else {
-		double cur = m_popup ? m_popup->get_effective_value<double>(m_setting_key) : Mod::get()->getSettingValue<double>(m_setting_key);
+		double cur = m_popup ? m_popup->get_effective_value<double>(m_setting_key)
+							 : Mod::get()->getSettingValue<double>(m_setting_key);
 		double base = std::abs(delta) >= 1.0 ? 1.0 : 0.1;
 		double next = std::clamp(std::round((cur + delta) / base) * base, m_min_val, m_max_val);
 		if (m_popup) {
@@ -514,23 +549,27 @@ void GwtSettingRow::on_info_btn(CCObject* sender) {
 	if (!arr || arr->count() < 2) {
 		return;
 	}
-	FLAlertLayer::create(
-		nullptr,
+
+	MDPopup::create(
 		static_cast<CCString*>(arr->objectAtIndex(0))->getCString(),
 		static_cast<CCString*>(arr->objectAtIndex(1))->getCString(),
-		"OK",
-		nullptr,
-		300.f
+		"OK"
 	)
 		->show();
 }
 
 void GwtSettingRow::on_view_colors(CCObject*) {
-	auto colors =
-		m_popup ? m_popup->get_effective_value<gay::ColorList>(m_setting_key) : Mod::get()->getSettingValue<gay::ColorList>(m_setting_key);
-	std::string kc = m_setting_key;
-	GwtSettingsPopup* pp = m_popup;
-	ColorListPopup::create(colors.colors, [kc, pp](std::vector<gay::ColorEntry> nc) {
+	gay::ColorList colors;
+	let kc = m_setting_key;
+	let pp = m_popup;
+
+	if (m_popup) {
+		colors = m_popup->get_effective_value<gay::ColorList>(m_setting_key);
+	} else {
+		colors = gay::settings::get<gay::ColorList>(m_setting_key);
+	}
+
+	ColorListPopup::create(colors.colors, [kc, pp](Vec<gay::ColorEntry> nc) {
 		if (pp) {
 			pp->set_pending(kc, matjson::Serialize<gay::ColorList>::toJson({std::move(nc)}));
 		} else {
@@ -543,11 +582,12 @@ void GwtSettingRow::on_choice_dropdown(CCObject* sender) {
 	if (m_choices.empty()) {
 		return;
 	}
-	auto* btn = static_cast<CCNode*>(sender);
-	auto world = btn->convertToWorldSpace({btn->getContentSize().width, 0.f});
-	std::string kc = m_setting_key;
-	GwtSettingsPopup* pp = m_popup;
-	auto* dd = GwtChoiceDropdown::create(
+
+	let btn = static_cast<CCNode*>(sender);
+	let world = btn->convertToWorldSpace({btn->getContentSize().width, 0.f});
+	let kc = m_setting_key;
+	let pp = m_popup;
+	let dd = GwtChoiceDropdown::create(
 		m_choices,
 		m_choice_index,
 		[this, kc, pp](int idx) {
@@ -555,35 +595,47 @@ void GwtSettingRow::on_choice_dropdown(CCObject* sender) {
 			if (pp) {
 				pp->set_pending(kc, matjson::Value((int64_t)idx));
 			} else {
-				Mod::get()->setSettingValue<int64_t>(kc, (int64_t)idx);
+				gay::settings::set<int64_t>(kc, static_cast<int64_t>(idx));
 			}
+
 			update_choice_label();
 			update_reset_btn();
+
 			if (m_on_change) {
 				m_on_change();
 			}
 		},
 		world
 	);
+
 	CCDirector::sharedDirector()->getRunningScene()->addChild(dd, 9999);
 }
 
 void GwtSettingRow::on_reset(CCObject*) {
-	auto setting = Mod::get()->getSetting(m_setting_key);
+	let setting = Mod::get()->getSetting(m_setting_key);
+
 	if (!setting) {
 		return;
 	}
+
 	if (m_popup) {
 		m_popup->clear_pending(m_setting_key);
 	}
+
 	setting->reset();
 	update_reset_btn();
+
 	if (m_popup) {
 		m_popup->request_rebuild();
 	}
 }
 
-GwtSettingRow* GwtSettingRow::create(const gay::SettingDisplayInfo& info, gay::DisplayMode mode, float width, GwtSettingsPopup* popup) {
+GwtSettingRow* GwtSettingRow::create(
+	const gay::SettingDisplayInfo& info,
+	gay::DisplayMode mode,
+	float width,
+	GwtSettingsPopup* popup
+) {
 	auto* r = new GwtSettingRow();
 	if (r->init(info, mode, width, popup)) {
 		r->autorelease();

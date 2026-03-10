@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.4.1] - 2026-03-9
+
+### Added
+
+- New API for registering custom settings menu modes
+
+### Changed
+
+- Refactor the settings menu modes system to make it easier to add more modes
+
+## [5.4.0] - 2026-03-5
+
+### Added
+
+- New granular mode for the custom settings menu with lots of extremely specific settings for tuning
+- Different modes for the geometry of the custom wave trail rewrite
+- Add pulsing to the custom wave trail rewrite
+
+### Changed
+
+- Optimize the geometry builders
+
 ## [5.3.1] - 2026-03-2
 
 ### Fixed

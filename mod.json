@@ -8,10 +8,10 @@
   },
   "id": "the_bearodactyl.gay-wave-trail",
   "name": "Gay Wave Trail",
-  "version": "5.3.1",
+  "version": "5.4.1",
   "developer": "The Bearodactyl",
   "description": "make your wave (and kayla) a raging homosexual >:3",
-  "tags": ["offline", "customization", "enhancement"],
+  "tags": ["offline", "customization", "enhancement", "api"],
   "settings": {
     "main-section": {
       "type": "title",
@@ -188,6 +188,12 @@
       "type": "bool",
       "description": "Enables an outline effect on the wave trail",
       "default": false
+    },
+    "fix-outline-intersect": {
+      "name": "Fix Outline Intersections",
+      "type": "bool",
+      "default": false,
+      "description": "Fills the gaps between trail segments at bends with fan triangles, giving rounded joins. Off by default (sharp corners)."
     },
     "wave-outline-width": {
       "name": "Wave Outline Width",
@@ -468,13 +474,214 @@
       "name": "Display Mode",
       "type": "int",
       "default": 1,
-      "description": "0 = Gay mode, 1 = straight mode"
+      "min": 0,
+      "max": 100,
+      "description": "0 = Gay mode, 1 = straight mode, 2 = granular mode, 3+ = custom"
     },
     "verbose-logging": {
       "name": "Verbose logging",
       "type": "bool",
       "default": false,
       "description": "Enable verbose logging (for debugging purposes)"
+    },
+    "join-style": {
+      "name": "Corner Join Style",
+      "type": "int",
+      "default": 0,
+      "min": 0,
+      "max": 2,
+      "description": "Corner join style: 0 = Sharp (miter), 1 = Round (fan), 2 = None"
+    },
+    "miter-limit": {
+      "name": "Miter Limit",
+      "type": "float",
+      "default": 4.0,
+      "min": 1.0,
+      "max": 10.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.5,
+        "big-arrow-step": 1.0
+      },
+      "description": "Max miter extension before bevel fallback"
+    },
+    "min-point-distance": {
+      "name": "Min Point Distance",
+      "type": "float",
+      "default": 0.1,
+      "min": 0.01,
+      "max": 5.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.01,
+        "big-arrow-step": 0.1
+      },
+      "description": "Minimum distance between trail sample points"
+    },
+    "trail-length": {
+      "name": "Trail Length",
+      "type": "float",
+      "default": 2.5,
+      "min": 0.5,
+      "max": 30.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.5,
+        "big-arrow-step": 2.5
+      },
+      "description": "Trail time-to-live in seconds"
+    },
+    "speed-reference": {
+      "name": "Speed Reference",
+      "type": "float",
+      "default": 500.0,
+      "min": 100.0,
+      "max": 2000.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 50.0,
+        "big-arrow-step": 100.0
+      },
+      "description": "Reference speed for thickness variation"
+    },
+    "speed-smoothing": {
+      "name": "Speed Smoothing",
+      "type": "float",
+      "default": 0.12,
+      "min": 0.01,
+      "max": 1.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.01,
+        "big-arrow-step": 0.05
+      },
+      "description": "Exponential smoothing alpha for speed"
+    },
+    "speed-clamp-min": {
+      "name": "Speed Clamp Min",
+      "type": "float",
+      "default": 0.2,
+      "min": 0.0,
+      "max": 1.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.05,
+        "big-arrow-step": 0.1
+      },
+      "description": "Minimum speed factor clamp"
+    },
+    "speed-clamp-max": {
+      "name": "Speed Clamp Max",
+      "type": "float",
+      "default": 2.0,
+      "min": 1.0,
+      "max": 5.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.1,
+        "big-arrow-step": 0.5
+      },
+      "description": "Maximum speed factor clamp"
+    },
+    "fade-curve-factor": {
+      "name": "Fade Curve Factor",
+      "type": "float",
+      "default": 0.1,
+      "min": 0.01,
+      "max": 1.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.01,
+        "big-arrow-step": 0.05
+      },
+      "description": "Fade-out curve steepness"
+    },
+    "outline-blur-decay": {
+      "name": "Outline Blur Decay",
+      "type": "float",
+      "default": 0.7,
+      "min": 0.1,
+      "max": 1.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.05,
+        "big-arrow-step": 0.1
+      },
+      "description": "Per-layer opacity decay for blur"
+    },
+    "outline-color-spread": {
+      "name": "Outline Color Spread",
+      "type": "float",
+      "default": 5.0,
+      "min": 0.0,
+      "max": 30.0,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 1.0,
+        "big-arrow-step": 5.0
+      },
+      "description": "Phase spread between outline blur layers"
+    },
+    "trail-z-order": {
+      "name": "Trail Z-Order",
+      "type": "int",
+      "default": -1,
+      "min": -10,
+      "max": 10,
+      "control": {
+        "slider": false,
+        "input": true,
+        "arrows": true,
+        "big-arrows": false,
+        "arrow-step": 1
+      },
+      "description": "Z-order of the trail node"
+    },
+    "trail-fade-time-accumulation-modifier": {
+      "name": "Trail Fade Time Accumulation Modifier",
+      "description": "Modifier for trail fade time accumulation (multiplicitive)",
+      "type": "float",
+      "default": 1.0,
+      "min": -10.0,
+      "max": 10.0,
+      "control": {
+        "slider": true,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.5,
+        "big-arrow-step": 1.0
+      }
     }
   },
   "resources": {
@@ -491,6 +698,9 @@
       "version": ">=v1.8.0",
       "required": false
     }
+  },
+  "api": {
+    "include": ["include/*.hpp"]
   },
   "links": {
     "homepage": "https://bearodactyl.dev",

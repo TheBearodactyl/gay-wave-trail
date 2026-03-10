@@ -2,10 +2,9 @@
 
 #include <gay/color.hpp>
 #include <gay/settings.hpp>
+#include <gay/utils.hpp>
 
 #include <Geode/modify/PlayLayer.hpp>
-
-#include "gay/utils.hpp"
 
 using namespace geode::prelude;
 namespace settings = gay::settings;
@@ -41,7 +40,7 @@ struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 		color::g_phase = calc_phase(color::g_phase, speed, dt);
 
 		if (separate && use_gaydient) {
-			apply_separate_gradient(dt, speed);
+			apply_separate_gradient();
 		} else {
 			apply_shared_colors(use_gaydient);
 		}
@@ -51,7 +50,7 @@ struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 		PlayLayer::postUpdate(dt);
 	}
 
-	void apply_separate_gradient(float dt, float speed) {
+	void apply_separate_gradient() {
 		auto p1_colors = settings::get<gay::ColorList>("gaydient-colors");
 		auto p2_colors = settings::get<gay::ColorList>("p2-gaydient-colors");
 		bool smooth = settings::get<bool>("smooth-colors");
@@ -72,8 +71,8 @@ struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 		bool smooth = settings::get<bool>("smooth-colors");
 		auto gradient_colors = settings::get<gay::ColorList>("gaydient-colors");
 
-		auto color_p1 =
-			use_gaydient ? color::get_gradient(color::g_phase, 0.0f, smooth, gradient_colors) : color::get_rainbow(0.0f, saturation);
+		auto color_p1 = use_gaydient ? color::get_gradient(color::g_phase, 0.0f, smooth, gradient_colors)
+									 : color::get_rainbow(0.0f, saturation);
 
 		auto color_p2 = use_gaydient ? color::get_gradient(color::g_phase + 180.0f, 0.0f, smooth, gradient_colors)
 									 : color::get_rainbow(180.0f, saturation);

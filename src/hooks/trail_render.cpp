@@ -68,7 +68,7 @@ struct TrailFadeHook: Modify<TrailFadeHook, HardStreak> {
 			return;
 		}
 
-		int trail_opacity = settings::get<int>("trail-opacity");
+		int32_t trail_opacity = static_cast<int32_t>(settings::get<int64_t>("trail-opacity"));
 
 		if (!settings::get<bool>("enable-trail-fade")) {
 			this->setOpacity(static_cast<GLubyte>(trail_opacity));
@@ -77,11 +77,13 @@ struct TrailFadeHook: Modify<TrailFadeHook, HardStreak> {
 		}
 
 		float fade_speed = settings::get_float("trail-fade-speed");
-		int min_opacity = settings::get<int>("trail-min-opacity");
+		float accumulation_mod = settings::get_float("trail-fade-time-accumulation-modifier");
+		int32_t min_opacity = static_cast<int32_t>(settings::get<int64_t>("trail-min-opacity"));
 
-		m_fields->accumulated_time += dt * fade_speed;
+		m_fields->accumulated_time += dt * fade_speed * accumulation_mod;
 
-		int faded = static_cast<int>(static_cast<float>(trail_opacity) / (1.0f + m_fields->accumulated_time * 0.1f));
+		int32_t faded =
+			static_cast<int32_t>(static_cast<float>(trail_opacity) / (1.0f + m_fields->accumulated_time * 0.1f));
 		auto target = static_cast<GLubyte>(std::max(min_opacity, faded));
 
 		this->setOpacity(target);
@@ -111,7 +113,13 @@ struct RegularStreakHook: Modify<RegularStreakHook, PlayerObject> {
 };
 
 struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
-	bool drawPolygon(CCPoint* verts, unsigned int count, const ccColor4F& fill, float border_width, const ccColor4F& border) {
+	bool drawPolygon(
+		CCPoint* verts,
+		unsigned int count,
+		const ccColor4F& fill,
+		float border_width,
+		const ccColor4F& border
+	) {
 		HardStreak* streak = typeinfo_cast<HardStreak*>(this);
 
 		if (!streak) {
@@ -128,8 +136,8 @@ struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
 			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
 		}
 
-		bool is_wave_trail =
-			(pl->m_player1 && pl->m_player1->m_waveTrail == streak) || (pl->m_player2 && pl->m_player2->m_waveTrail == streak);
+		bool is_wave_trail = (pl->m_player1 && pl->m_player1->m_waveTrail == streak) ||
+			(pl->m_player2 && pl->m_player2->m_waveTrail == streak);
 
 		if (!is_wave_trail) {
 			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
@@ -141,8 +149,8 @@ struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
 
 		auto outline_width = settings::get<double>("wave-outline-width");
 		auto outline_colors = settings::get<gay::ColorList>("outline-colors");
-		auto blur_layers = settings::get<double>("wave-outline-blur");
-		auto outline_opacity = settings::get<int>("wave-outline-opacity");
+		auto blur_layers = settings::get<int64_t>("wave-outline-blur");
+		auto outline_opacity = settings::get<int64_t>("wave-outline-opacity");
 
 		this->setBlendFunc(CCSprite::create()->getBlendFunc());
 		this->setZOrder(-1);
@@ -156,17 +164,21 @@ struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
 			}
 		};
 
-		if (blur_layers == 0.0) {
+		if (blur_layers == 0) {
 			copy_verts();
 
-			float offset = static_cast<float>(outline_width) + (static_cast<float>(outline_width) / static_cast<float>(count));
+			float offset =
+				static_cast<float>(outline_width) + (static_cast<float>(outline_width) / static_cast<float>(count));
 			expanded[0].y -= offset;
 			expanded[3].y -= offset;
 			expanded[1].y += offset;
 			expanded[2].y += offset;
 
 			auto gc = color::get_gradient(phase, 0.0f, true, outline_colors);
-			ccColor4F outline_color = {gc.r / 255.0f, gc.g / 255.0f, gc.b / 255.0f, static_cast<float>(outline_opacity) / 255.0f};
+			ccColor4F outline_color = {gc.r / 255.0f,
+				gc.g / 255.0f,
+				gc.b / 255.0f,
+				static_cast<float>(outline_opacity) / 255.0f};
 
 			this->drawSegment(expanded[0], expanded[3], static_cast<float>(outline_width), outline_color);
 			this->drawSegment(expanded[1], expanded[2], static_cast<float>(outline_width), outline_color);
@@ -174,16 +186,19 @@ struct OutlineDrawHook: Modify<OutlineDrawHook, CCDrawNode> {
 			return CCDrawNode::drawPolygon(verts, count, fill, border_width, border);
 		}
 
-		int blur_count = static_cast<int>(std::round(blur_layers));
+		int32_t blur_count = static_cast<int32_t>(blur_layers);
 		float count_f = static_cast<float>(count);
 
-		for (int i = 0; i < blur_count; i++) {
+		for (int32_t i = 0; i < blur_count; i++) {
 			float layer_width = static_cast<float>(outline_width) * (1.0f + static_cast<float>(i) * 0.8f);
 			float opacity = std::max(0.05f, 0.8f * static_cast<float>(std::pow(0.7, i)));
 			float phase_offset = static_cast<float>(i) * 5.0f;
 
 			auto gc = color::get_gradient(phase, phase_offset, true, outline_colors);
-			ccColor4F glow = {gc.r / 255.0f, gc.g / 255.0f, gc.b / 255.0f, (static_cast<float>(outline_opacity) / 255.0f) * opacity};
+			ccColor4F glow = {gc.r / 255.0f,
+				gc.g / 255.0f,
+				gc.b / 255.0f,
+				(static_cast<float>(outline_opacity) / 255.0f) * opacity};
 
 			copy_verts();
 

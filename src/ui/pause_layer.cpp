@@ -26,19 +26,23 @@ class GwtSettingsRedirect: public CCNode {
 static geode::ListenerHandle s_settings_listener;
 
 $execute {
-	s_settings_listener = geode::ModPopupUIEvent().listen([](FLAlertLayer* popup, std::string_view mod_id, std::optional<Mod*>) -> bool {
-		if (mod_id != Mod::get()->getID() || !popup) {
-			return false;
-		}
-
-		if (auto* btn = popup->getChildByIDRecursive("settings-button")) {
-			if (auto* item = typeinfo_cast<CCMenuItemSpriteExtra*>(btn)) {
-				item->setTarget(GwtSettingsRedirect::shared(), menu_selector(GwtSettingsRedirect::on_open_settings));
+	s_settings_listener =
+		geode::ModPopupUIEvent().listen([](FLAlertLayer* popup, std::string_view mod_id, std::optional<Mod*>) -> bool {
+			if (mod_id != Mod::get()->getID() || !popup) {
+				return false;
 			}
-		}
 
-		return false;
-	});
+			if (auto* btn = popup->getChildByIDRecursive("settings-button")) {
+				if (auto* item = typeinfo_cast<CCMenuItemSpriteExtra*>(btn)) {
+					item->setTarget(
+						GwtSettingsRedirect::shared(),
+						menu_selector(GwtSettingsRedirect::on_open_settings)
+					);
+				}
+			}
+
+			return false;
+		});
 }
 
 class $modify(GwtPauseLayer, PauseLayer) {

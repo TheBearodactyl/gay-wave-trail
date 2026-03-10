@@ -19,10 +19,6 @@
 using namespace eclipse;
 using namespace geode::prelude;
 
-static bool is_gay_mode() {
-	return Mod::get()->getSettingValue<int64_t>("display-mode") == 0;
-}
-
 [[nodiscard]]
 static std::optional<const gay::SettingDisplayInfo*> find_info(std::string_view id) {
 	auto it = std::ranges::find_if(
@@ -41,7 +37,8 @@ static std::optional<const gay::SettingDisplayInfo*> find_info(std::string_view 
 [[nodiscard]]
 static std::string find_name(std::string_view id) {
 	if (auto info = find_info(id)) {
-		return std::string(is_gay_mode() ? (*info)->gay_name : (*info)->straight_name);
+		int mode_idx = static_cast<int>(Mod::get()->getSettingValue<int64_t>("display-mode"));
+		return std::string(gay::get_mode_text(**info, mode_idx).name);
 	}
 
 	return std::string(id);
@@ -50,7 +47,8 @@ static std::string find_name(std::string_view id) {
 [[nodiscard]]
 static std::string find_desc(std::string_view id) {
 	if (auto info = find_info(id)) {
-		return std::string(is_gay_mode() ? (*info)->gay_desc : (*info)->straight_desc);
+		int mode_idx = static_cast<int>(Mod::get()->getSettingValue<int64_t>("display-mode"));
+		return std::string(gay::get_mode_text(**info, mode_idx).desc);
 	}
 	return {};
 }

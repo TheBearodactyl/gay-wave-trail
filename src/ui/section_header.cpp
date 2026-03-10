@@ -14,8 +14,8 @@ bool GwtSectionHeader::init(std::string_view title, std::string_view tooltip, fl
 		return false;
 	}
 
-	m_header_title = std::string(title);
-	m_header_tooltip = std::string(tooltip);
+	m_header_title = title;
+	m_header_tooltip = tooltip;
 
 	constexpr float HEIGHT = 28.0f;
 	constexpr float INFO_BTN_RESERVED = 20.0f;
@@ -31,7 +31,7 @@ bool GwtSectionHeader::init(std::string_view title, std::string_view tooltip, fl
 
 	float info_reserved = tooltip.empty() ? 0.0f : INFO_BTN_RESERVED;
 
-	auto* label = CCLabelBMFont::create(m_header_title.c_str(), "bigFont.fnt");
+	auto* label = CCLabelBMFont::create(m_header_title.as_ptr(), "bigFont.fnt");
 	label->setID("header-label");
 	label->setColor(rp::gold);
 	label->setScale(0.48f);
@@ -84,7 +84,7 @@ bool GwtSectionHeader::init(std::string_view title, std::string_view tooltip, fl
 }
 
 void GwtSectionHeader::on_info_btn(CCObject*) {
-	FLAlertLayer::create(nullptr, m_header_title.c_str(), m_header_tooltip.c_str(), "OK", nullptr, 300.0f)->show();
+	FLAlertLayer::create(nullptr, m_header_title.as_ptr(), m_header_tooltip.as_ptr(), "OK", nullptr, 300.0f)->show();
 }
 
 GwtSectionHeader* GwtSectionHeader::create(std::string_view title, std::string_view tooltip, float width) {

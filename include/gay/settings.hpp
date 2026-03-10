@@ -4,6 +4,7 @@
 #include <utility>
 
 #include <gay/types.hpp>
+#include <gay/utils/extensions.hpp>
 
 #include <Geode/Geode.hpp>
 #include <Geode/loader/SettingV3.hpp>
@@ -18,6 +19,11 @@ namespace gay::settings {
 	template<typename T>
 	inline T get(std::string_view name) {
 		return geode::Mod::get()->getSettingValue<T>(std::string(name));
+	}
+
+	template<typename T>
+	inline T set(std::string_view name, T value) {
+		return geode::Mod::get()->setSettingValue<T>(std::string(name), value);
 	}
 
 	template<CheckMode Mode, typename... T>
@@ -70,7 +76,11 @@ struct matjson::Serialize<gay::ColorEntry> {
 			return geode::Err("Invalid ColorEntry JSON");
 		}
 		return geode::Ok(
-			gay::ColorEntry(value["hex"].asString().unwrap(), value["user_added"].asBool().unwrap(), value["enabled"].asBool().unwrap())
+			gay::ColorEntry(
+				value["hex"].asString().unwrap(),
+				value["user_added"].asBool().unwrap(),
+				value["enabled"].asBool().unwrap()
+			)
 		);
 	}
 

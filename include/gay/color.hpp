@@ -4,8 +4,11 @@
 #include <string_view>
 
 #include <gay/types.hpp>
+#include <gay/utils/extensions.hpp>
 
 #include <cocos2d.h>
+
+using gay::ext::RustStr;
 
 #define color(name, r, g, b) static constexpr cocos2d::ccColor3B name = {r, g, b}
 
@@ -13,8 +16,8 @@ namespace gay::color {
 	extern float g_phase;
 	cocos2d::ccColor3B hsv_to_rgb(float h, float s, float v);
 	cocos2d::ccColor3B hex_to_rgb(std::string_view hex_code);
-	std::string rgb_to_hex(const cocos2d::ccColor3B& color);
-	std::string rgb_to_hex(const cocos2d::ccColor4B& color);
+	RustStr rgb_to_hex(const cocos2d::ccColor3B& color);
+	RustStr rgb_to_hex(const cocos2d::ccColor4B& color);
 	cocos2d::ccColor3B get_rainbow(float offset, float saturation);
 	cocos2d::ccColor3B get_gradient(float phase, float offset, bool smooth, const ColorList& colors);
 	cocos2d::ccColor3B apply_brightness(const cocos2d::ccColor3B& color, float brightness);

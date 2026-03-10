@@ -5,11 +5,8 @@
 
 using namespace geode::prelude;
 
-Result<std::shared_ptr<SettingV3>> ColorListSetting::parse(
-	const std::string& key,
-	const std::string& mod_id,
-	const matjson::Value& json
-) {
+Result<std::shared_ptr<SettingV3>>
+ColorListSetting::parse(const std::string& key, const std::string& mod_id, const matjson::Value& json) {
 	auto ret = std::make_shared<ColorListSetting>();
 	auto root = checkJson(json, "ColorListSetting");
 
@@ -36,8 +33,7 @@ bool ColorListSettingNode::init(std::shared_ptr<ColorListSetting> setting, float
 	auto* view_spr = ButtonSprite::create("View");
 	view_spr->setScale(0.72f);
 
-	auto* view_btn =
-		CCMenuItemSpriteExtra::create(view_spr, this, menu_selector(ColorListSettingNode::on_view));
+	auto* view_btn = CCMenuItemSpriteExtra::create(view_spr, this, menu_selector(ColorListSettingNode::on_view));
 	view_btn->setPosition(width - 40.f, HEIGHT - 20.f);
 
 	menu->addChild(view_btn);
@@ -54,8 +50,7 @@ void ColorListSettingNode::on_view(cocos2d::CCObject*) {
 	})->show();
 }
 
-ColorListSettingNode*
-ColorListSettingNode::create(std::shared_ptr<ColorListSetting> setting, float width) {
+ColorListSettingNode* ColorListSettingNode::create(std::shared_ptr<ColorListSetting> setting, float width) {
 	auto* ret = new ColorListSettingNode();
 	if (ret->init(std::move(setting), width)) {
 		ret->autorelease();
@@ -66,8 +61,5 @@ ColorListSettingNode::create(std::shared_ptr<ColorListSetting> setting, float wi
 }
 
 SettingNodeV3* ColorListSetting::createNode(float width) {
-	return ColorListSettingNode::create(
-		std::static_pointer_cast<ColorListSetting>(shared_from_this()),
-		width
-	);
+	return ColorListSettingNode::create(std::static_pointer_cast<ColorListSetting>(shared_from_this()), width);
 }

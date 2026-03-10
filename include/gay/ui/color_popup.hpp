@@ -1,9 +1,9 @@
 #pragma once
 
+#include <gay/types.hpp>
+
 #include <Geode/Geode.hpp>
 #include <Geode/ui/Popup.hpp>
-
-#include <gay/types.hpp>
 
 class ColorListPopup: public geode::Popup {
   protected:
@@ -18,5 +18,6 @@ class ColorListPopup: public geode::Popup {
 	void onClose(cocos2d::CCObject*) override;
 
   public:
-	static ColorListPopup* create(std::vector<gay::ColorEntry>, const std::function<void(std::vector<gay::ColorEntry>)>&);
+	static ColorListPopup*
+	create(std::vector<gay::ColorEntry>, const std::function<void(std::vector<gay::ColorEntry>)>&);
 };

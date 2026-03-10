@@ -7,7 +7,10 @@
 
 using namespace geode::prelude;
 
-bool ColorListPopup::setup(std::vector<gay::ColorEntry> entries, std::function<void(std::vector<gay::ColorEntry>)> callback) {
+bool ColorListPopup::setup(
+	std::vector<gay::ColorEntry> entries,
+	std::function<void(std::vector<gay::ColorEntry>)> callback
+) {
 	m_entries = std::move(entries);
 	m_callback = std::move(callback);
 
@@ -24,8 +27,11 @@ bool ColorListPopup::setup(std::vector<gay::ColorEntry> entries, std::function<v
 	menu->setID("add-color-menu");
 	menu->addChild(add_btn);
 	menu->setZOrder(1);
-	m_mainLayer
-		->addChildAtPosition(menu, Anchor::BottomRight, {-5.f - add_btn->getContentWidth() / 2.f, 8.f + add_btn->getContentHeight() / 2.f});
+	m_mainLayer->addChildAtPosition(
+		menu,
+		Anchor::BottomRight,
+		{-5.f - add_btn->getContentWidth() / 2.f, 8.f + add_btn->getContentHeight() / 2.f}
+	);
 
 	return true;
 }
@@ -59,8 +65,7 @@ void ColorListPopup::create_list() {
 					create_list();
 				}
 			},
-			[] {
-			},
+			[] {},
 			{320.f - PAD * 2, 35.f}
 		);
 
@@ -88,8 +93,10 @@ void ColorListPopup::on_add(CCObject*) {
 	create_list();
 }
 
-ColorListPopup*
-ColorListPopup::create(std::vector<gay::ColorEntry> colors, const std::function<void(std::vector<gay::ColorEntry>)>& callback) {
+ColorListPopup* ColorListPopup::create(
+	std::vector<gay::ColorEntry> colors,
+	const std::function<void(std::vector<gay::ColorEntry>)>& callback
+) {
 	auto* r = new ColorListPopup();
 
 	if (r->init(320.f, 240.f, "GJ_square01.png")) {

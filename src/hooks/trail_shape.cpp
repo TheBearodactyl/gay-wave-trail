@@ -1,4 +1,3 @@
-#include <cmath>
 #include <unordered_set>
 
 #include <gay/settings.hpp>
@@ -57,7 +56,8 @@ struct ThicknessHook: Modify<ThicknessHook, PlayLayer> {
 	void postUpdate(float dt) override {
 		PlayLayer::postUpdate(dt);
 
-		if (!settings::is_enabled() || !settings::get<bool>("trail-thickness-variation") || settings::get<bool>("disable-pulse")) {
+		if (!settings::is_enabled() || !settings::get<bool>("trail-thickness-variation") ||
+			settings::get<bool>("disable-pulse")) {
 			return;
 		}
 
@@ -138,7 +138,8 @@ struct SegmentsStreakHook: Modify<SegmentsStreakHook, HardStreak> {
 		SegmentState* state = nullptr;
 		if (play_layer->m_player1 && play_layer->m_player1->m_waveTrail && this == play_layer->m_player1->m_waveTrail) {
 			state = &s_segment_p1;
-		} else if (play_layer->m_player2 && play_layer->m_player2->m_waveTrail && this == play_layer->m_player2->m_waveTrail) {
+		} else if (play_layer->m_player2 && play_layer->m_player2->m_waveTrail &&
+			this == play_layer->m_player2->m_waveTrail) {
 			state = &s_segment_p2;
 		}
 

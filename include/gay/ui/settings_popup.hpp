@@ -1,9 +1,12 @@
 #pragma once
 
+#include <array>
 #include <span>
 #include <string>
 #include <string_view>
 #include <unordered_map>
+
+#include <gay/utils.hpp>
 
 #include <Geode/Geode.hpp>
 #include <Geode/binding/Slider.hpp>
@@ -15,6 +18,8 @@
 
 #include <matjson.hpp>
 
+using gay::ext::RustStr;
+
 namespace gay {
 	enum class SettingType {
 		Bool,
@@ -24,33 +29,47 @@ namespace gay {
 		Choice
 	};
 
+	enum class DisplayMode : int {
+		Gay = 0,
+		Straight = 1,
+		Granular = 2,
+		_BuiltinCount = 3
+	};
+
+	struct ModeText {
+		std::string_view name;
+		std::string_view desc;
+	};
+
+	struct SectionInfo {
+		std::string_view key;
+		std::array<std::string_view, 3> titles;
+		std::string_view tooltip = "";
+	};
+
 	struct SettingDisplayInfo {
 		std::string_view key;
-		std::string_view gay_name;
-		std::string_view gay_desc;
-		std::string_view straight_name;
-		std::string_view straight_desc;
 		SettingType type;
-		std::string_view section_straight = "";
-		std::string_view section_gay = "";
-		std::string_view section_tooltip = "";
+		std::array<ModeText, 3> mode_text;
+		std::string_view section_key = "";
 		double min_val = 0.0;
 		double max_val = 10.0;
 		std::span<const std::string_view> choices = {};
+		bool granular_only = false;
 	};
 
-	enum class DisplayMode : int {
-		Gay = 0,
-		Straight = 1
-	};
+	ModeText get_mode_text(const SettingDisplayInfo& info, int mode_idx);
+	std::string_view get_section_title(const SectionInfo& section, int mode_idx);
 } // namespace gay
 
 class GwtSettingsPopup;
 
 class GwtSectionHeader: public cocos2d::CCNode {
+	using cocos2d::CCNode::init;
+
   protected:
-	std::string m_header_title;
-	std::string m_header_tooltip;
+	RustStr m_header_title;
+	RustStr m_header_tooltip;
 
 	bool init(std::string_view title, std::string_view tooltip, float width);
 	void on_info_btn(cocos2d::CCObject*);
@@ -60,8 +79,10 @@ class GwtSectionHeader: public cocos2d::CCNode {
 };
 
 class GwtSettingRow: public cocos2d::CCNode {
+	using cocos2d::CCNode::init;
+
   protected:
-	std::string m_setting_key;
+	RustStr m_setting_key;
 	gay::SettingType m_setting_type = gay::SettingType::Bool;
 	std::function<void()> m_on_change;
 	CCMenuItemSpriteExtra* m_reset_btn = nullptr;
@@ -83,7 +104,7 @@ class GwtSettingRow: public cocos2d::CCNode {
 	double m_max_val = 10.0;
 
 	std::vector<std::string_view> m_choices;
-	int m_choice_index = 0;
+	int32_t m_choice_index = 0;
 	cocos2d::CCLabelBMFont* m_choice_label = nullptr;
 
 	bool init(const gay::SettingDisplayInfo& info, gay::DisplayMode mode, float width, GwtSettingsPopup* popup);
@@ -108,7 +129,8 @@ class GwtSettingRow: public cocos2d::CCNode {
 	double value_from_slider(float t) const;
 
   public:
-	static GwtSettingRow* create(const gay::SettingDisplayInfo& info, gay::DisplayMode mode, float width, GwtSettingsPopup* popup);
+	static GwtSettingRow*
+	create(const gay::SettingDisplayInfo& info, gay::DisplayMode mode, float width, GwtSettingsPopup* popup);
 
 	void set_on_change(std::function<void()> cb) {
 		m_on_change = std::move(cb);

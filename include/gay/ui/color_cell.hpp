@@ -1,13 +1,15 @@
 #pragma once
 
+#include <gay/types.hpp>
+
 #include <Geode/Geode.hpp>
 #include <Geode/binding/CCMenuItemToggler.hpp>
-
-#include <gay/types.hpp>
 
 class ColorListPopup;
 
 class ColorCell: public cocos2d::CCNode {
+	using cocos2d::CCNode::init;
+
   protected:
 	ColorListPopup* m_parent_popup;
 	gay::ColorEntry* m_entry;
