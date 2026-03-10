@@ -12,8 +12,10 @@ namespace color = gay::color;
 
 struct ColorApplyHook: Modify<ColorApplyHook, PlayLayer> {
 	float calc_phase(float phase, float speed, float dt) {
+		float phase_calc_speed_modifier = settings::get_float("phase-calc-speed-modifier");
+
 		gay::util::debug("[ColorApplyHook::calc_phase]: {{phase: {}, speed: {}, dt: {}}}", phase, speed, dt);
-		return std::fmod(phase + (speed * 60.0f * dt), 360.0f);
+		return std::fmod(phase + (speed * phase_calc_speed_modifier * dt), 360.0f);
 	}
 
 	void postUpdate(float dt) override {

@@ -682,6 +682,22 @@
         "arrow-step": 0.5,
         "big-arrow-step": 1.0
       }
+    },
+    "phase-calc-speed-modifier": {
+      "name": "Phase calculation speed modifier (multiplicitive)",
+      "description": "Modifier for the color phase when applying the rainbow/gaydient",
+      "type": "float",
+      "default": 60.0,
+      "min": 0.1,
+      "max": 1024.0,
+      "control": {
+        "slider": true,
+        "input": true,
+        "arrows": true,
+        "big-arrows": true,
+        "arrow-step": 0.5,
+        "big-arrow-step": 3.0
+      }
     }
   },
   "resources": {

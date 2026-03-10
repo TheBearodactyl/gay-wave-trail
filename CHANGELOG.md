@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Added to `support.md`
+
 ## [5.4.1] - 2026-03-9
 
 ### Added
@@ -81,6 +85,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [5.1.0] - 2026-02-24
 
+### Added
+
+- New "Disable Regular Streak" setting
+- New setting for verbose logging
+
 ### Changed
 
 - `src/ui.cpp` is now separated into multiple files instead of being a single 1k line file
@@ -93,16 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "Trail Outline" should be much more consistent now
 - "Persist Trail" now works for real lmao
 
-### Added
-
-- New "Disable Regular Streak" setting
-- New setting for verbose logging
-
 ## [5.0.0] - 2026-02-22
-
-### Fixed
-
-- Update to Geode V5
 
 ### Added
 
@@ -115,6 +115,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove CMake code for enabling `-Wall -Wextra -Wpedantic`
 - Refactor so that there's less files
+
+### Fixed
+
+- Update to Geode V5
 
 ## [4.3.3] - 2025-10-21
 
@@ -142,3 +146,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Trail outline being janky
+
