@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed P1 being a cracker when the gaydient is enabled
+
+## [5.4.5] - 2026-03-11
+
+### Fixed
+
+- Fixed P1 being a cracker when the gaydient is enabled
+
 ## [5.4.4] - 2026-03-10
 
 ### Added
@@ -176,3 +186,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Trail outline being janky
+
