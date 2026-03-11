@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.4.3] - 2026-03-10
+
+### Changed
+
+- Insult generator is now only pseudorandom
+
+### Removed
+
+- Removed the truerand system :(
+
+## [5.4.2] - 2026-03-10
+
 ### Added
 
 - Add new granular `phase-calc-speed-modifier` setting
@@ -17,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Added to `support.md`
+- Bump version to 5.4.2
 
 ## [5.4.1] - 2026-03-9
 

@@ -426,6 +426,14 @@ void GwtSettingsPopup::clear_pending(const std::string& key) {
 	update_apply_btn();
 }
 
+std::string_view rand_insult() {
+	std::mt19937 generator(std::random_device {}());
+	std::uniform_int_distribution<std::size_t> distribution(0, INSULTS_FOR_DUMBASSES.size() - 1);
+	std::size_t num = distribution(generator);
+
+	return INSULTS_FOR_DUMBASSES[num];
+}
+
 void GwtSettingsPopup::maybe_show_granular_warning() {
 	let mode = static_cast<gay::DisplayMode>(get_effective_value<int64_t>("display-mode"));
 
@@ -439,7 +447,7 @@ void GwtSettingsPopup::maybe_show_granular_warning() {
 
 	Mod::get()->setSavedValue("seen-granular-warning", true);
 
-	auto insult = fmt::format("then tough luck you {}", gay::util::trand::pick(INSULTS_FOR_DUMBASSES));
+	auto insult = fmt::format("then tough luck you {}", rand_insult());
 
 	MDPopup::create(
 		"Granular Mode",
