@@ -6,40 +6,185 @@
 
 using ST = gay::SettingType;
 
+// thank you urban dictionary
 static constexpr std::array INSULTS_FOR_DUMBASSES = {
-	"dingbat",
-	"fool",
-	"doofus",
-	"uncultured swine",
-	"drunkard",
-	"peter griffin",
-	"doorknob",
-	"flivver",
-	"floudering fish",
-	"laxidaisical bufoon",
-	"thoosie",
-	"velvet hippo",
-	"citizen of France",
-	"cabbage",
-	"chudling",
-	"britbong",
-	"lanklet",
-	"sephora kid",
-	"twinkfoot",
-	"gomer",
-	"pizza bones",
-	"clanker",
-	"Splenda Daddy",
-	"carbrain",
-	"clanker",
-	"unc",
-	"Etsy Witch",
-	"doomba",
-	"neden",
-	"juggahoe",
-	"wang",
-	"scrub",
-	"nugbone",
+	gay::Insult {
+		.text = "dingbat",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "fool",
+		.weight = 0.5,
+	},
+	gay::Insult {
+		.text = "doofus",
+		.weight = 0.5,
+	},
+	gay::Insult {
+		.text = "uncultured swine",
+		.weight = 0.9,
+	},
+	gay::Insult {
+		.text = "drunkard",
+		.weight = 0.3,
+	},
+	gay::Insult {
+		.text = "peter griffin",
+		.weight = 0.1,
+	},
+	gay::Insult {
+		.text = "doorknob",
+		.weight = 0.6,
+	},
+	gay::Insult {
+		.text = "flivver",
+		.weight = 0.9,
+	},
+	gay::Insult {
+		.text = "floudering fish",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "laxidaisical bufoon",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "thoosie",
+		.weight = 0.9,
+	},
+	gay::Insult {
+		.text = "velvet hippo",
+		.weight = 0.64,
+	},
+	gay::Insult {
+		.text = "citizen of France",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "cabbage",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "chudling",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "britbong",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "lanklet",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "sephora kid",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "twinkfoot",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "gomer",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "pizza bones",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "clanker",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "Splenda Daddy",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "carbrain",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "clanker",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "unc",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "Etsy Witch",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "doomba",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "neden",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "juggahoe",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "wang",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "scrub",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "nugbone",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "big poopy head",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text =
+			"low down, good for nothin, deplorable, contemptible, despicable, loathsome, detestable...ignominious nitwit",
+		.weight = 10e-16
+	},
+	gay::Insult {
+		.text = "chronic geode user",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "Minecraft Youtuber",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "white republican cis-het christian man",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "twitter crypto bot",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "john",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "bocker",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "tank",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "idiot sandwhich",
+		.weight = 1.0,
+	},
+	gay::Insult {
+		.text = "donut",
+		.weight = 1.0,
+	}
 };
 
 static constexpr std::string_view DISPLAY_MODE_CHOICES[] = {
@@ -1013,7 +1158,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		0,
 		2,
 		JOIN_STYLE_CHOICES,
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"miter-limit",
@@ -1036,7 +1181,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		1.0,
 		10.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"min-point-distance",
@@ -1059,7 +1204,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		0.01,
 		5.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"trail-length",
@@ -1082,7 +1227,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		0.5,
 		30.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"speed-reference",
@@ -1105,7 +1250,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		100.0,
 		2000.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"speed-smoothing",
@@ -1128,7 +1273,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		0.01,
 		1.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"speed-clamp-min",
@@ -1151,7 +1296,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		0.0,
 		1.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"speed-clamp-max",
@@ -1174,7 +1319,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		1.0,
 		5.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"fade-curve-factor",
@@ -1197,7 +1342,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		0.01,
 		1.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		"outline-blur-decay",
@@ -1243,7 +1388,7 @@ static constexpr std::array SETTING_DISPLAY_INFO = {
 		0.0,
 		30.0,
 		{},
-		.granular_only = true,
+		true,
 	},
 	gay::SettingDisplayInfo {
 		.key = "trail-z-order",

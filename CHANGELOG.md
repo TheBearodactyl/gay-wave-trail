@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.4.4] - 2026-03-10
+
+### Added
+
+- Weighted insults
+
+### Removed
+
+- bad word
+
 ## [5.4.3] - 2026-03-10
 
 ### Changed
@@ -166,4 +176,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Trail outline being janky
-

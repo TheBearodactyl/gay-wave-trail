@@ -24,7 +24,9 @@ namespace gay {
 		bool operator==(const ColorEntry& other) const = default;
 
 		ColorEntry(std::string hex, bool user_added, bool enabled) :
-			hex(std::move(hex)), user_added(user_added), enabled(enabled) {}
+			hex(std::move(hex)),
+			user_added(user_added),
+			enabled(enabled) {}
 
 		ColorEntry(const ColorEntry&) = default;
 		ColorEntry& operator=(const ColorEntry&) = default;
@@ -126,5 +128,10 @@ namespace gay {
 	  private:
 		void worker_loop();
 		void build_geometry(const TrailPt* pts, size_t total, const WorkerParams& p, FrameGeo& out);
+	};
+
+	struct Insult {
+		std::string_view text;
+		double weight;
 	};
 } // namespace gay

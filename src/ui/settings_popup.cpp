@@ -427,11 +427,16 @@ void GwtSettingsPopup::clear_pending(const std::string& key) {
 }
 
 std::string_view rand_insult() {
-	std::mt19937 generator(std::random_device {}());
-	std::uniform_int_distribution<std::size_t> distribution(0, INSULTS_FOR_DUMBASSES.size() - 1);
-	std::size_t num = distribution(generator);
+	std::vector<double> weights;
+	weights.reserve(INSULTS_FOR_DUMBASSES.size());
+	for (const auto& i : INSULTS_FOR_DUMBASSES) {
+		weights.push_back(i.weight);
+	}
 
-	return INSULTS_FOR_DUMBASSES[num];
+	std::mt19937 generator(std::random_device {}());
+	std::discrete_distribution<std::size_t> distribution(weights.begin(), weights.end());
+
+	return INSULTS_FOR_DUMBASSES[distribution(generator)].text;
 }
 
 void GwtSettingsPopup::maybe_show_granular_warning() {
