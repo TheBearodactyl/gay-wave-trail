@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add new granular `phase-calc-speed-modifier` setting
+- Implemented crossplatform true RNG in `include/gay/utils/trand.hpp`
+- Added a warning popup for when enabling granular mode
+- Added a bunch of insults in `include/gay/setting_defs.hpp`
+
 ### Changed
 
 - Added to `support.md`

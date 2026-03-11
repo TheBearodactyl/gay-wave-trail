@@ -200,6 +200,7 @@ void GwtSettingsPopup::rebuild_list(bool preserve_scroll) {
 		if (info.granular_only && mode != gay::DisplayMode::Granular) {
 			continue;
 		}
+
 		if (!has_query) {
 			scored.push_back({&info, 0});
 			continue;
@@ -274,7 +275,10 @@ void GwtSettingsPopup::rebuild_list(bool preserve_scroll) {
 		}
 
 		if (info.key == "display-mode") {
-			row->set_on_change([this] { rebuild_list(); });
+			row->set_on_change([this] {
+				maybe_show_granular_warning();
+				rebuild_list();
+			});
 		}
 
 		m_list->m_contentLayer->addChild(row);
@@ -420,6 +424,34 @@ void GwtSettingsPopup::set_pending(const std::string& key, matjson::Value v) {
 void GwtSettingsPopup::clear_pending(const std::string& key) {
 	m_pending.erase(key);
 	update_apply_btn();
+}
+
+void GwtSettingsPopup::maybe_show_granular_warning() {
+	let mode = static_cast<gay::DisplayMode>(get_effective_value<int64_t>("display-mode"));
+
+	if (mode != gay::DisplayMode::Granular) {
+		return;
+	}
+
+	if (Mod::get()->getSavedValue<bool>("seen-granular-warning", false)) {
+		return;
+	}
+
+	Mod::get()->setSavedValue("seen-granular-warning", true);
+
+	auto insult = fmt::format("then tough luck you {}", gay::util::trand::pick(INSULTS_FOR_DUMBASSES));
+
+	MDPopup::create(
+		"Granular Mode",
+		"You're enabling **Granular Mode**.\n\n"
+		"Every setting here can and will break everything about your wave trail  "
+		"**Whatever you change is on you. If something breaks, <c-ff0000>" +
+			insult +
+			"</c>, deal with it**  "
+			"Do **NOT** open a bug report based on changes made here __***UNLESS IT CRAHED YOUR GAME***__",
+		"Ok, I understand"
+	)
+		->show();
 }
 
 GwtSettingsPopup* GwtSettingsPopup::create() {

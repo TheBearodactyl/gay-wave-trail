@@ -1,72 +1,64 @@
+Standard: Latest
+ColumnLimit: 120
+TabWidth: 4
+IndentWidth: 4
+UseTab: Always
+ContinuationIndentWidth: 4
+
 AccessModifierOffset: -2
+IndentCaseLabels: true
+IndentWrappedFunctionNames: false
+NamespaceIndentation: All
+ConstructorInitializerIndentWidth: 4
+BracedInitializerIndentWidth: 4
+
 AlignAfterOpenBracket: false
-BreakAfterOpenBracketFunction: true
-BreakBeforeCloseBracketFunction: true
 AlignConsecutiveMacros: false
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: DontAlign
 AlignOperands: false
 AlignTrailingComments: false
+
+BreakAfterOpenBracketFunction: true
+BreakBeforeCloseBracketFunction: true
 AllowAllArgumentsOnNextLine: false
-AllowAllConstructorInitializersOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: false
+BinPackArguments: false
+BinPackParameters: OnePerLine
+
+BreakAfterOpenBracketBracedList: true
+BreakBeforeCloseBracketBracedList: true
+Cpp11BracedListStyle: true
+SpaceBeforeCpp11BracedList: true
+
+InsertTrailingCommas: Wrapped
+
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: false
-AllowShortEnumsOnASingleLine: false
-AlwaysBreakAfterReturnType: None
+
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: Yes
 BreakAfterAttributes: Always
-BinPackArguments: false
-BinPackParameters: false
 BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
 BreakStringLiterals: false
-ColumnLimit: 120
-CompactNamespaces: false
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 4
-ContinuationIndentWidth: 4
-Cpp11BracedListStyle: true
-DerivePointerAlignment: false
-FixNamespaceComments: true
-IncludeBlocks: Regroup
-IncludeCategories:
-  - Regex: "^<gay/"
-    Priority: 2
-  - Regex: "^<Geode/"
-    CaseSensitive: true
-    Priority: 3
-  - Regex: "^<[a-z_]+>$"
-    Priority: 1
-  - Regex: '^"'
-    Priority: 4
-IncludeIsMainRegex: "([-_](test|unittest))?$"
-IndentCaseLabels: true
-IndentWidth: 4
-IndentWrappedFunctionNames: false
+AlwaysBreakAfterReturnType: None
+PackConstructorInitializers: CurrentLine
+
 InsertBraces: true
-KeepEmptyLinesAtTheStartOfBlocks: false
-MaxEmptyLinesToKeep: 1
-NamespaceIndentation: All
-PointerAlignment: Left
-ReferenceAlignment: Left
-ReflowComments: true
-SeparateDefinitionBlocks: Always
-SortIncludes: true
-SortUsingDeclarations: true
+
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
 SpaceAfterTemplateKeyword: false
 SpaceBeforeAssignmentOperators: true
-SpaceBeforeCpp11BracedList: true
 SpaceBeforeCtorInitializerColon: true
 SpaceBeforeInheritanceColon: false
 SpaceBeforeParens: ControlStatements
@@ -78,6 +70,31 @@ SpacesInCStyleCastParentheses: false
 SpacesInContainerLiterals: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
-Standard: Latest
-TabWidth: 4
-UseTab: Always
+
+PointerAlignment: Left
+ReferenceAlignment: Left
+DerivePointerAlignment: false
+
+CompactNamespaces: false
+FixNamespaceComments: true
+
+ReflowComments: true
+
+MaxEmptyLinesToKeep: 1
+KeepEmptyLinesAtTheStartOfBlocks: false
+SeparateDefinitionBlocks: Always
+
+IncludeBlocks: Regroup
+SortIncludes: true
+SortUsingDeclarations: true
+IncludeIsMainRegex: "([-_](test|unittest))?$"
+IncludeCategories:
+  - Regex: "^<gay/"
+    Priority: 2
+  - Regex: "^<Geode/"
+    CaseSensitive: true
+    Priority: 3
+  - Regex: "^<[a-z_]+>$"
+    Priority: 1
+  - Regex: '^"'
+    Priority: 4

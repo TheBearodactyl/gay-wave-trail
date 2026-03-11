@@ -514,9 +514,13 @@ void GwtSettingRow::update_choice_label() {
 	if (!m_choice_label || m_choices.empty()) {
 		return;
 	}
+
 	m_choice_label->setString(std::string(m_choices[m_choice_index]).c_str());
+
 	constexpr float MAX_W = 105.f, BASE = 0.28f;
+
 	m_choice_label->setScale(BASE);
+
 	if (m_choice_label->getScaledContentWidth() > MAX_W) {
 		m_choice_label->setScale(BASE * MAX_W / m_choice_label->getScaledContentWidth());
 	}

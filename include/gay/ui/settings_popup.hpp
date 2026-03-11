@@ -165,6 +165,7 @@ class GwtSettingsPopup: public geode::Popup {
 	void on_discard(cocos2d::CCObject*);
 	void onClose(cocos2d::CCObject*) override;
 	void update_apply_btn();
+	void maybe_show_granular_warning();
 
   public:
 	static GwtSettingsPopup* create();
