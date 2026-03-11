@@ -145,7 +145,6 @@ void ColorCell::on_toggle(CCObject*) {
 	}
 	m_entry->enabled = !m_entry->enabled;
 	update_ui();
-	m_toggle_btn->toggle(!m_toggle_btn->isToggled());
 }
 
 void ColorCell::on_delete_btn(CCObject*) {

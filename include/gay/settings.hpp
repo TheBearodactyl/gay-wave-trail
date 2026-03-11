@@ -72,9 +72,10 @@ struct geode::SettingTypeForValueType<gay::ColorList> {
 template<>
 struct matjson::Serialize<gay::ColorEntry> {
 	static geode::Result<gay::ColorEntry> fromJson(const matjson::Value& value) {
-		if (!value["hex"].isString() || !value["user_added"].isBool() || !value["enabled"].isBool()) {
+		if (not value["hex"].isString() or not value["user_added"].isBool() or not value["enabled"].isBool()) {
 			return geode::Err("Invalid ColorEntry JSON");
 		}
+
 		return geode::Ok(
 			gay::ColorEntry(
 				value["hex"].asString().unwrap(),
@@ -85,7 +86,11 @@ struct matjson::Serialize<gay::ColorEntry> {
 	}
 
 	static matjson::Value toJson(const gay::ColorEntry& value) {
-		return matjson::makeObject({{"hex", value.hex}, {"user_added", value.user_added}, {"enabled", value.enabled}});
+		return matjson::makeObject({
+			{"hex", value.hex},
+			{"user_added", value.user_added},
+			{"enabled", value.enabled},
+		});
 	}
 };
 
