@@ -28,9 +28,9 @@ RUN --mount=type=cache,target=/workspace/cpm-cache \
     -DCMAKE_TOOLCHAIN_FILE=/opt/android-ndk/build/cmake/android.toolchain.cmake \
     -DANDROID_ABI=armeabi-v7a \
     -DANDROID_PLATFORM=android-23 \
-    -DANDROID_STL=c++_shared
-RUN cmake --build build --parallel
-RUN cp "build/${MOD_ID}.geode" /workspace/
+    -DANDROID_STL=c++_shared\
+    && cmake --build build --parallel \
+    && cp "build/${MOD_ID}.geode" /workspace/
 
 FROM scratch AS export-android32
 ARG MOD_ID
