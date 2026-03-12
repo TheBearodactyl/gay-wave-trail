@@ -1,0 +1,48 @@
+x-build-common: &build-common
+  context: .
+  args:
+    MOD_ID: ${MOD_ID:?MOD_ID must be set in .env or the environment}
+    CPM_CACHE_DIR: ${CPM_CACHE_DIR:-/workspace/cpm-cache}
+    BINDINGS: ${BINDINGS:-geode-sdk/bindings}
+    SDK_VERSION: ${SDK_VERSION:-stable}
+
+services:
+  android32:
+    build:
+      <<: *build-common
+      target: android32
+      x-bake:
+        output:
+          - type=local,dest=./dist
+
+  android64:
+    build:
+      <<: *build-common
+      target: android64
+      x-bake:
+        output:
+          - type=local,dest=./dist
+
+  ios:
+    build:
+      <<: *build-common
+      target: ios
+      x-bake:
+        output:
+          - type=local,dest=./dist
+
+  macos:
+    build:
+      <<: *build-common
+      target: macos
+      x-bake:
+        output:
+          - type=local,dest=./dist
+
+  windows:
+    build:
+      <<: *build-common
+      target: windows
+      x-bake:
+        output:
+          - type=local,dest=./dist

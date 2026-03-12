@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Introduce Docker based GitHub actions workflow
+- Create `Dockerfile` and `docker-compose.yml`
 
 ## [5.4.5] - 2026-03-11
 
