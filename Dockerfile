@@ -62,9 +62,9 @@ RUN --mount=type=cache,target=/workspace/cpm-cache \
     -DCMAKE_TOOLCHAIN_FILE=/opt/android-ndk/build/cmake/android.toolchain.cmake \
     -DANDROID_ABI=arm64-v8a \
     -DANDROID_PLATFORM=android-23 \
-    -DANDROID_STL=c++_shared
-RUN cmake --build build --parallel 
-RUN cp "build/${MOD_ID}.geode" /workspace/
+    -DANDROID_STL=c++_shared \
+    && cmake --build build --parallel \
+    && cp "build/${MOD_ID}.geode" /workspace/
 
 FROM scratch AS export-android64
 ARG MOD_ID
@@ -94,9 +94,9 @@ RUN --mount=type=cache,target=/workspace/cpm-cache \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCPM_SOURCE_CACHE="${CPM_CACHE_DIR}" \
     -DGEODE_BINDINGS_REPO_PATH=/workspace/bindings \
-    -DGEODE_IOS_SDK="${CMAKE_OSX_SYSROOT}"
-RUN cmake --build build --parallel
-RUN cp "build/${MOD_ID}.geode" /workspace/
+    -DGEODE_IOS_SDK="${CMAKE_OSX_SYSROOT}" \
+    && cmake --build build --parallel \
+    && cp "build/${MOD_ID}.geode" /workspace/
 
 FROM scratch AS export-ios
 ARG MOD_ID
@@ -126,9 +126,9 @@ RUN --mount=type=cache,target=/workspace/cpm-cache \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0 \
     -DCPM_SOURCE_CACHE="${CPM_CACHE_DIR}" \
-    -DGEODE_BINDINGS_REPO_PATH=/workspace/bindings 
-RUN cmake --build build --parallel 
-RUN cp "build/${MOD_ID}.geode" /workspace/
+    -DGEODE_BINDINGS_REPO_PATH=/workspace/bindings \
+    && cmake --build build --parallel \
+    && cp "build/${MOD_ID}.geode" /workspace/
 
 FROM scratch AS export-macos
 ARG MOD_ID
@@ -160,9 +160,9 @@ RUN --mount=type=cache,target=/workspace/cpm-cache \
     -DGEODE_BINDINGS_REPO_PATH=/workspace/bindings \
     -DCMAKE_TOOLCHAIN_FILE=/root/.local/share/Geode/cross-tools/clang-msvc-sdk/clang-msvc.cmake \
     -DSPLAT_DIR=/root/.local/share/Geode/cross-tools/splat \
-    -DHOST_ARCH=x64 
-RUN cmake --build build --parallel 
-RUN cp "build/${MOD_ID}.geode" /workspace/
+    -DHOST_ARCH=x64 \
+    && cmake --build build --parallel \
+    && cp "build/${MOD_ID}.geode" /workspace/
 
 FROM scratch AS export-windows
 ARG MOD_ID
