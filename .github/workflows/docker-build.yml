@@ -7,7 +7,7 @@ on:
       - "**"
 
 env:
-  MOD_ID: alk.allium
+  MOD_ID: the_bearodactyl.gay-wave-trail
 
 jobs:
   build:
