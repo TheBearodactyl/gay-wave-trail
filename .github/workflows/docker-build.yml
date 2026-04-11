@@ -36,7 +36,7 @@ jobs:
             artifact-name: geode-build-android64
 
     name: ${{ matrix.config.name }}
-    runs-on: ubuntu-latest
+    runs-on: codeberg-medium
 
     steps:
       - name: Checkout repository
