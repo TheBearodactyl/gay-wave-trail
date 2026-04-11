@@ -40,26 +40,27 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Install Podman
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -qy podman
 
       - name: Build ${{ matrix.config.name }}
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          target: export-${{ matrix.config.target }}
-          build-args: |
-            MOD_ID=${{ env.MOD_ID }}
-          outputs: type=local,dest=./out
-          cache-from: type=gha,scope=geode-mod-${{ matrix.config.target }}
-          cache-to: type=gha,mode=max,compression=zstd,compression-level=8,scope=geode-mod-${{ matrix.config.target }}
-        env:
-          DOCKER_BUILD_SUMMARY: false
+        run: |
+          podman build \
+            --target export-${{ matrix.config.target }} \
+            --build-arg MOD_ID=${{ env.MOD_ID }} \
+            --tag geode-export \
+            .
+          mkdir -p ./out
+          cid=$(podman create geode-export)
+          podman cp "$cid":/ ./out/
+          podman rm "$cid"
 
       - name: Upload ${{ matrix.config.name }} artifact
-        uses: actions/upload-artifact@v4
+        uses: action/upload-artifact@v4
         with:
           name: ${{ matrix.config.artifact-name }}
           path: ./out
@@ -70,7 +71,7 @@ jobs:
     needs: ["build"]
 
     steps:
-      - uses: geode-sdk/build-geode-mod/combine@main
+      - uses: https://github.com/geode-sdk/build-geode-mod/combine@main
         id: build
 
       - uses: actions/upload-artifact@v4
