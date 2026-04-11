@@ -16,13 +16,13 @@ jobs:
             image: windows
             target: Win64
 
-          - name: macOS
-            image: macos
-            target: MacOS
+          # - name: macOS
+          #   image: macos
+          #   target: MacOS
 
-          - name: iOS
-            image: ios
-            target: iOS
+          # - name: iOS
+          #   image: ios
+          #   target: iOS
 
           - name: Android32
             image: android
